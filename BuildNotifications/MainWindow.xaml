@@ -10,12 +10,14 @@
         mc:Ignorable="d"
         Title="Build Notifications" Height="350" Width="525"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
+    <!-- Close Command -->
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">
             <command:EventToCommand Command="{Binding CloseCommand}" PassEventArgsToCommand="True" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Grid>
+        <!-- Task bar things -->
         <tb:TaskbarIcon
               IconSource="Icons/Error.ico"
               ToolTipText="hello world"
@@ -34,8 +36,8 @@
             </tb:TaskbarIcon.ContextMenu>
         </tb:TaskbarIcon>
         
-        
-        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="229,134,0,0" TextWrapping="Wrap" Text="Test!!!" VerticalAlignment="Top"/>
-
+        <!-- Main Content -->
+        <Frame Source="BuildList.xaml" />
     </Grid>
+
 </Window>

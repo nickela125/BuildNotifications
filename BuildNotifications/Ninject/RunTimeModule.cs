@@ -1,4 +1,5 @@
-﻿using BuildNotifications.Interface.ViewModel;
+﻿using BuildNotifications.Interface;
+using BuildNotifications.Interface.ViewModel;
 using BuildNotifications.ViewModel;
 using Ninject.Modules;
 
@@ -10,6 +11,8 @@ namespace BuildNotifications.Ninject
         {
             // ViewModel
             Bind<IMainViewModel>().To<MainViewModel>();
+            Bind<IBuildListViewModel>().To<BuildListViewModel>();
+            Bind<IConfigureAccountViewModel>().To<ConfigureAccountViewModel>();
         }
     }
 }

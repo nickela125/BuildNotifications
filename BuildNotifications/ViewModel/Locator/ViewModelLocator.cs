@@ -1,4 +1,5 @@
-﻿using BuildNotifications.Interface.ViewModel;
+﻿using BuildNotifications.Interface;
+using BuildNotifications.Interface.ViewModel;
 using BuildNotifications.Ninject;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
@@ -20,11 +21,10 @@ namespace BuildNotifications.ViewModel.Locator
             ServiceLocator.SetLocatorProvider(() => new CustomServiceLocator(kernel));
         }
 
-        public IMainViewModel Main
-        {
-            get { return GetInstance<IMainViewModel>(); }
-        }
-        
+        public IMainViewModel Main => GetInstance<IMainViewModel>();
+        public IBuildListViewModel BuildList => GetInstance<IBuildListViewModel>();
+        public IConfigureAccountViewModel ConfigureAccount => GetInstance<IConfigureAccountViewModel>();
+
         public static void Cleanup()
         {
             // TODO Clear the ViewModels

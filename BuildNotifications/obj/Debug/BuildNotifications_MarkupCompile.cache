@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\BuildNotifications\BuildNotifications\App.xaml
-11151548125
+31672913304
 
-10-1009960321
+161415959222
 72-577508842
-MainWindow.xaml;
+BuildList.xaml;ConfigureAccountWindow.xaml;MainWindow.xaml;
 
 False
 

@@ -32,3 +32,7 @@ C:\BuildNotifications\BuildNotifications\bin\Debug\Microsoft.Practices.ServiceLo
 C:\BuildNotifications\BuildNotifications\bin\Debug\Ninject.xml
 C:\BuildNotifications\BuildNotifications\obj\Debug\GeneratedInternalTypeHelper.g.cs
 C:\BuildNotifications\BuildNotifications\obj\Debug\App.baml
+C:\BuildNotifications\BuildNotifications\obj\Debug\BuildList.g.cs
+C:\BuildNotifications\BuildNotifications\obj\Debug\BuildList.baml
+C:\BuildNotifications\BuildNotifications\obj\Debug\ConfigureAccountWindow.g.cs
+C:\BuildNotifications\BuildNotifications\obj\Debug\ConfigureAccountWindow.baml
