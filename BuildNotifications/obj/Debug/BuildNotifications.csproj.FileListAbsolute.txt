@@ -1,0 +1,17 @@
+C:\BuildNotifications\BuildNotifications\bin\Debug\BuildNotifications.exe
+C:\BuildNotifications\BuildNotifications\bin\Debug\Hardcodet.Wpf.TaskbarNotification.dll
+C:\BuildNotifications\BuildNotifications\bin\Debug\BuildNotifications.exe.config
+C:\BuildNotifications\BuildNotifications\bin\Debug\Hardcodet.Wpf.TaskbarNotification.pdb
+C:\BuildNotifications\BuildNotifications\bin\Debug\Hardcodet.Wpf.TaskbarNotification.xml
+C:\BuildNotifications\BuildNotifications\obj\Debug\BuildNotifications.csprojResolveAssemblyReference.cache
+C:\BuildNotifications\BuildNotifications\obj\Debug\MainWindow.baml
+C:\BuildNotifications\BuildNotifications\obj\Debug\MainWindow.g.cs
+C:\BuildNotifications\BuildNotifications\obj\Debug\App.g.cs
+C:\BuildNotifications\BuildNotifications\obj\Debug\BuildNotifications_MarkupCompile.cache
+C:\BuildNotifications\BuildNotifications\obj\Debug\BuildNotifications_MarkupCompile.lref
+C:\BuildNotifications\BuildNotifications\obj\Debug\BuildNotifications.g.resources
+C:\BuildNotifications\BuildNotifications\obj\Debug\BuildNotifications.Properties.Resources.resources
+C:\BuildNotifications\BuildNotifications\obj\Debug\BuildNotifications.csproj.GenerateResource.Cache
+C:\BuildNotifications\BuildNotifications\obj\Debug\BuildNotifications.exe
+C:\BuildNotifications\BuildNotifications\obj\Debug\BuildNotifications.pdb
+C:\BuildNotifications\BuildNotifications\bin\Debug\BuildNotifications.pdb
