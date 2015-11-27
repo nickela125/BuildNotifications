@@ -1,9 +1,8 @@
-﻿<Application x:Class="BuildNotifications.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:BuildNotifications"
-             StartupUri="MainWindow.xaml">
-    <Application.Resources>
-         
-    </Application.Resources>
+﻿<Application x:Class="BuildNotifications.App" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:local="clr-namespace:BuildNotifications" StartupUri="MainWindow.xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" d1p1:Ignorable="d" xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:locator="clr-namespace:BuildNotifications.ViewModel.Locator">
+  <Application.Resources>
+    <ResourceDictionary>
+      <locator:ViewModelLocator x:Key="Locator" d:IsDataSource="True" xmlns:vm="clr-namespace:BuildNotifications.ViewModel" />
+    </ResourceDictionary>
+  </Application.Resources>
 </Application>
