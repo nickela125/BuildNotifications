@@ -5,12 +5,23 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BuildNotifications"
         mc:Ignorable="d"
-        Title="Configure Account" Height="300" Width="300"
+        Title="Configure Account"  Height="285" Width="400" ResizeMode="NoResize"
         DataContext="{Binding ConfigureAccount, Source={StaticResource Locator}}">
-    <Grid>
-        <TextBlock>Configure Account</TextBlock>
-        <Button 
-            Content="Close"
-            Command="{Binding CloseCommand}"/>
-    </Grid>
+    <StackPanel Margin="10,10,10,10">
+        <TextBlock FontWeight="Bold" FontSize="14" Text="Account:" Height="20" />
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+            <TextBox Width="250" Height="30" Text="{Binding VsoAccount, Mode=TwoWay}" Padding="5" FontSize="14" />
+            <TextBlock VerticalAlignment="Center" FontSize="14" Text=".visualstudio.com" Height="20" Margin="5,0,0,0"/>
+        </StackPanel>
+
+        <TextBlock FontWeight="Bold" FontSize="14" Text="Username:" Height="20" />
+        <TextBox Height="30" Text="{Binding Username, Mode=TwoWay}" Padding="5" FontSize="14" />
+        <TextBlock FontWeight="Bold" FontSize="14" Text="Password:" Height="20" />
+        <PasswordBox Height="30" Name="PasswordBox" Padding="5" FontSize="14" />
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+            <Button Margin="0,0,10,0" Width="100" Height="30" Content="Update" Command="{Binding SaveAccountCommand}" CommandParameter="{Binding ElementName=PasswordBox}"/>
+            <Button Width="100" Height="30" Content="Cancel" Command="{Binding CloseDialogCommand}"/>
+        </StackPanel>
+
+    </StackPanel>
 </Window>

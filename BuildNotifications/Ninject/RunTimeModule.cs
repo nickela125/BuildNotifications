@@ -1,5 +1,9 @@
-﻿using BuildNotifications.Interface;
+﻿using BuildNotifications.Client;
+using BuildNotifications.Interface;
+using BuildNotifications.Interface.Client;
+using BuildNotifications.Interface.Service;
 using BuildNotifications.Interface.ViewModel;
+using BuildNotifications.Service;
 using BuildNotifications.ViewModel;
 using Ninject.Modules;
 
@@ -10,9 +14,17 @@ namespace BuildNotifications.Ninject
         public override void Load()
         {
             // ViewModel
-            Bind<IMainViewModel>().To<MainViewModel>();
-            Bind<IBuildListViewModel>().To<BuildListViewModel>();
-            Bind<IConfigureAccountViewModel>().To<ConfigureAccountViewModel>();
+            Bind<IMainViewModel>().To<MainViewModel>().InSingletonScope();
+            Bind<IBuildListViewModel>().To<BuildListViewModel>().InSingletonScope();
+            Bind<IConfigureAccountViewModel>().To<ConfigureAccountViewModel>().InSingletonScope();
+
+            // Service
+            Bind<IAccountService>().To<AccountService>().InSingletonScope();
+            Bind<IMapper>().To<Mapper>().InSingletonScope();
+
+            // Client
+            Bind<IRestClient>().To<RestClient>();
+            Bind<IVsoClient>().To<VsoClient>();
         }
     }
 }

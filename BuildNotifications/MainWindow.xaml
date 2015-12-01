@@ -20,7 +20,7 @@
         <!-- Task bar things -->
         <tb:TaskbarIcon
               IconSource="Icons/Error.ico"
-              ToolTipText="hello world"
+              ToolTipText="Build Notifications"
               DoubleClickCommand="{Binding DoubleClickNotificationIconCommand}"
               MenuActivation="RightClick"
               >

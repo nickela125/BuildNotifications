@@ -35,6 +35,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="GalaSoft.MvvmLight, Version=5.2.0.37222, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
       <Private>True</Private>
@@ -55,12 +63,18 @@
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
@@ -87,13 +101,28 @@
     <Compile Include="BuildList.xaml.cs">
       <DependentUpon>BuildList.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Interface\Service\IMapper.cs" />
+    <Compile Include="Model\DTO\Project.cs" />
+    <Compile Include="Model\DTO\ProjectList.cs" />
+    <Compile Include="Client\VsoClient.cs" />
+    <Compile Include="Client\RestClient.cs" />
     <Compile Include="ConfigureAccountWindow.xaml.cs">
       <DependentUpon>ConfigureAccountWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Interface\ViewModel\IConfigureAccountViewMode.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Helpers\VsoAddressHelper.cs" />
+    <Compile Include="Interface\Client\IRestClient.cs" />
+    <Compile Include="Interface\Client\IVsoClient.cs" />
+    <Compile Include="Interface\Service\IAccountService.cs" />
+    <Compile Include="Interface\ViewModel\IConfigureAccountViewModel.cs" />
     <Compile Include="Interface\ViewModel\IBuildListViewModel.cs" />
     <Compile Include="Interface\ViewModel\IMainViewModel.cs" />
+    <Compile Include="Model\VsoAccount.cs" />
+    <Compile Include="Model\VsoBuild.cs" />
+    <Compile Include="Model\VsoProject.cs" />
     <Compile Include="Ninject\RunTimeModule.cs" />
+    <Compile Include="Service\AccountService.cs" />
+    <Compile Include="Service\Mapper.cs" />
     <Compile Include="ViewModel\ConfigureAccountViewModel.cs" />
     <Compile Include="ViewModel\Locator\CustomServiceLocator.cs" />
     <Compile Include="ViewModel\Locator\ViewModelLocator.cs" />

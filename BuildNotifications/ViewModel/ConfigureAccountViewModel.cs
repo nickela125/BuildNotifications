@@ -1,52 +1,93 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Windows;
+using System.Windows.Controls;
+using BuildNotifications.Interface.Client;
+using BuildNotifications.Interface.Service;
 using BuildNotifications.Interface.ViewModel;
+using BuildNotifications.Model;
+using BuildNotifications.Model.DTO;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 
 namespace BuildNotifications.ViewModel
 {
-    /// <summary>
-    /// This class contains properties that the main View can data bind to.
-    /// <para>
-    /// Use the <strong>mvvminpc</strong> snippet to add bindable properties to this ViewModel.
-    /// </para>
-    /// <para>
-    /// You can also use Blend to data bind with the tool's support.
-    /// </para>
-    /// <para>
-    /// See http://www.galasoft.ch/mvvm
-    /// </para>
-    /// </summary>
     public class ConfigureAccountViewModel : ViewModelBase, IConfigureAccountViewModel
     {
-        /// <summary>
-        /// Initializes a new instance of the MainViewModel class.
-        /// </summary>
-        public ConfigureAccountViewModel()
+        private readonly IVsoClient _vsoClient;
+        private readonly IAccountService _accountService;
+        private string _vsoAccount;
+        private string _username;
+        private string _password;
+
+        public ConfigureAccountViewModel(IVsoClient vsoClient, IAccountService accountService)
         {
-            CloseCommand = new RelayCommand(Close);
+            _vsoClient = vsoClient;
+            _accountService = accountService;
+            CloseDialogCommand = new RelayCommand(CloseDialog);
+            SaveAccountCommand = new RelayCommand<PasswordBox>(SaveAccount);
         }
 
         #region Properties
 
-        public RelayCommand CloseCommand { get; }
+        public RelayCommand CloseDialogCommand { get; }
+        public RelayCommand<PasswordBox> SaveAccountCommand { get; }
+
+        public string VsoAccount
+        {
+            get { return _vsoAccount; }
+            set { Set(ref _vsoAccount, value); }
+        }
+
+        public string Username
+        {
+            get { return _username; }
+            set { Set(ref _username, value); }
+        }
+
+        public string Password
+        {
+            get { return _password; }
+            set { Set(ref _password, value); }
+        }
 
         #endregion
 
         #region Commands
 
-
-        private void Close()
+        private async void SaveAccount(PasswordBox passwordBox)
         {
-            CloseDialog();
+            var account = new VsoAccount
+            {
+                Name = VsoAccount,
+                Username = Username,
+                EncodedCredentials = Convert.ToBase64String(Encoding.ASCII.GetBytes(Username + ":" + passwordBox.Password))
+            };
+
+            try
+            {
+                account.Projects = await _vsoClient.GetProjects(account);
+                _accountService.UpdateAccount(account);
+            }
+            catch (Exception)
+            {
+                // TODO show error dialog
+            }
+        }
+
+        private void CloseDialog()
+        {
+            CloseFrontWindow();
         }
 
         #endregion
         
-        private void CloseDialog()
+        private void CloseFrontWindow()
         {
             int numberOfWindows = Application.Current.Windows.Count;
-            Application.Current.Windows[numberOfWindows - 1].Close();
+            Window currentWindow = Application.Current.Windows[numberOfWindows - 1];
+            currentWindow?.Close();
         }
     }
 }
