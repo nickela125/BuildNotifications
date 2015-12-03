@@ -14,5 +14,14 @@ namespace BuildNotifications.Service
                 Name = project.Name
             };
         }
+
+        public VsoBuild MapToVsoBuild(Build build)
+        {
+            return new VsoBuild
+            {
+                Id = build.Id,
+                Name = build.Name
+            };
+        }
     }
 }

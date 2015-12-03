@@ -101,7 +101,10 @@
     <Compile Include="BuildList.xaml.cs">
       <DependentUpon>BuildList.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Model\DTO\BuildDefinitionList.cs" />
     <Compile Include="Interface\Service\IMapper.cs" />
+    <Compile Include="Model\DTO\Build.cs" />
+    <Compile Include="Model\DTO\BuildList.cs" />
     <Compile Include="Model\DTO\Project.cs" />
     <Compile Include="Model\DTO\ProjectList.cs" />
     <Compile Include="Client\VsoClient.cs" />

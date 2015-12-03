@@ -67,7 +67,6 @@ namespace BuildNotifications.ViewModel
 
             try
             {
-                account.Projects = await _vsoClient.GetProjects(account);
                 _accountService.UpdateAccount(account);
             }
             catch (Exception)
