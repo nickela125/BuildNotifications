@@ -19,8 +19,8 @@
         <TextBlock FontWeight="Bold" FontSize="14" Text="Password:" Height="20" />
         <PasswordBox Height="30" Name="PasswordBox" Padding="5" FontSize="14" />
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
-            <Button Margin="0,0,10,0" Width="100" Height="30" Content="Update" Command="{Binding SaveAccountCommand}" CommandParameter="{Binding ElementName=PasswordBox}"/>
-            <Button Width="100" Height="30" Content="Cancel" Command="{Binding CloseDialogCommand}"/>
+            <Button Margin="0,0,10,0" Width="100" Height="30" Content="Update" IsDefault="True" IsEnabled="{Binding IsUpdateEnabled}"  Command="{Binding SaveAccountCommand}" CommandParameter="{Binding ElementName=PasswordBox}"/>
+            <Button Width="100" Height="30" Content="Cancel" IsCancel="True" Command="{Binding CloseDialogCommand}"/>
         </StackPanel>
 
     </StackPanel>

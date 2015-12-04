@@ -7,7 +7,7 @@ namespace BuildNotifications.Interface.ViewModel
     {
         string VsoAccount { get; set; }
         string Username { get; set; }
-        string Password { get; set; }
+        bool IsUpdateEnabled { get; set; }
         RelayCommand CloseDialogCommand { get; }
         RelayCommand<PasswordBox> SaveAccountCommand { get; }
     }

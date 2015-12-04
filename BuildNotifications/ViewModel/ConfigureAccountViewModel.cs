@@ -19,7 +19,7 @@ namespace BuildNotifications.ViewModel
         private readonly IAccountService _accountService;
         private string _vsoAccount;
         private string _username;
-        private string _password;
+        private bool _isUpdateEnabled;
 
         public ConfigureAccountViewModel(IVsoClient vsoClient, IAccountService accountService)
         {
@@ -27,6 +27,7 @@ namespace BuildNotifications.ViewModel
             _accountService = accountService;
             CloseDialogCommand = new RelayCommand(CloseDialog);
             SaveAccountCommand = new RelayCommand<PasswordBox>(SaveAccount);
+            IsUpdateEnabled = true;
         }
 
         #region Properties
@@ -46,10 +47,10 @@ namespace BuildNotifications.ViewModel
             set { Set(ref _username, value); }
         }
 
-        public string Password
+        public bool IsUpdateEnabled
         {
-            get { return _password; }
-            set { Set(ref _password, value); }
+            get { return _isUpdateEnabled; }
+            set { Set(ref _isUpdateEnabled, value); }
         }
 
         #endregion
@@ -58,6 +59,8 @@ namespace BuildNotifications.ViewModel
 
         private async void SaveAccount(PasswordBox passwordBox)
         {
+            IsUpdateEnabled = false;
+
             var account = new VsoAccount
             {
                 Name = VsoAccount,
@@ -67,12 +70,16 @@ namespace BuildNotifications.ViewModel
 
             try
             {
-                _accountService.UpdateAccount(account);
+                await _accountService.UpdateAccount(account);
+                CloseDialog();
             }
             catch (Exception)
             {
-                // TODO show error dialog
+                MessageBox.Show("Could not connect to your account with the credentials provided. Please try again.",
+                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+
+            IsUpdateEnabled = true;
         }
 
         private void CloseDialog()
