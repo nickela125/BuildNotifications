@@ -4,6 +4,6 @@ namespace BuildNotifications.Interface.ViewModel
 {
     public interface IBuildListViewModel
     {
-        RelayCommand ConfigureAccountCommand { get; }
+        RelayCommand ManageAccountsCommand { get; }
     }
 }

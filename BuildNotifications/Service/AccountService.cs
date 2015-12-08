@@ -51,7 +51,7 @@ namespace BuildNotifications.Service
             // todo notify of update
         }
 
-        private void SaveAccounts(IList<VsoAccount> accounts)
+        public void SaveAccounts(IList<VsoAccount> accounts)
         {
             string jsonString = JsonConvert.SerializeObject(accounts);
             Properties.Settings.Default[Constants.AccountsConfigurationName] = jsonString;

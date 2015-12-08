@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -7,7 +6,7 @@ using BuildNotifications.Interface.Client;
 using BuildNotifications.Interface.Service;
 using BuildNotifications.Interface.ViewModel;
 using BuildNotifications.Model;
-using BuildNotifications.Model.DTO;
+using BuildNotifications.ViewModel.Helpers;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 
@@ -84,16 +83,9 @@ namespace BuildNotifications.ViewModel
 
         private void CloseDialog()
         {
-            CloseFrontWindow();
+            ApplicationHelper.CloseFrontWindow();
         }
 
         #endregion
-        
-        private void CloseFrontWindow()
-        {
-            int numberOfWindows = Application.Current.Windows.Count;
-            Window currentWindow = Application.Current.Windows[numberOfWindows - 1];
-            currentWindow?.Close();
-        }
     }
 }

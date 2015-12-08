@@ -17,6 +17,7 @@ namespace BuildNotifications.Ninject
             Bind<IMainViewModel>().To<MainViewModel>().InSingletonScope();
             Bind<IBuildListViewModel>().To<BuildListViewModel>().InSingletonScope();
             Bind<IConfigureAccountViewModel>().To<ConfigureAccountViewModel>();
+            Bind<IManageAccountsViewModel>().To<ManageAccountsViewModel>();
 
             // Service
             Bind<IAccountService>().To<AccountService>().InSingletonScope();

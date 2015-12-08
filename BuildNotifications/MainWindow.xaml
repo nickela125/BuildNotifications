@@ -21,7 +21,6 @@
         <tb:TaskbarIcon
               IconSource="Icons/Error.ico"
               ToolTipText="Build Notifications"
-              DoubleClickCommand="{Binding DoubleClickNotificationIconCommand}"
               MenuActivation="RightClick"
               >
             <tb:TaskbarIcon.ContextMenu>
@@ -37,7 +36,7 @@
         </tb:TaskbarIcon>
         
         <!-- Main Content -->
-        <Frame Source="BuildList.xaml" />
+        <Frame Source="BuildList.xaml" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
     </Grid>
 
 </Window>

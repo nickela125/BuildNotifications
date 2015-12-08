@@ -24,25 +24,25 @@ namespace BuildNotifications.ViewModel
         /// </summary>
         public BuildListViewModel()
         {
-            ConfigureAccountCommand = new RelayCommand(ConfigureAccount);
+            ManageAccountsCommand = new RelayCommand(ManageAccounts);
         }
 
         #region Properties
-        public RelayCommand ConfigureAccountCommand { get; }
+        public RelayCommand ManageAccountsCommand { get; }
 
         #endregion
 
         #region Commands
 
-        private void ConfigureAccount()
+        private void ManageAccounts()
         {
-            ConfigureAccountWindow configuruAccountWindow = new ConfigureAccountWindow
+            ManageAccountsWindow manageAccountsWindow = new ManageAccountsWindow
             {
                 Top = Application.Current.MainWindow.Top + 100,
                 Left = Application.Current.MainWindow.Left + 100
             };
 
-            configuruAccountWindow.ShowDialog();
+            manageAccountsWindow.ShowDialog();
         }
 
         #endregion

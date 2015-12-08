@@ -101,6 +101,10 @@
     <Compile Include="BuildList.xaml.cs">
       <DependentUpon>BuildList.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Interface\ViewModel\IManageAccountsViewModel.cs" />
+    <Compile Include="ManageAccountsWindow.xaml.cs">
+      <DependentUpon>ManageAccountsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Model\DTO\BuildDefinitionList.cs" />
     <Compile Include="Interface\Service\IMapper.cs" />
     <Compile Include="Model\DTO\Build.cs" />
@@ -120,6 +124,7 @@
     <Compile Include="Interface\ViewModel\IConfigureAccountViewModel.cs" />
     <Compile Include="Interface\ViewModel\IBuildListViewModel.cs" />
     <Compile Include="Interface\ViewModel\IMainViewModel.cs" />
+    <Compile Include="Model\TreeItem.cs" />
     <Compile Include="Model\VsoAccount.cs" />
     <Compile Include="Model\VsoBuild.cs" />
     <Compile Include="Model\VsoProject.cs" />
@@ -127,13 +132,19 @@
     <Compile Include="Service\AccountService.cs" />
     <Compile Include="Service\Mapper.cs" />
     <Compile Include="ViewModel\ConfigureAccountViewModel.cs" />
+    <Compile Include="ViewModel\Helpers\ApplicationHelper.cs" />
     <Compile Include="ViewModel\Locator\CustomServiceLocator.cs" />
     <Compile Include="ViewModel\Locator\ViewModelLocator.cs" />
     <Compile Include="ViewModel\BuildListViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\ManageAccountsViewModel.cs" />
     <Page Include="BuildList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ManageAccountsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="ConfigureAccountWindow.xaml">
       <SubType>Designer</SubType>

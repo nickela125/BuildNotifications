@@ -24,6 +24,7 @@ namespace BuildNotifications.ViewModel.Locator
         public IMainViewModel Main => GetInstance<IMainViewModel>();
         public IBuildListViewModel BuildList => GetInstance<IBuildListViewModel>();
         public IConfigureAccountViewModel ConfigureAccount => GetInstance<IConfigureAccountViewModel>();
+        public IManageAccountsViewModel ManageAccounts => GetInstance<IManageAccountsViewModel>();
 
         public static void Cleanup()
         {
