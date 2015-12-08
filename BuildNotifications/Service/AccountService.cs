@@ -58,6 +58,31 @@ namespace BuildNotifications.Service
             Properties.Settings.Default.Save();
         }
 
+        public bool GetNotifyOnStart()
+        {
+            return (bool)Properties.Settings.Default[Constants.NotifyOnStartConfigurationName];
+        }
+
+        public bool GetNotifyOnFinish()
+        {
+            return (bool)Properties.Settings.Default[Constants.NotifyOnFinishConfigurationName];
+        }
+
+        public void SaveNotifyOptions(bool? notifyOnStart, bool? notifyOnFinish)
+        {
+            if (notifyOnStart != null)
+            {
+                Properties.Settings.Default[Constants.NotifyOnStartConfigurationName] = notifyOnStart;
+            }
+
+            if (notifyOnFinish != null)
+            {
+                Properties.Settings.Default[Constants.NotifyOnFinishConfigurationName] = notifyOnFinish;
+            }
+
+            Properties.Settings.Default.Save();
+        }
+
         public IList<VsoAccount> GetAccounts()
         {
             string jsonString = (string)Properties.Settings.Default[Constants.AccountsConfigurationName];

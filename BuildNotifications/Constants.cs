@@ -4,6 +4,8 @@
     {
         // Settings Names
         public const string AccountsConfigurationName = "Accounts";
+        public const string NotifyOnStartConfigurationName = "NotifyOnStart";
+        public const string NotifyOnFinishConfigurationName = "NotifyOnFinish";
 
         // URIs
         public const string VsoBaseAddress = "https://{0}.visualstudio.com/defaultcollection/";

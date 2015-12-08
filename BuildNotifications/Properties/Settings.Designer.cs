@@ -34,5 +34,29 @@ namespace BuildNotifications.Properties {
                 this["Accounts"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool NotifyOnStart {
+            get {
+                return ((bool)(this["NotifyOnStart"]));
+            }
+            set {
+                this["NotifyOnStart"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool NotifyOnFinish {
+            get {
+                return ((bool)(this["NotifyOnFinish"]));
+            }
+            set {
+                this["NotifyOnFinish"] = value;
+            }
+        }
     }
 }

@@ -18,7 +18,7 @@
                   IsChecked="{Binding IsSelected}" 
                   VerticalAlignment="Center" />
                 <ContentPresenter 
-                  Content="{Binding Name, Mode=OneTime}" 
+                  Content="{Binding Name, Mode=OneTime}"
                   Margin="2,0"
                 />
             </StackPanel>
@@ -28,6 +28,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="40" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="82" />
             <RowDefinition Height="60" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -55,8 +56,29 @@
             ItemTemplate="{StaticResource CheckBoxItemTemplate}"
             />
 
+        <!-- Checkboxes -->
+        <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Vertical">
+            <TextBlock 
+                Text="Notify me when a build:"
+                FontSize="11" 
+                Height="14"
+                Margin="10,10,0,0"/>
+            <CheckBox 
+                Content="Starts"
+                IsChecked="{Binding NotifyOnStart}"
+                FontSize="11" 
+                Height="14" 
+                Margin="20,10,0,0"/>
+            <CheckBox
+                Content="Finishes"
+                IsChecked="{Binding NotifyOnFinish}"
+                FontSize="11" 
+                Height="14"
+                Margin="20,10,0,0"/>
+        </StackPanel>
+        
         <!--Buttons-->
-        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+        <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
             <Button Margin="0,0,10,0" Width="100" Height="30" Content="Update" IsDefault="True" IsEnabled="{Binding IsUpdateEnabled}"  Command="{Binding UpdateAccountsCommand}"/>
             <Button Width="100" Height="30" Content="Cancel" IsCancel="True" Command="{Binding CloseDialogCommand}"/>
         </StackPanel>

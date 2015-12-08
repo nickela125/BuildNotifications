@@ -15,17 +15,21 @@ namespace BuildNotifications.ViewModel
         private readonly IAccountService _accountService;
         private IList<VsoAccount> _accounts;
         private bool _isUpdateEnabled;
+        private bool _notifyOnStart;
+        private bool _notifyOnFinish;
 
         public ManageAccountsViewModel(IAccountService accountService)
         {
             _accountService = accountService;
 
-            Accounts = _accountService.GetAccounts();//.Cast<TreeItem>().ToList();
+            Accounts = _accountService.GetAccounts();
 
             CloseDialogCommand = new RelayCommand(CloseDialog);
             UpdateAccountsCommand = new RelayCommand(UpdateAccounts);
 
             IsUpdateEnabled = true;
+            NotifyOnStart = _accountService.GetNotifyOnStart();
+            NotifyOnFinish = _accountService.GetNotifyOnFinish();
         }
 
         #region Properties
@@ -44,6 +48,18 @@ namespace BuildNotifications.ViewModel
             set { Set(ref _isUpdateEnabled, value); }
         }
 
+        public bool NotifyOnStart
+        {
+            get { return _notifyOnStart; }
+            set { Set(ref _notifyOnStart, value); }
+        }
+
+        public bool NotifyOnFinish
+        {
+            get { return _notifyOnFinish; }
+            set { Set(ref _notifyOnFinish, value); }
+        }
+
         #endregion
 
 
@@ -59,8 +75,10 @@ namespace BuildNotifications.ViewModel
             IsUpdateEnabled = false;
             
             _accountService.SaveAccounts(Accounts);
-            
-            IsUpdateEnabled = true;
+            _accountService.SaveNotifyOptions(NotifyOnStart, NotifyOnFinish);
+            CloseDialog();
+
+             IsUpdateEnabled = true;
         }
 
         #endregion

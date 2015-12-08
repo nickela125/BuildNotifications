@@ -9,5 +9,10 @@ namespace BuildNotifications.Interface.Service
         Task UpdateAccount(VsoAccount account);
         IList<VsoAccount> GetAccounts();
         void SaveAccounts(IList<VsoAccount> accounts);
+        
+        //TODO these will be saved per build later - here temporarily
+        bool GetNotifyOnStart();
+        bool GetNotifyOnFinish();
+        void SaveNotifyOptions(bool? notifyOnStart, bool? notifyOnFinish);
     }
 }

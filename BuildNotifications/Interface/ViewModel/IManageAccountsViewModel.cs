@@ -10,5 +10,7 @@ namespace BuildNotifications.Interface.ViewModel
         RelayCommand CloseDialogCommand { get; }
         RelayCommand UpdateAccountsCommand { get; }
         bool IsUpdateEnabled { get; }
+        bool NotifyOnStart { get; }
+        bool NotifyOnFinish { get; }
     }
 }
