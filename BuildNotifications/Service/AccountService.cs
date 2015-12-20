@@ -26,10 +26,10 @@ namespace BuildNotifications.Service
             }
 
             // Get any updates to projects and builds
-            account.Projects = await _vsoClient.GetProjects(account);
+            account.Projects = await _vsoClient.GetProjects(account.Name, account.EncodedCredentials);
             foreach (VsoProject vsoProject in account.Projects)
             {
-                vsoProject.Builds = await _vsoClient.GetBuilds(vsoProject, account);
+                vsoProject.Builds = await _vsoClient.GetBuildDefinitions(vsoProject, account.Name, account.EncodedCredentials);
             }
 
             // Replace existing reference to account if there is one

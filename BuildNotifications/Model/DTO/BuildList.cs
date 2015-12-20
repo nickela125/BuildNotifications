@@ -4,6 +4,6 @@ namespace BuildNotifications.Model.DTO
 {
     public class BuildList
     {
-        public IList<Build> Value { get; set; } 
+        public IList<Build> Value { get; set; }
     }
 }

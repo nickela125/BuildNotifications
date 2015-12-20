@@ -1,14 +1,13 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using System;
 
 namespace BuildNotifications.Model
 {
-    public class VsoBuild : TreeItem
+    public class VsoBuild
     {
         public string Id { get; set; }
-        public string Name { get; set; }
-        public new bool IsSelected { get; set; }
-        [JsonIgnore]
-        public new string DisplayName => Name;
+        public string BuildDefinitionId { get; set; }
+        public BuildResult? Result { get; set; }
+        public BuildStatus Status { get; set; }
+        public DateTime QueueTime { get; set; }
     }
 }

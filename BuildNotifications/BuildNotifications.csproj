@@ -101,13 +101,18 @@
     <Compile Include="BuildList.xaml.cs">
       <DependentUpon>BuildList.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Interface\Service\IBuildService.cs" />
     <Compile Include="Interface\ViewModel\IManageAccountsViewModel.cs" />
     <Compile Include="ManageAccountsWindow.xaml.cs">
       <DependentUpon>ManageAccountsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Model\DTO\BuildDefinitionList.cs" />
+    <Compile Include="Model\BuildResult.cs" />
+    <Compile Include="Model\VsoBuild.cs" />
+    <Compile Include="Model\BuildStatus.cs" />
     <Compile Include="Interface\Service\IMapper.cs" />
     <Compile Include="Model\DTO\Build.cs" />
+    <Compile Include="Model\DTO\BuildDefinition.cs" />
+    <Compile Include="Model\DTO\BuildDefinitionList.cs" />
     <Compile Include="Model\DTO\BuildList.cs" />
     <Compile Include="Model\DTO\Project.cs" />
     <Compile Include="Model\DTO\ProjectList.cs" />
@@ -126,10 +131,12 @@
     <Compile Include="Interface\ViewModel\IMainViewModel.cs" />
     <Compile Include="Model\TreeItem.cs" />
     <Compile Include="Model\VsoAccount.cs" />
-    <Compile Include="Model\VsoBuild.cs" />
+    <Compile Include="Model\VsoBuildDefinition.cs" />
+    <Compile Include="Model\VsoBuildUpdate.cs" />
     <Compile Include="Model\VsoProject.cs" />
     <Compile Include="Ninject\RunTimeModule.cs" />
     <Compile Include="Service\AccountService.cs" />
+    <Compile Include="Service\BuildService.cs" />
     <Compile Include="Service\Mapper.cs" />
     <Compile Include="ViewModel\ConfigureAccountViewModel.cs" />
     <Compile Include="ViewModel\Helpers\ApplicationHelper.cs" />

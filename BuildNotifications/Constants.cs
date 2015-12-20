@@ -11,5 +11,6 @@
         public const string VsoBaseAddress = "https://{0}.visualstudio.com/defaultcollection/";
         public const string VsoBuildDefinitionsAddress = "{0}/_apis/build/definitions?api-version=2.0";
         public const string VsoProjectsAddress = "_apis/projects?api-version=1.0";
+        public const string VsoBuildsAddress = "{0}/_apis/build/builds?definitions={1}&api-version=2.0&maxBuildsPerDefinition={2}";
     }
 }

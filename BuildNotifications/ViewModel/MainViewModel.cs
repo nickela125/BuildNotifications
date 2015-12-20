@@ -1,35 +1,32 @@
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
-using System.Windows;
+using System.Linq;
+using System.Windows.Forms;
+using BuildNotifications.Interface.Service;
 using BuildNotifications.Interface.ViewModel;
+using BuildNotifications.Model;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using Application = System.Windows.Application;
 
 namespace BuildNotifications.ViewModel
 {
-    /// <summary>
-    /// This class contains properties that the main View can data bind to.
-    /// <para>
-    /// Use the <strong>mvvminpc</strong> snippet to add bindable properties to this ViewModel.
-    /// </para>
-    /// <para>
-    /// You can also use Blend to data bind with the tool's support.
-    /// </para>
-    /// <para>
-    /// See http://www.galasoft.ch/mvvm
-    /// </para>
-    /// </summary>
     public class MainViewModel : ViewModelBase, IMainViewModel
     {
-        /// <summary>
-        /// Initializes a new instance of the MainViewModel class.
-        /// </summary>
-        public MainViewModel()
+        private readonly IAccountService _accountService;
+        private readonly IBuildService _buildService;
+        private Timer _timer;
+
+        public MainViewModel(IAccountService accountService, IBuildService buildService)
         {
-            // Set up Commands
+            _accountService = accountService;
+            _buildService = buildService;
             CloseCommand = new RelayCommand<CancelEventArgs>(Close);
             DoubleClickNotificationIconCommand = new RelayCommand(DoubleClickNotificationIcon);
             BuildsMenuItemCommand = new RelayCommand(BuildsMenuItem);
             ExitMenuItemCommand = new RelayCommand(ExitMenuItem);
+            InitTimer();
         }
 
         #region Properties
@@ -62,6 +59,43 @@ namespace BuildNotifications.ViewModel
         {
             eventArgs.Cancel = true;
             Application.Current.MainWindow.Hide();
+        }
+
+        #endregion
+
+        #region private methods
+        
+        private void InitTimer()
+        {
+            _timer = new Timer();
+            _timer.Tick += new EventHandler(CheckBuilds);
+            _timer.Interval = 10000; // todo - configurable?
+            _timer.Start();
+        }
+
+        private void CheckBuilds(object sender, EventArgs e)
+        {
+            IList<VsoAccount> accounts = _accountService.GetAccounts(); // todo shouldn't do this every time - get notification if updates
+            // TODO Bad bad O(n^3)
+            foreach (VsoAccount account in accounts)
+            {
+                foreach (VsoProject project in account.Projects)
+                {
+                    IList<VsoBuildDefinition> buildDefinitions = new List<VsoBuildDefinition>();
+                    foreach (VsoBuildDefinition build in project.Builds)
+                    {
+                        if (build.IsSelected)
+                        {
+                            buildDefinitions.Add(build);
+                        }
+                    }
+
+                    if (buildDefinitions.Any())
+                    {
+                        _buildService.CheckForUpdatedBuilds(project, account.Name, account.EncodedCredentials, buildDefinitions);
+                    }
+                }
+            }
         }
 
         #endregion
