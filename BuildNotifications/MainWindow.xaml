@@ -18,10 +18,11 @@
     </i:Interaction.Triggers>
     <Grid>
         <!-- Task bar things -->
-        <tb:TaskbarIcon
+        <!--<tb:TaskbarIcon
               IconSource="Icons/Error.ico"
               ToolTipText="Build Notifications"
               MenuActivation="RightClick"
+              
               >
             <tb:TaskbarIcon.ContextMenu>
                 <ContextMenu>
@@ -33,7 +34,7 @@
                         Command="{Binding ExitMenuItemCommand}" />
                 </ContextMenu>
             </tb:TaskbarIcon.ContextMenu>
-        </tb:TaskbarIcon>
+        </tb:TaskbarIcon>-->
         
         <!-- Main Content -->
         <Frame Source="BuildList.xaml" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />

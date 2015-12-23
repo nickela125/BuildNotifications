@@ -525,6 +525,50 @@ namespace BuildNotifications.Test.Service
             Assert.AreEqual(BuildResult.Failed, buildDefinition.LastCompletedBuildResult);
             Assert.AreEqual("1234", buildDefinition.CurrentBuildId);
         }
+
+        [TestMethod]
+        public void SuccessStored_TwoCompleteReturnedNotNew_NoUpdate()
+        {
+            IList<VsoBuild> builds = new List<VsoBuild>
+            {
+                new VsoBuild
+                {
+                    BuildDefinitionId = "1",
+                    Status = BuildStatus.Completed,
+                    Result = BuildResult.Succeeded,
+                    Id = "1234",
+                    QueueTime = DateTime.Now
+                },
+                new VsoBuild
+                {
+                    BuildDefinitionId = "1",
+                    Status = BuildStatus.Completed,
+                    Result = BuildResult.Succeeded,
+                    Id = "5678",
+                    QueueTime = DateTime.Now.AddMinutes(-1)
+                }
+
+            };
+
+            VsoBuildDefinition buildDefinition = new VsoBuildDefinition
+            {
+                Id = "1",
+                CurrentBuildId = "1234",
+                LastCompletedBuildResult = BuildResult.Succeeded,
+                CurrentBuildStatus = BuildStatus.Completed,
+                Name = "First Definition"
+            };
+
+            var buildService = new BuildService(Initialize(builds));
+
+            IList<VsoBuildUpdate> updates = buildService.CheckForUpdatedBuilds(new VsoProject(), string.Empty, string.Empty,
+                new List<VsoBuildDefinition> { buildDefinition }).Result;
+
+            Assert.AreEqual(0, updates.Count);
+            Assert.AreEqual(BuildStatus.Completed, buildDefinition.CurrentBuildStatus);
+            Assert.AreEqual(BuildResult.Succeeded, buildDefinition.LastCompletedBuildResult);
+            Assert.AreEqual("1234", buildDefinition.CurrentBuildId);
+        }
             
         //multiple definitions
     }

@@ -74,7 +74,7 @@ namespace BuildNotifications.Service
                 // latest build already seen before
                 if (buildDefinition.CurrentBuildId.Equals(latestBuild.Id))
                 {
-                    if (latestBuild.Result != null)
+                    if (latestBuild.Result != null && latestBuild.Status != buildDefinition.CurrentBuildStatus)
                     {
                         buildDefinition.CurrentBuildStatus = latestBuild.Status;
                         buildDefinition.LastCompletedBuildResult = latestBuild.Result;

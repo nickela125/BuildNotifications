@@ -8,6 +8,7 @@ using BuildNotifications.Interface.ViewModel;
 using BuildNotifications.Model;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using Hardcodet.Wpf.TaskbarNotification;
 using Application = System.Windows.Application;
 
 namespace BuildNotifications.ViewModel
@@ -17,6 +18,7 @@ namespace BuildNotifications.ViewModel
         private readonly IAccountService _accountService;
         private readonly IBuildService _buildService;
         private Timer _timer;
+        private TaskbarIcon _icon;
 
         public MainViewModel(IAccountService accountService, IBuildService buildService)
         {
@@ -26,6 +28,15 @@ namespace BuildNotifications.ViewModel
             DoubleClickNotificationIconCommand = new RelayCommand(DoubleClickNotificationIcon);
             BuildsMenuItemCommand = new RelayCommand(BuildsMenuItem);
             ExitMenuItemCommand = new RelayCommand(ExitMenuItem);
+
+            _icon = new TaskbarIcon
+            {
+                Name = "NotifyIcon",
+                Icon = new System.Drawing.Icon("Icons/Error.ico"),
+                ToolTip = "Build Notifications",
+                MenuActivation = PopupActivationMode.RightClick
+            };
+
             InitTimer();
         }
 
@@ -73,7 +84,7 @@ namespace BuildNotifications.ViewModel
             _timer.Start();
         }
 
-        private void CheckBuilds(object sender, EventArgs e)
+        private async void CheckBuilds(object sender, EventArgs e)
         {
             IList<VsoAccount> accounts = _accountService.GetAccounts(); // todo shouldn't do this every time - get notification if updates
             // TODO Bad bad O(n^3)
@@ -92,7 +103,46 @@ namespace BuildNotifications.ViewModel
 
                     if (buildDefinitions.Any())
                     {
-                        _buildService.CheckForUpdatedBuilds(project, account.Name, account.EncodedCredentials, buildDefinitions);
+                        IList<VsoBuildUpdate> updates = await _buildService.CheckForUpdatedBuilds(project, account.Name, account.EncodedCredentials, buildDefinitions);
+                        if (updates.Any())
+                        {
+                            NotifyOfUpdates(updates);
+                        }
+                    }
+                }
+            }
+
+            _accountService.SaveAccounts(accounts);
+        }
+
+        private void NotifyOfUpdates(IList<VsoBuildUpdate> updates)
+        {
+            foreach (VsoBuildUpdate vsoBuildUpdate in updates)
+            {
+                if (vsoBuildUpdate.Result == null)
+                {
+                    // Only one we care about for now
+                    if (vsoBuildUpdate.Status == BuildStatus.InProgress)
+                    {
+                        _icon.ShowBalloonTip($"{vsoBuildUpdate.Name} Started", " ", BalloonIcon.Info);
+                    }
+                }
+                else
+                {
+                    switch (vsoBuildUpdate.Result)
+                    {
+                        case BuildResult.Succeeded:
+                            _icon.ShowBalloonTip($"{vsoBuildUpdate.Name} Succeeded", " ", BalloonIcon.Info);
+                        break;
+                        case BuildResult.PartiallySucceeded:
+                            _icon.ShowBalloonTip($"{vsoBuildUpdate.Name} Partially Succeeded", " ", BalloonIcon.Warning);
+                        break;
+                        case BuildResult.Failed:
+                            _icon.ShowBalloonTip($"{vsoBuildUpdate.Name} Failed", " ", BalloonIcon.Error);
+                        break;
+                        case BuildResult.Canceled:
+                            _icon.ShowBalloonTip($"{vsoBuildUpdate.Name} Cancelled", " ", BalloonIcon.Info);
+                        break;
                     }
                 }
             }
