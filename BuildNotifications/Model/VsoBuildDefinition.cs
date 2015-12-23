@@ -7,12 +7,11 @@ namespace BuildNotifications.Model
     {
         public string Id { get; set; }
         public string Name { get; set; }
-        public BuildStatus Status { get; set; }
         public new bool IsSelected { get; set; }
         [JsonIgnore]
         public new string DisplayName => Name;
 
-        public BuildStatus CurrentBuildStatus { get; set; }
+        public BuildStatus? CurrentBuildStatus { get; set; }
         public string CurrentBuildId { get; set; }
         public BuildResult? LastCompletedBuildResult { get; set; }
     }

@@ -31,7 +31,7 @@ namespace BuildNotifications.Service
             {
                 if (buildList.Any())
                 {
-                    VsoBuildDefinition buildDefinition = buildDefinitions.Single(bd => bd.Id == buildList.First().Id);
+                    VsoBuildDefinition buildDefinition = buildDefinitions.Single(bd => bd.Id == buildList.First().BuildDefinitionId);
                     updates.AddRange(CheckForUpdateInternal(buildList, buildDefinition));
                 }
             }
@@ -41,10 +41,6 @@ namespace BuildNotifications.Service
         private IList<VsoBuildUpdate> CheckForUpdateInternal(List<VsoBuild> buildList, VsoBuildDefinition buildDefinition)
         {
             IList<VsoBuildUpdate> updates = new List<VsoBuildUpdate>();
-            if (buildDefinition.LastCompletedBuildResult != null)
-            {
-                return updates;
-            }
 
             if (buildDefinition.CurrentBuildId == null)
             {
@@ -53,13 +49,19 @@ namespace BuildNotifications.Service
                     buildList.First() :
                     buildList.OrderByDescending(b => b.QueueTime).First();
 
-                buildDefinition.Id = latestBuild.Id;
+                buildDefinition.CurrentBuildId = latestBuild.Id;
                 buildDefinition.CurrentBuildStatus = latestBuild.Status;
+                buildDefinition.LastCompletedBuildResult = latestBuild.Result;
 
                 // send update if queued in last 10 seconds
-                if (latestBuild.Result != null && latestBuild.QueueTime < DateTime.Now.AddSeconds(-10))
+                if (latestBuild.QueueTime > DateTime.Now.AddSeconds(-10))
                 {
-                    // TODO send notification
+                    updates.Add(new VsoBuildUpdate
+                    {
+                        Name = buildDefinition.DisplayName,
+                        Result = latestBuild.Result,
+                        Status = latestBuild.Status
+                    });
                 }
             }
             else
@@ -69,32 +71,63 @@ namespace BuildNotifications.Service
                 VsoBuild latestBuild = orderedBuilds.First();
                 VsoBuild oldestBuild = orderedBuilds.Count == 1 ? null : orderedBuilds.Last();
 
-
+                // latest build already seen before
                 if (buildDefinition.CurrentBuildId.Equals(latestBuild.Id))
                 {
                     if (latestBuild.Result != null)
                     {
                         buildDefinition.CurrentBuildStatus = latestBuild.Status;
                         buildDefinition.LastCompletedBuildResult = latestBuild.Result;
-                        // TODO send notification
+
+                        updates.Add(new VsoBuildUpdate
+                        {
+                            Name = buildDefinition.DisplayName,
+                            Result = latestBuild.Result,
+                            Status = latestBuild.Status
+                        });
                     }
                     else if (latestBuild.Status != buildDefinition.CurrentBuildStatus)
                     {
                         buildDefinition.CurrentBuildStatus = latestBuild.Status;
-                        // TODO send notification
+                        
+                        updates.Add(new VsoBuildUpdate
+                        {
+                            Name = buildDefinition.DisplayName,
+                            Result = latestBuild.Result,
+                            Status = latestBuild.Status
+                        });
                     }
                 }
+                // Older build has been seen before
                 else if (oldestBuild != null && buildDefinition.CurrentBuildId.Equals(oldestBuild.Id))
                 {
-                    if (oldestBuild.Result != buildDefinition.LastCompletedBuildResult)
+                    if (oldestBuild.Status != buildDefinition.CurrentBuildStatus)
                     {
-                        // TODO send notification
+                        buildDefinition.LastCompletedBuildResult = oldestBuild.Result;
+
+                        updates.Add(new VsoBuildUpdate
+                        {
+                            Name = buildDefinition.DisplayName,
+                            Result = oldestBuild.Result,
+                            Status = oldestBuild.Status
+                        });
                     }
-                    else if (latestBuild.Status != buildDefinition.CurrentBuildStatus)
+                    
+                    // look at new build
+                    buildDefinition.CurrentBuildStatus = latestBuild.Status;
+                    buildDefinition.CurrentBuildId = latestBuild.Id;
+
+                    if (latestBuild.Result != null)
                     {
-                        buildDefinition.CurrentBuildStatus = latestBuild.Status;
-                        // TODO send notification
+                        buildDefinition.LastCompletedBuildResult = latestBuild.Result;
                     }
+
+                    updates.Add(new VsoBuildUpdate
+                    {
+                        Name = buildDefinition.DisplayName,
+                        Result = latestBuild.Result,
+                        Status = latestBuild.Status
+                    });
                 }
             }
             return updates;
