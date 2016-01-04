@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BuildNotifications.Interface.Client;
 using BuildNotifications.Interface.Service;
 using BuildNotifications.Model;
+using BuildNotifications.Model.DTO;
 
 namespace BuildNotifications.Service
 {
@@ -17,9 +18,9 @@ namespace BuildNotifications.Service
             _vsoClient = vsoClient;
         }
 
-        public async Task<IList<VsoBuildUpdate>> CheckForUpdatedBuilds(VsoProject vsoProject, string accountName, string encodedCredentials, IList<VsoBuildDefinition> buildDefinitions)
+        public async Task<IList<VsoBuildUpdate>> CheckForUpdatedBuilds(AccountDetails accountDetails, IList<VsoBuildDefinition> buildDefinitions)
         {
-            IList<VsoBuild> builds = await _vsoClient.GetBuilds(vsoProject, accountName, encodedCredentials, buildDefinitions.Select(bd => bd.Id).ToList());
+            IList<VsoBuild> builds = await _vsoClient.GetBuilds(accountDetails, buildDefinitions.Select(bd => bd.Id).ToList());
             List<List<VsoBuild>> buildsByDefinition = builds
                 .GroupBy(b => b.BuildDefinitionId)
                 .Select(grp => grp.ToList())
@@ -59,6 +60,7 @@ namespace BuildNotifications.Service
                     updates.Add(new VsoBuildUpdate
                     {
                         Name = buildDefinition.DisplayName,
+                        Id = buildDefinition.Id,
                         Result = latestBuild.Result,
                         Status = latestBuild.Status
                     });
@@ -82,6 +84,7 @@ namespace BuildNotifications.Service
                         updates.Add(new VsoBuildUpdate
                         {
                             Name = buildDefinition.DisplayName,
+                            Id = buildDefinition.Id,
                             Result = latestBuild.Result,
                             Status = latestBuild.Status
                         });
@@ -93,6 +96,7 @@ namespace BuildNotifications.Service
                         updates.Add(new VsoBuildUpdate
                         {
                             Name = buildDefinition.DisplayName,
+                            Id = buildDefinition.Id,
                             Result = latestBuild.Result,
                             Status = latestBuild.Status
                         });
@@ -108,6 +112,7 @@ namespace BuildNotifications.Service
                         updates.Add(new VsoBuildUpdate
                         {
                             Name = buildDefinition.DisplayName,
+                            Id = buildDefinition.Id,
                             Result = oldestBuild.Result,
                             Status = oldestBuild.Status
                         });
@@ -125,6 +130,7 @@ namespace BuildNotifications.Service
                     updates.Add(new VsoBuildUpdate
                     {
                         Name = buildDefinition.DisplayName,
+                        Id = buildDefinition.Id,
                         Result = latestBuild.Result,
                         Status = latestBuild.Status
                     });

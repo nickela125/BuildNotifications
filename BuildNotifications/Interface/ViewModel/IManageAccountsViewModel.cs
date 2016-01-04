@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using BuildNotifications.Model;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 
 namespace BuildNotifications.Interface.ViewModel
 {
@@ -9,6 +9,7 @@ namespace BuildNotifications.Interface.ViewModel
         IList<VsoAccount> Accounts { get; set; }
         RelayCommand CloseDialogCommand { get; }
         RelayCommand UpdateAccountsCommand { get; }
+        RelayCommand AddAccountCommand { get; }
         bool IsUpdateEnabled { get; }
         bool NotifyOnStart { get; }
         bool NotifyOnFinish { get; }

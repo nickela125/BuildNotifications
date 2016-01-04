@@ -1,5 +1,7 @@
-﻿using System.ComponentModel;
-using GalaSoft.MvvmLight.Command;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using BuildNotifications.Model;
+using GalaSoft.MvvmLight.CommandWpf;
 
 namespace BuildNotifications.Interface.ViewModel
 {
@@ -9,5 +11,7 @@ namespace BuildNotifications.Interface.ViewModel
         RelayCommand DoubleClickNotificationIconCommand { get; }
         RelayCommand BuildsMenuItemCommand { get; }
         RelayCommand ExitMenuItemCommand { get; }
+        RelayCommand ManageAccountsCommand { get; }
+        IList<VsoSubscibedBuildList> BuildAccounts { get; set; }
     }
 }

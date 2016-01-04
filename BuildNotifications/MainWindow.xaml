@@ -35,9 +35,65 @@
                 </ContextMenu>
             </tb:TaskbarIcon.ContextMenu>
         </tb:TaskbarIcon>-->
-        
+
         <!-- Main Content -->
-        <Frame Source="BuildList.xaml" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
+        <!--<Frame Source="BuildList.xaml" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />-->
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition />
+                <RowDefinition Height="50" />
+            </Grid.RowDefinitions>
+            <TextBlock FontWeight="Bold" FontSize="14" Text="Builds" Height="20" Margin="10" />
+
+            <ScrollViewer 
+                Grid.Row="1"
+                Padding="10">
+                <StackPanel>
+                    <ItemsControl ItemsSource="{Binding BuildAccounts, Mode=TwoWay}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <Grid>
+                                        <TextBlock
+                                            Text="{Binding AccountDetails.AccountName}"
+                                            FontWeight="Bold"/>
+                                    </Grid>
+                                    <ItemsControl ItemsSource="{Binding BuildDefinitions}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid Margin="20,0,0,0">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="20" />
+                                                        <ColumnDefinition />
+                                                    </Grid.ColumnDefinitions>
+                                                    <Image 
+                                                        Grid.Column="0"
+                                                        Width="20"
+                                                        Source="Icons/tick.ico" />
+                                                    <TextBlock
+                                                        Grid.Column="1"
+                                                        Text="{Binding DisplayName}"/>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </ScrollViewer>
+
+            <Button 
+                Grid.Row="2"
+                Content="Manage Accounts..."
+                Command="{Binding ManageAccountsCommand}"
+                Margin="10"
+                Width="150"
+                HorizontalAlignment="Right"
+                />
+        </Grid>
     </Grid>
 
 </Window>

@@ -1,31 +1,40 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using BuildNotifications.Interface.Service;
 using BuildNotifications.Interface.ViewModel;
 using BuildNotifications.Model;
+using BuildNotifications.Model.Message;
 using BuildNotifications.ViewModel.Helpers;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
-using Newtonsoft.Json;
+using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace BuildNotifications.ViewModel
 {
     public class ManageAccountsViewModel : ViewModelBase, IManageAccountsViewModel
     {
         private readonly IAccountService _accountService;
+        private readonly IMessenger _messenger;
         private IList<VsoAccount> _accounts;
         private bool _isUpdateEnabled;
         private bool _notifyOnStart;
         private bool _notifyOnFinish;
 
-        public ManageAccountsViewModel(IAccountService accountService)
+        public ManageAccountsViewModel(IAccountService accountService, IMessenger messenger)
         {
             _accountService = accountService;
+            _messenger = messenger;
 
             Accounts = _accountService.GetAccounts();
+            _messenger.Register<AccountsUpdate>(this, update =>
+            {
+                Accounts = _accountService.GetAccounts();
+            });
 
             CloseDialogCommand = new RelayCommand(CloseDialog);
             UpdateAccountsCommand = new RelayCommand(UpdateAccounts);
+            AddAccountCommand = new RelayCommand(AddAccount);
 
             IsUpdateEnabled = true;
             NotifyOnStart = _accountService.GetNotifyOnStart();
@@ -35,6 +44,7 @@ namespace BuildNotifications.ViewModel
         #region Properties
         public RelayCommand CloseDialogCommand { get; }
         public RelayCommand UpdateAccountsCommand { get; }
+        public RelayCommand AddAccountCommand { get; }
 
         public IList<VsoAccount> Accounts
         {
@@ -79,6 +89,17 @@ namespace BuildNotifications.ViewModel
             CloseDialog();
 
              IsUpdateEnabled = true;
+        }
+
+        private void AddAccount()
+        {
+            ConfigureAccountWindow configureAccountWindow = new ConfigureAccountWindow
+            {
+                Top = Application.Current.MainWindow.Top + 100,
+                Left = Application.Current.MainWindow.Left + 100
+            };
+
+            configureAccountWindow.ShowDialog();
         }
 
         #endregion

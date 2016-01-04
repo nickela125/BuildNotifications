@@ -7,8 +7,8 @@ namespace BuildNotifications.Interface.Client
 {
     public interface IVsoClient
     {
-        Task<IList<VsoProject>> GetProjects(string accountName, string encodedCredentials);
-        Task<IList<VsoBuildDefinition>> GetBuildDefinitions(VsoProject project, string accountName, string encodedCredentials);
-        Task<IList<VsoBuild>> GetBuilds(VsoProject project, string accountName, string encodedCredentials, IList<string> buildDefinitions);
+        Task<IList<VsoProject>> GetProjects(AccountDetails accountDetails);
+        Task<IList<VsoBuildDefinition>> GetBuildDefinitions(AccountDetails accountDetails);
+        Task<IList<VsoBuild>> GetBuilds(AccountDetails accountDetails, IList<string> buildDefinitions);
     }
 }

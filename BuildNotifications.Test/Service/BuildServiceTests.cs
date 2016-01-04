@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using BuildNotifications.Client;
 using BuildNotifications.Interface.Client;
 using BuildNotifications.Model;
+using BuildNotifications.Model.DTO;
 using BuildNotifications.Service;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -20,8 +21,7 @@ namespace BuildNotifications.Test.Service
             var mockVsoClient = new Mock<IVsoClient>();
             mockVsoClient.Setup(
                 x =>
-                    x.GetBuilds(It.IsAny<VsoProject>(), It.IsAny<string>(), It.IsAny<string>(),
-                        It.IsAny<IList<string>>()))
+                    x.GetBuilds(It.IsAny<AccountDetails>(), It.IsAny<IList<string>>()))
                 .Returns(Task.FromResult(builds));
 
             return mockVsoClient.Object;
@@ -35,7 +35,7 @@ namespace BuildNotifications.Test.Service
             VsoBuildDefinition buildDefinition = new VsoBuildDefinition { Id = "1" };
 
             var buildService = new BuildService(Initialize(builds));
-            IList<VsoBuildUpdate> updates = buildService.CheckForUpdatedBuilds(new VsoProject(), string.Empty, string.Empty,
+            IList<VsoBuildUpdate> updates = buildService.CheckForUpdatedBuilds(new AccountDetails(), 
                 new List<VsoBuildDefinition> { buildDefinition }).Result;
 
             Assert.AreEqual(0, updates.Count);
@@ -61,7 +61,7 @@ namespace BuildNotifications.Test.Service
             VsoBuildDefinition buildDefinition = new VsoBuildDefinition { Id = "1", Name = "First Definition"};
             var buildService = new BuildService(Initialize(builds));
 
-            IList<VsoBuildUpdate> updates = buildService.CheckForUpdatedBuilds(new VsoProject(), string.Empty, string.Empty,
+            IList<VsoBuildUpdate> updates = buildService.CheckForUpdatedBuilds(new AccountDetails(), 
                 new List<VsoBuildDefinition> { buildDefinition }).Result;
 
             Assert.AreEqual(1, updates.Count);
@@ -91,7 +91,7 @@ namespace BuildNotifications.Test.Service
             VsoBuildDefinition buildDefinition = new VsoBuildDefinition { Id = "1", Name = "First Definition" };
             var buildService = new BuildService(Initialize(builds));
 
-            IList<VsoBuildUpdate> updates = buildService.CheckForUpdatedBuilds(new VsoProject(), string.Empty, string.Empty,
+            IList<VsoBuildUpdate> updates = buildService.CheckForUpdatedBuilds(new AccountDetails(), 
                 new List<VsoBuildDefinition> { buildDefinition }).Result;
 
             Assert.AreEqual(1, updates.Count);
@@ -121,7 +121,7 @@ namespace BuildNotifications.Test.Service
             VsoBuildDefinition buildDefinition = new VsoBuildDefinition { Id = "1" };
             var buildService = new BuildService(Initialize(builds));
 
-            IList<VsoBuildUpdate> updates = buildService.CheckForUpdatedBuilds(new VsoProject(), string.Empty, string.Empty,
+            IList<VsoBuildUpdate> updates = buildService.CheckForUpdatedBuilds(new AccountDetails(),
                 new List<VsoBuildDefinition> { buildDefinition }).Result;
 
             Assert.AreEqual(0, updates.Count);
@@ -154,7 +154,7 @@ namespace BuildNotifications.Test.Service
             VsoBuildDefinition buildDefinition = new VsoBuildDefinition { Id = "1", Name = "First Definition" };
             var buildService = new BuildService(Initialize(builds));
 
-            IList<VsoBuildUpdate> updates = buildService.CheckForUpdatedBuilds(new VsoProject(), string.Empty, string.Empty,
+            IList<VsoBuildUpdate> updates = buildService.CheckForUpdatedBuilds(new AccountDetails(),
                 new List<VsoBuildDefinition> { buildDefinition }).Result;
 
             Assert.AreEqual(1, updates.Count);
@@ -186,7 +186,7 @@ namespace BuildNotifications.Test.Service
             
             var buildService = new BuildService(Initialize(builds));
 
-            IList<VsoBuildUpdate> updates = buildService.CheckForUpdatedBuilds(new VsoProject(), string.Empty, string.Empty,
+            IList<VsoBuildUpdate> updates = buildService.CheckForUpdatedBuilds(new AccountDetails(),
                 new List<VsoBuildDefinition> { buildDefinition }).Result;
 
             Assert.AreEqual(0, updates.Count);
@@ -217,7 +217,7 @@ namespace BuildNotifications.Test.Service
 
             var buildService = new BuildService(Initialize(builds));
 
-            IList<VsoBuildUpdate> updates = buildService.CheckForUpdatedBuilds(new VsoProject(), string.Empty, string.Empty,
+            IList<VsoBuildUpdate> updates = buildService.CheckForUpdatedBuilds(new AccountDetails(),
                 new List<VsoBuildDefinition> { buildDefinition }).Result;
 
             Assert.AreEqual(1, updates.Count);
@@ -251,7 +251,7 @@ namespace BuildNotifications.Test.Service
 
             var buildService = new BuildService(Initialize(builds));
 
-            IList<VsoBuildUpdate> updates = buildService.CheckForUpdatedBuilds(new VsoProject(), string.Empty, string.Empty,
+            IList<VsoBuildUpdate> updates = buildService.CheckForUpdatedBuilds(new AccountDetails(),
                 new List<VsoBuildDefinition> { buildDefinition }).Result;
 
             Assert.AreEqual(1, updates.Count);
@@ -294,7 +294,7 @@ namespace BuildNotifications.Test.Service
 
             var buildService = new BuildService(Initialize(builds));
 
-            IList<VsoBuildUpdate> updates = buildService.CheckForUpdatedBuilds(new VsoProject(), string.Empty, string.Empty,
+            IList<VsoBuildUpdate> updates = buildService.CheckForUpdatedBuilds(new AccountDetails(),
                 new List<VsoBuildDefinition> { buildDefinition }).Result;
 
             Assert.AreEqual(0, updates.Count);
@@ -334,7 +334,7 @@ namespace BuildNotifications.Test.Service
 
             var buildService = new BuildService(Initialize(builds));
 
-            IList<VsoBuildUpdate> updates = buildService.CheckForUpdatedBuilds(new VsoProject(), string.Empty, string.Empty,
+            IList<VsoBuildUpdate> updates = buildService.CheckForUpdatedBuilds(new AccountDetails(),
                 new List<VsoBuildDefinition> { buildDefinition }).Result;
 
             Assert.AreEqual(1, updates.Count);
@@ -378,7 +378,7 @@ namespace BuildNotifications.Test.Service
 
             var buildService = new BuildService(Initialize(builds));
 
-            IList<VsoBuildUpdate> updates = buildService.CheckForUpdatedBuilds(new VsoProject(), string.Empty, string.Empty,
+            IList<VsoBuildUpdate> updates = buildService.CheckForUpdatedBuilds(new AccountDetails(),
                 new List<VsoBuildDefinition> { buildDefinition }).Result;
 
             Assert.AreEqual(1, updates.Count);
@@ -424,7 +424,7 @@ namespace BuildNotifications.Test.Service
 
             var buildService = new BuildService(Initialize(builds));
 
-            IList<VsoBuildUpdate> updates = buildService.CheckForUpdatedBuilds(new VsoProject(), string.Empty, string.Empty,
+            IList<VsoBuildUpdate> updates = buildService.CheckForUpdatedBuilds(new AccountDetails(),
                 new List<VsoBuildDefinition> { buildDefinition }).Result;
 
             Assert.AreEqual(1, updates.Count);
@@ -470,7 +470,7 @@ namespace BuildNotifications.Test.Service
 
             var buildService = new BuildService(Initialize(builds));
 
-            IList<VsoBuildUpdate> updates = buildService.CheckForUpdatedBuilds(new VsoProject(), string.Empty, string.Empty,
+            IList<VsoBuildUpdate> updates = buildService.CheckForUpdatedBuilds(new AccountDetails(),
                 new List<VsoBuildDefinition> { buildDefinition }).Result;
 
             Assert.AreEqual(2, updates.Count);
@@ -514,7 +514,7 @@ namespace BuildNotifications.Test.Service
 
             var buildService = new BuildService(Initialize(builds));
 
-            IList<VsoBuildUpdate> updates = buildService.CheckForUpdatedBuilds(new VsoProject(), string.Empty, string.Empty,
+            IList<VsoBuildUpdate> updates = buildService.CheckForUpdatedBuilds(new AccountDetails(),
                 new List<VsoBuildDefinition> { buildDefinition }).Result;
 
             Assert.AreEqual(1, updates.Count);
@@ -561,7 +561,7 @@ namespace BuildNotifications.Test.Service
 
             var buildService = new BuildService(Initialize(builds));
 
-            IList<VsoBuildUpdate> updates = buildService.CheckForUpdatedBuilds(new VsoProject(), string.Empty, string.Empty,
+            IList<VsoBuildUpdate> updates = buildService.CheckForUpdatedBuilds(new AccountDetails(),
                 new List<VsoBuildDefinition> { buildDefinition }).Result;
 
             Assert.AreEqual(0, updates.Count);

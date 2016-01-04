@@ -8,7 +8,7 @@ using BuildNotifications.Interface.ViewModel;
 using BuildNotifications.Model;
 using BuildNotifications.ViewModel.Helpers;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 
 namespace BuildNotifications.ViewModel
 {

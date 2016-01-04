@@ -99,15 +99,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="BuildList.xaml.cs">
-      <DependentUpon>BuildList.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="Helpers\TreeHelper.cs" />
     <Compile Include="Interface\Service\IBuildService.cs" />
     <Compile Include="Interface\ViewModel\IManageAccountsViewModel.cs" />
     <Compile Include="ManageAccountsWindow.xaml.cs">
       <DependentUpon>ManageAccountsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Model\BuildResult.cs" />
+    <Compile Include="Model\AccountDetails.cs" />
+    <Compile Include="Model\Message\AccountsUpdate.cs" />
+    <Compile Include="Model\Message\NotifyOptionsUpdate.cs" />
     <Compile Include="Model\VsoBuild.cs" />
     <Compile Include="Model\BuildStatus.cs" />
     <Compile Include="Interface\Service\IMapper.cs" />
@@ -128,10 +129,10 @@
     <Compile Include="Interface\Client\IVsoClient.cs" />
     <Compile Include="Interface\Service\IAccountService.cs" />
     <Compile Include="Interface\ViewModel\IConfigureAccountViewModel.cs" />
-    <Compile Include="Interface\ViewModel\IBuildListViewModel.cs" />
     <Compile Include="Interface\ViewModel\IMainViewModel.cs" />
     <Compile Include="Model\TreeItem.cs" />
     <Compile Include="Model\VsoAccount.cs" />
+    <Compile Include="Model\VsoSubscibedBuildList.cs" />
     <Compile Include="Model\VsoBuildDefinition.cs" />
     <Compile Include="Model\VsoBuildUpdate.cs" />
     <Compile Include="Model\VsoProject.cs" />
@@ -143,13 +144,8 @@
     <Compile Include="ViewModel\Helpers\ApplicationHelper.cs" />
     <Compile Include="ViewModel\Locator\CustomServiceLocator.cs" />
     <Compile Include="ViewModel\Locator\ViewModelLocator.cs" />
-    <Compile Include="ViewModel\BuildListViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ManageAccountsViewModel.cs" />
-    <Page Include="BuildList.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="ManageAccountsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -200,7 +196,27 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Icons\Error.ico">
+    <EmbeddedResource Include="Icons\tick.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Icons\cross.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Icons\info.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Icons\warning.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Icons\question.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

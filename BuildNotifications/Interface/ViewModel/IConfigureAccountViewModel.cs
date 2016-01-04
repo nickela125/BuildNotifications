@@ -1,5 +1,5 @@
 ﻿using System.Windows.Controls;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 
 namespace BuildNotifications.Interface.ViewModel
 {

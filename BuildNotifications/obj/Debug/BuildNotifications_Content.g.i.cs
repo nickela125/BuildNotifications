@@ -8,6 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("icons/error.ico")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("icons/quessdfdstion.ico")]
 
 

@@ -1,18 +1,19 @@
 ﻿using BuildNotifications.Client;
 using BuildNotifications.Interface.Service;
 using BuildNotifications.Service;
+using GalaSoft.MvvmLight.Messaging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BuildNotifications.Test.Service
 {
     [TestClass]
-    public class UnitTest1
+    public class AccountServiceTests
     {
         private IAccountService _accountService;
-        [TestInitialize]
+
         public void Initialize()
         {
-            _accountService = new AccountService(new VsoClient(new RestClient(), new Mapper()));
+            _accountService = new AccountService(new VsoClient(new RestClient(), new Mapper()), new Messenger());
         }
 
         [TestMethod]
@@ -20,5 +21,7 @@ namespace BuildNotifications.Test.Service
         {
 
         }
+
+        // TODO testing
     }
 }

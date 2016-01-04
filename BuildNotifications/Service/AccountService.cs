@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 using BuildNotifications.Interface.Client;
 using BuildNotifications.Interface.Service;
 using BuildNotifications.Model;
+using BuildNotifications.Model.DTO;
+using BuildNotifications.Model.Message;
+using GalaSoft.MvvmLight.Messaging;
 using Newtonsoft.Json;
 
 namespace BuildNotifications.Service
@@ -12,10 +15,12 @@ namespace BuildNotifications.Service
     public class AccountService : IAccountService
     {
         private readonly IVsoClient _vsoClient;
+        private readonly IMessenger _messenger;
 
-        public AccountService(IVsoClient vsoClient)
+        public AccountService(IVsoClient vsoClient, IMessenger messenger)
         {
             _vsoClient = vsoClient;
+            _messenger = messenger;
         }
 
         public async Task UpdateAccount(VsoAccount account)
@@ -25,11 +30,20 @@ namespace BuildNotifications.Service
                 throw new ArgumentNullException(nameof(account));
             }
 
+            AccountDetails accountDetails = new AccountDetails
+            {
+                AccountName = account.Name,
+                EncodedCredentials = account.EncodedCredentials
+            };
+
             // Get any updates to projects and builds
-            account.Projects = await _vsoClient.GetProjects(account.Name, account.EncodedCredentials);
+            account.Projects = await _vsoClient.GetProjects(accountDetails);
+
             foreach (VsoProject vsoProject in account.Projects)
             {
-                vsoProject.Builds = await _vsoClient.GetBuildDefinitions(vsoProject, account.Name, account.EncodedCredentials);
+                accountDetails.ProjectId = vsoProject.Id;
+                vsoProject.Builds = await _vsoClient.GetBuildDefinitions(accountDetails);
+                vsoProject.Builds.ToList().ForEach(b => b.IsSelected = false);
             }
 
             // Replace existing reference to account if there is one
@@ -48,7 +62,7 @@ namespace BuildNotifications.Service
             }
 
             SaveAccounts(accounts);
-            // todo notify of update
+           _messenger.Send(new AccountsUpdate());
         }
 
         public void SaveAccounts(IList<VsoAccount> accounts)
@@ -56,6 +70,32 @@ namespace BuildNotifications.Service
             string jsonString = JsonConvert.SerializeObject(accounts);
             Properties.Settings.Default[Constants.AccountsConfigurationName] = jsonString;
             Properties.Settings.Default.Save();
+            _messenger.Send(new AccountsUpdate());
+        }
+
+        public void UpdateBuildDefinitions(IList<VsoSubscibedBuildList> subscibedBuilds) // todo more efficient way?
+        {
+            IList<VsoAccount> accounts = GetAccounts();
+
+            foreach (VsoAccount account in accounts)
+            {
+                foreach (VsoProject vsoProject in account.Projects)
+                {
+                    VsoSubscibedBuildList buildList =
+                    subscibedBuilds.SingleOrDefault(sb => sb.AccountDetails.AccountName == account.Name && sb.AccountDetails.ProjectId == vsoProject.Id);
+
+                    if (buildList != null)
+                    {
+                        foreach (VsoBuildDefinition vsoBuildDefinition in vsoProject.Builds)
+                        {
+                            int existingDefinitionIndex =
+                                vsoProject.Builds.ToList().FindIndex(b => b.Id == vsoBuildDefinition.Id);
+                            vsoProject.Builds[existingDefinitionIndex] = vsoBuildDefinition;
+                        }
+                        
+                    }
+                }
+            }
         }
 
         public bool GetNotifyOnStart()
@@ -68,19 +108,46 @@ namespace BuildNotifications.Service
             return (bool)Properties.Settings.Default[Constants.NotifyOnFinishConfigurationName];
         }
 
-        public void SaveNotifyOptions(bool? notifyOnStart, bool? notifyOnFinish)
+        public void SaveNotifyOptions(bool notifyOnStart, bool notifyOnFinish)
         {
-            if (notifyOnStart != null)
-            {
-                Properties.Settings.Default[Constants.NotifyOnStartConfigurationName] = notifyOnStart;
-            }
-
-            if (notifyOnFinish != null)
-            {
-                Properties.Settings.Default[Constants.NotifyOnFinishConfigurationName] = notifyOnFinish;
-            }
-
+            Properties.Settings.Default[Constants.NotifyOnStartConfigurationName] = notifyOnStart;
+            Properties.Settings.Default[Constants.NotifyOnFinishConfigurationName] = notifyOnFinish;
             Properties.Settings.Default.Save();
+
+            _messenger.Send<NotifyOptionsUpdate>(new NotifyOptionsUpdate
+            {
+                NotifyOnStart = notifyOnStart,
+                NotifyOnFinish = notifyOnFinish
+            });
+        }
+
+        public void UpdateBuildStatus(string accountName, string projectId, IList<VsoBuildDefinition> updatedDefinitions)
+        {
+            if (accountName == null)
+            {
+                throw new ArgumentNullException("accountName");
+            }
+            if (projectId == null)
+            {
+                throw new ArgumentNullException("projectId");
+            }
+            if (updatedDefinitions == null || !updatedDefinitions.Any())
+            {
+                return;
+            }
+
+            IList<VsoAccount> accounts = GetAccounts();
+
+            VsoAccount account = accounts.Single(a => a.Name == accountName);
+            VsoProject project = account.Projects.Single(p => p.Id == projectId);
+            foreach (VsoBuildDefinition update in updatedDefinitions)
+            {
+                VsoBuildDefinition oldBuildDefinition = project.Builds.Single(b => b.Id == update.Id);
+                int buildDefinitionIndex = project.Builds.IndexOf(oldBuildDefinition);
+                project.Builds[buildDefinitionIndex] = update;
+            }
+
+            SaveAccounts(accounts);
         }
 
         public IList<VsoAccount> GetAccounts()

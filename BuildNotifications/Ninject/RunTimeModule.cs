@@ -5,6 +5,7 @@ using BuildNotifications.Interface.Service;
 using BuildNotifications.Interface.ViewModel;
 using BuildNotifications.Service;
 using BuildNotifications.ViewModel;
+using GalaSoft.MvvmLight.Messaging;
 using Ninject.Modules;
 
 namespace BuildNotifications.Ninject
@@ -13,9 +14,11 @@ namespace BuildNotifications.Ninject
     {
         public override void Load()
         {
+            // MVVM Light
+            Bind<IMessenger>().ToMethod(x => Messenger.Default);
+
             // ViewModel
             Bind<IMainViewModel>().To<MainViewModel>().InSingletonScope();
-            Bind<IBuildListViewModel>().To<BuildListViewModel>().InSingletonScope();
             Bind<IConfigureAccountViewModel>().To<ConfigureAccountViewModel>();
             Bind<IManageAccountsViewModel>().To<ManageAccountsViewModel>();
 
