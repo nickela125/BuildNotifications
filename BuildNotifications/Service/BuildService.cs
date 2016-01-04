@@ -61,6 +61,7 @@ namespace BuildNotifications.Service
                     {
                         Name = buildDefinition.DisplayName,
                         Id = buildDefinition.Id,
+                        RequestedFor = latestBuild.RequestedFor,
                         Result = latestBuild.Result,
                         Status = latestBuild.Status
                     });
@@ -85,6 +86,7 @@ namespace BuildNotifications.Service
                         {
                             Name = buildDefinition.DisplayName,
                             Id = buildDefinition.Id,
+                            RequestedFor = latestBuild.RequestedFor,
                             Result = latestBuild.Result,
                             Status = latestBuild.Status
                         });
@@ -97,6 +99,7 @@ namespace BuildNotifications.Service
                         {
                             Name = buildDefinition.DisplayName,
                             Id = buildDefinition.Id,
+                            RequestedFor = latestBuild.RequestedFor,
                             Result = latestBuild.Result,
                             Status = latestBuild.Status
                         });
@@ -113,6 +116,7 @@ namespace BuildNotifications.Service
                         {
                             Name = buildDefinition.DisplayName,
                             Id = buildDefinition.Id,
+                            RequestedFor = oldestBuild.RequestedFor,
                             Result = oldestBuild.Result,
                             Status = oldestBuild.Status
                         });
@@ -131,6 +135,7 @@ namespace BuildNotifications.Service
                     {
                         Name = buildDefinition.DisplayName,
                         Id = buildDefinition.Id,
+                        RequestedFor = latestBuild.RequestedFor,
                         Result = latestBuild.Result,
                         Status = latestBuild.Status
                     });

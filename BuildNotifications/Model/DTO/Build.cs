@@ -7,5 +7,6 @@
         public string Result { get; set; }
         public string QueueTime { get; set; }
         public BuildDefinition Definition { get; set; }
+        public User RequestedFor { get; set; }
     }
 }

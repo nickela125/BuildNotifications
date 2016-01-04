@@ -188,7 +188,10 @@ namespace BuildNotifications.ViewModel
                     // Only one we care about for now
                     if (vsoBuildUpdate.Status == BuildStatus.InProgress)
                     {
-                        _icon.ShowBalloonTip($"{vsoBuildUpdate.Name} Started", " ", BalloonIcon.Info);
+                        _icon.ShowBalloonTip(
+                            $"{vsoBuildUpdate.Name} Started", 
+                            $"Requested For: {vsoBuildUpdate.RequestedFor}", 
+                            BalloonIcon.Info);
                     }
                 }
                 else if (_notifyOnBuildFinish)
@@ -196,16 +199,28 @@ namespace BuildNotifications.ViewModel
                     switch (vsoBuildUpdate.Result)
                     {
                         case BuildResult.Succeeded:
-                            _icon.ShowBalloonTip($"{vsoBuildUpdate.Name} Succeeded", " ", BalloonIcon.Info);
+                            _icon.ShowBalloonTip(
+                                $"{vsoBuildUpdate.Name} Succeeded",
+                                $"Requested For: {vsoBuildUpdate.RequestedFor}", 
+                                BalloonIcon.Info);
                             break;
                         case BuildResult.PartiallySucceeded:
-                            _icon.ShowBalloonTip($"{vsoBuildUpdate.Name} Partially Succeeded", " ", BalloonIcon.Warning);
+                            _icon.ShowBalloonTip(
+                                $"{vsoBuildUpdate.Name} Partially Succeeded",
+                                $"Requested For: {vsoBuildUpdate.RequestedFor}",
+                                BalloonIcon.Warning);
                             break;
                         case BuildResult.Failed:
-                            _icon.ShowBalloonTip($"{vsoBuildUpdate.Name} Failed", " ", BalloonIcon.Error);
+                            _icon.ShowBalloonTip(
+                                $"{vsoBuildUpdate.Name} Failed",
+                                $"Requested For: {vsoBuildUpdate.RequestedFor}",
+                                BalloonIcon.Error);
                             break;
                         case BuildResult.Canceled:
-                            _icon.ShowBalloonTip($"{vsoBuildUpdate.Name} Cancelled", " ", BalloonIcon.Info);
+                            _icon.ShowBalloonTip(
+                                $"{vsoBuildUpdate.Name} Cancelled",
+                                $"Requested For: {vsoBuildUpdate.RequestedFor}",
+                                BalloonIcon.Info);
                             break;
                     }
                 }
