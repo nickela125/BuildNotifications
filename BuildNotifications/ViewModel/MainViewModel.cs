@@ -7,14 +7,13 @@ using System.Windows.Controls.Primitives;
 using BuildNotifications.Interface.Service;
 using BuildNotifications.Interface.ViewModel;
 using BuildNotifications.Model;
-using BuildNotifications.Model.DTO;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
-using Hardcodet.Wpf.TaskbarNotification;
 using Application = System.Windows.Application;
 using System.Windows.Forms;
 using BuildNotifications.Model.Message;
 using GalaSoft.MvvmLight.Messaging;
+using Hardcodet.Wpf.TaskbarNotification;
 using ContextMenu = System.Windows.Controls.ContextMenu;
 using MenuItem = System.Windows.Controls.MenuItem;
 
@@ -45,22 +44,22 @@ namespace BuildNotifications.ViewModel
             });
 
             CloseCommand = new RelayCommand<CancelEventArgs>(Close);
-            DoubleClickNotificationIconCommand = new RelayCommand(DoubleClickNotificationIcon);
+            ManageAccountsCommand = new RelayCommand(ManageAccounts);
             BuildsMenuItemCommand = new RelayCommand(BuildsMenuItem);
             ExitMenuItemCommand = new RelayCommand(ExitMenuItem);
-            ManageAccountsCommand = new RelayCommand(ManageAccounts);
 
             BuildAccounts = GetSubscribedBuilds();
             _messenger.Register<AccountsUpdate>(this, update =>
             {
                 BuildAccounts = GetSubscribedBuilds();
+                _icon.Icon = GetIconForBuilds();
             });
             // todo show correct icon
 
             _icon = new TaskbarIcon
             {
                 Name = "NotifyIcon",
-                Icon = GetIcon(null),
+                Icon = GetIconForBuilds(),
                 ToolTip = "Build Notifications",
                 MenuActivation = PopupActivationMode.RightClick,
                 ContextMenu = new ContextMenu
@@ -73,7 +72,8 @@ namespace BuildNotifications.ViewModel
                     Placement = PlacementMode.AbsolutePoint, //todo get this in the right position
                     HorizontalOffset = 0,
                     VerticalOffset = 0
-                }
+                },
+                DoubleClickCommand = BuildsMenuItemCommand
             };
             
             InitTimer();
@@ -82,9 +82,8 @@ namespace BuildNotifications.ViewModel
         #region Properties
 
         public RelayCommand<CancelEventArgs> CloseCommand { get; }
-        public RelayCommand DoubleClickNotificationIconCommand { get; }
-        public RelayCommand BuildsMenuItemCommand { get; }
-        public RelayCommand ExitMenuItemCommand { get; }
+        private RelayCommand BuildsMenuItemCommand { get; }
+        private RelayCommand ExitMenuItemCommand { get; }
         public RelayCommand ManageAccountsCommand { get; }
         private IList<VsoSubscibedBuildList> _buildAccounts; 
         public IList<VsoSubscibedBuildList> BuildAccounts
@@ -105,11 +104,6 @@ namespace BuildNotifications.ViewModel
         private void BuildsMenuItem()
         {
             Application.Current.MainWindow.Show();
-        }
-
-        private void DoubleClickNotificationIcon()
-        {
-
         }
 
         private void Close(CancelEventArgs eventArgs)
@@ -171,11 +165,14 @@ namespace BuildNotifications.ViewModel
                 if (updates.Any())
                 {
                     NotifyOfUpdates(updates);
-                    _accountService.UpdateBuildStatus(
-                        vsoBuildAccount.AccountDetails.AccountName,
-                        vsoBuildAccount.AccountDetails.ProjectId,
-                        vsoBuildAccount.BuildDefinitions.Where(bd => updates.Any(u => u.Id == bd.Id)).ToList());
+                    _icon.Icon = GetIconForBuilds();
                 }
+
+                // TODO - don't need to update every time - only if something has changed
+                _accountService.UpdateBuildStatus(
+                    vsoBuildAccount.AccountDetails.AccountName,
+                    vsoBuildAccount.AccountDetails.ProjectId,
+                    vsoBuildAccount.BuildDefinitions.ToList());
             }
         }
 
@@ -225,6 +222,29 @@ namespace BuildNotifications.ViewModel
                     }
                 }
             }
+        }
+
+        private Icon GetIconForBuilds()
+        {
+            List<BuildResult?> results = BuildAccounts.SelectMany(ba => ba.BuildDefinitions.Select(bd => bd.LastCompletedBuildResult)).ToList();
+
+            if (results.Any(r => r.GetValueOrDefault(BuildResult.Succeeded) == BuildResult.Failed))
+            {
+                return new Icon("Icons/cross.ico");
+            }
+            if (results.Any(r => r.GetValueOrDefault(BuildResult.Succeeded) == BuildResult.PartiallySucceeded))
+            {
+                return new Icon("Icons/warning.ico");
+            }
+            if (results.Any(r => r.GetValueOrDefault(BuildResult.Succeeded) == BuildResult.Canceled))
+            {
+                return new Icon("Icons/info.ico");
+            }
+            if (results.All(r => r.GetValueOrDefault(BuildResult.Failed) == BuildResult.Succeeded))
+            {
+                return new Icon("Icons/tick.ico");
+            }
+            return new Icon("Icons/question.ico");
         }
 
         private Icon GetIcon(BuildResult? result)

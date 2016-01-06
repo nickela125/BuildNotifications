@@ -3,10 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:BuildNotifications"
-        xmlns:tb="http://www.hardcodet.net/taskbar"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:command="http://www.galasoft.ch/mvvmlight"
+        xmlns:converters="clr-namespace:BuildNotifications.Converters"
         mc:Ignorable="d"
         Title="Build Notifications" Height="350" Width="525"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
@@ -16,6 +15,16 @@
             <command:EventToCommand Command="{Binding CloseCommand}" PassEventArgsToCommand="True" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
+    <Window.Resources>
+        <converters:SwitchConverter x:Key="IconConverter">
+            <converters:SwitchConverterCase When="Succeeded" Then="Icons/tickResource.ico" />
+            <converters:SwitchConverterCase When="PartiallySucceeded" Then="Icons/warningResource.ico" />
+            <converters:SwitchConverterCase When="Failed" Then="Icons/crossResource.ico" />
+            <converters:SwitchConverterCase When="Canceled" Then="Icons/questionResource.ico" /> 
+            <converters:SwitchConverterCase When="null" Then="Icons/questionResource.ico" /> 
+        </converters:SwitchConverter>
+    </Window.Resources>
+
     <Grid>
         <!-- Task bar things -->
         <!--<tb:TaskbarIcon
@@ -70,7 +79,8 @@
                                                     <Image 
                                                         Grid.Column="0"
                                                         Width="20"
-                                                        Source="Icons/tick.ico" />
+                                                        Source="{Binding LastCompletedBuildResult, 
+                                                            Converter={StaticResource IconConverter}}" />
                                                     <TextBlock
                                                         Grid.Column="1"
                                                         Text="{Binding DisplayName}"/>
