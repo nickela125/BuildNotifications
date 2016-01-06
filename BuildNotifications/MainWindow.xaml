@@ -20,90 +20,105 @@
             <converters:SwitchConverterCase When="Succeeded" Then="Icons/tickResource.ico" />
             <converters:SwitchConverterCase When="PartiallySucceeded" Then="Icons/warningResource.ico" />
             <converters:SwitchConverterCase When="Failed" Then="Icons/crossResource.ico" />
-            <converters:SwitchConverterCase When="Canceled" Then="Icons/questionResource.ico" /> 
-            <converters:SwitchConverterCase When="null" Then="Icons/questionResource.ico" /> 
+            <converters:SwitchConverterCase When="Canceled" Then="Icons/questionResource.ico" />
+            <converters:SwitchConverterCase When="null" Then="Icons/questionResource.ico" />
         </converters:SwitchConverter>
     </Window.Resources>
 
-    <Grid>
-        <!-- Task bar things -->
-        <!--<tb:TaskbarIcon
-              IconSource="Icons/Error.ico"
-              ToolTipText="Build Notifications"
-              MenuActivation="RightClick"
-              
-              >
-            <tb:TaskbarIcon.ContextMenu>
-                <ContextMenu>
-                    <MenuItem 
-                        Header="Builds..."
-                        Command="{Binding BuildsMenuItemCommand}"/>
-                    <MenuItem  
-                        Header="Exit"
-                        Command="{Binding ExitMenuItemCommand}" />
-                </ContextMenu>
-            </tb:TaskbarIcon.ContextMenu>
-        </tb:TaskbarIcon>-->
+    <!-- Main Content -->
+    <Grid
+        Background="#F0F0F0">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="40" />
+        </Grid.RowDefinitions>
 
-        <!-- Main Content -->
-        <!--<Frame Source="BuildList.xaml" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />-->
-        <Grid>
+        <!-- http://blogs.msdn.com/b/jaimer/archive/2009/01/20/styling-microsoft-s-wpf-datagrid.aspx
+        http://www.wpftutorial.net/datagrid.html
+        <DataGrid
+            Grid.Row="0"
+            Background="White"
+            Margin="10"
+            ItemsSource="{Binding BuildAccounts}">
+            <DataGrid.Columns></DataGrid.Columns>
+        </DataGrid>-->
+        
+        <!--<Grid 
+            Grid.Row="0"
+            Background="White"
+            Margin="10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="50" />
                 <RowDefinition />
-                <RowDefinition Height="50" />
             </Grid.RowDefinitions>
-            <TextBlock FontWeight="Bold" FontSize="14" Text="Builds" Height="20" Margin="10" />
-
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="3" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="asdf asdf lksadf safljk sfaklj sljk sfdfas asf" />
+            <GridSplitter Grid.Row="0" Grid.Column="1" Background="White" BorderBrush="DarkGray" BorderThickness="1,0,0,0"  HorizontalAlignment="Stretch" />
+            <TextBlock Grid.Row="0" Grid.Column="2" Text="asdf asdf lksadf safljk sfaklj sljk sfdfas asf" /> 
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="asdf asdf lksadf safljk sfaklj sljk sfdfas asf" /> 
+            <TextBlock Grid.Row="1" Grid.Column="2" Text="asdf asdf lksadf safljk sfaklj sljk sfdfas asf" /> 
+        </Grid>-->
+        <Border
+                Grid.Row="0"
+                Margin="10"
+                BorderBrush="#828790"
+                BorderThickness="0.5">
             <ScrollViewer 
-                Grid.Row="1"
-                Padding="10">
-                <StackPanel>
-                    <ItemsControl ItemsSource="{Binding BuildAccounts, Mode=TwoWay}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel>
-                                    <Grid>
-                                        <TextBlock
+                Background="White"
+                BorderBrush="DarkGray"
+                BorderThickness="1"
+                Padding="10"
+                VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <ItemsControl ItemsSource="{Binding BuildAccounts, Mode=TwoWay}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <Grid>
+                                    <TextBlock
                                             Text="{Binding AccountDetails.AccountName}"
                                             FontWeight="Bold"/>
-                                    </Grid>
-                                    <ItemsControl ItemsSource="{Binding BuildDefinitions}">
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                                <Grid Margin="20,0,0,0">
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="20" />
-                                                        <ColumnDefinition />
-                                                    </Grid.ColumnDefinitions>
-                                                    <Image 
+                                </Grid>
+                                <ItemsControl ItemsSource="{Binding BuildDefinitions}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Margin="20,0,0,0">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="20" />
+                                                    <ColumnDefinition />
+                                                </Grid.ColumnDefinitions>
+                                                <Image 
                                                         Grid.Column="0"
                                                         Width="20"
                                                         Source="{Binding LastCompletedBuildResult, 
                                                             Converter={StaticResource IconConverter}}" />
-                                                    <TextBlock
+                                                <TextBlock
                                                         Grid.Column="1"
                                                         Text="{Binding DisplayName}"/>
-                                                </Grid>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </StackPanel>
-            </ScrollViewer>
-
-            <Button 
-                Grid.Row="2"
-                Content="Manage Accounts..."
-                Command="{Binding ManageAccountsCommand}"
-                Margin="10"
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </ScrollViewer>
+        </Border>
+        
+        <Button 
+                Grid.Row="1"
+                Content="Manage Builds..."
+                Command="{Binding ManageBuildsCommand}"
+                Margin="10,0,10,10"
                 Width="150"
                 HorizontalAlignment="Right"
                 />
-        </Grid>
     </Grid>
 
 </Window>

@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:BuildNotifications"
         mc:Ignorable="d"
         Title="Configure Account"  Height="285" Width="400" ResizeMode="NoResize"
-        DataContext="{Binding ConfigureAccount, Source={StaticResource Locator}}">
+        DataContext="{Binding ConfigureAccount, Source={StaticResource Locator}}"
+        Background="#F0F0F0">
     <StackPanel Margin="10,10,10,10">
         <TextBlock FontWeight="Bold" FontSize="14" Text="Account:" Height="20" />
         <StackPanel Orientation="Horizontal" Margin="0,0,0,20">

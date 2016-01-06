@@ -44,7 +44,7 @@ namespace BuildNotifications.ViewModel
             });
 
             CloseCommand = new RelayCommand<CancelEventArgs>(Close);
-            ManageAccountsCommand = new RelayCommand(ManageAccounts);
+            ManageBuildsCommand = new RelayCommand(ManageBuilds);
             BuildsMenuItemCommand = new RelayCommand(BuildsMenuItem);
             ExitMenuItemCommand = new RelayCommand(ExitMenuItem);
 
@@ -73,7 +73,8 @@ namespace BuildNotifications.ViewModel
                     HorizontalOffset = 0,
                     VerticalOffset = 0
                 },
-                DoubleClickCommand = BuildsMenuItemCommand
+                DoubleClickCommand = BuildsMenuItemCommand,
+                ToolTipText = "Build Notifications"
             };
             
             InitTimer();
@@ -84,7 +85,7 @@ namespace BuildNotifications.ViewModel
         public RelayCommand<CancelEventArgs> CloseCommand { get; }
         private RelayCommand BuildsMenuItemCommand { get; }
         private RelayCommand ExitMenuItemCommand { get; }
-        public RelayCommand ManageAccountsCommand { get; }
+        public RelayCommand ManageBuildsCommand { get; }
         private IList<VsoSubscibedBuildList> _buildAccounts; 
         public IList<VsoSubscibedBuildList> BuildAccounts
         {
@@ -111,15 +112,15 @@ namespace BuildNotifications.ViewModel
             eventArgs.Cancel = true;
             Application.Current.MainWindow.Hide();
         }
-        private void ManageAccounts()
+        private void ManageBuilds()
         {
-            ManageAccountsWindow manageAccountsWindow = new ManageAccountsWindow
+            ManageBuildsWindow manageBuildsWindow = new ManageBuildsWindow
             {
                 Top = Application.Current.MainWindow.Top + 100,
                 Left = Application.Current.MainWindow.Left + 100
             };
 
-            manageAccountsWindow.ShowDialog();
+            manageBuildsWindow.ShowDialog();
         }
 
         #endregion

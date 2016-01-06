@@ -4,7 +4,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 
 namespace BuildNotifications.Interface.ViewModel
 {
-    public interface IManageAccountsViewModel
+    public interface IManageBuildsViewModel
     {
         IList<VsoAccount> Accounts { get; set; }
         RelayCommand CloseDialogCommand { get; }

@@ -12,7 +12,7 @@ using GalaSoft.MvvmLight.Messaging;
 
 namespace BuildNotifications.ViewModel
 {
-    public class ManageAccountsViewModel : ViewModelBase, IManageAccountsViewModel
+    public class ManageBuildsViewModel : ViewModelBase, IManageBuildsViewModel
     {
         private readonly IAccountService _accountService;
         private readonly IMessenger _messenger;
@@ -21,7 +21,7 @@ namespace BuildNotifications.ViewModel
         private bool _notifyOnStart;
         private bool _notifyOnFinish;
 
-        public ManageAccountsViewModel(IAccountService accountService, IMessenger messenger)
+        public ManageBuildsViewModel(IAccountService accountService, IMessenger messenger)
         {
             _accountService = accountService;
             _messenger = messenger;

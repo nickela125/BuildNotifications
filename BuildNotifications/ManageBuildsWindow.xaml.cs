@@ -15,11 +15,11 @@ using System.Windows.Shapes;
 namespace BuildNotifications
 {
     /// <summary>
-    /// Interaction logic for ManageAccountsWindow.xaml
+    /// Interaction logic for ManageBuildsWindow.xaml
     /// </summary>
-    public partial class ManageAccountsWindow : Window
+    public partial class ManageBuildsWindow : Window
     {
-        public ManageAccountsWindow()
+        public ManageBuildsWindow()
         {
             InitializeComponent();
         }

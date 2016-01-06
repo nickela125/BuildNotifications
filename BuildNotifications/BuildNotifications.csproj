@@ -100,9 +100,9 @@
     <Compile Include="Converters\SwitchConverter.cs" />
     <Compile Include="Helpers\TreeHelper.cs" />
     <Compile Include="Interface\Service\IBuildService.cs" />
-    <Compile Include="Interface\ViewModel\IManageAccountsViewModel.cs" />
-    <Compile Include="ManageAccountsWindow.xaml.cs">
-      <DependentUpon>ManageAccountsWindow.xaml</DependentUpon>
+    <Compile Include="Interface\ViewModel\IManageBuildsViewModel.cs" />
+    <Compile Include="ManageBuildsWindow.xaml.cs">
+      <DependentUpon>ManageBuildsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Model\BuildResult.cs" />
     <Compile Include="Model\AccountDetails.cs" />
@@ -145,8 +145,8 @@
     <Compile Include="ViewModel\Locator\CustomServiceLocator.cs" />
     <Compile Include="ViewModel\Locator\ViewModelLocator.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
-    <Compile Include="ViewModel\ManageAccountsViewModel.cs" />
-    <Page Include="ManageAccountsWindow.xaml">
+    <Compile Include="ViewModel\ManageBuildsViewModel.cs" />
+    <Page Include="ManageBuildsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

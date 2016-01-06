@@ -1,11 +1,11 @@
-﻿<Window x:Class="BuildNotifications.ManageAccountsWindow"
+﻿<Window x:Class="BuildNotifications.ManageBuildsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Mangage Accounts"  Height="525" Width="500" ResizeMode="NoResize"
-        DataContext="{Binding ManageAccounts, Source={StaticResource Locator}}">
+        Title="Manage Builds"  Height="525" Width="500" ResizeMode="NoResize"
+        DataContext="{Binding ManageBuilds, Source={StaticResource Locator}}">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="VisibilityConverter" />
 
@@ -34,7 +34,7 @@
             </StackPanel>
         </HierarchicalDataTemplate>
     </Window.Resources>
-    <Grid>
+    <Grid Background="#F0F0F0">
         <Grid.RowDefinitions>
             <RowDefinition Height="40" />
             <RowDefinition Height="*" />
@@ -45,16 +45,6 @@
             <ColumnDefinition />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-
-        <TextBlock 
-            Text="Accounts" 
-            Grid.Row="0" 
-            Grid.Column="0" 
-            Grid.ColumnSpan="2" 
-            FontWeight="Bold" 
-            FontSize="14" 
-            Height="20" 
-            Margin="10" />
 
         <Button 
             Grid.Row="0"
