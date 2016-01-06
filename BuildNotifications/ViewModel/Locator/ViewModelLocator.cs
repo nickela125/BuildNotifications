@@ -1,6 +1,7 @@
 ﻿using BuildNotifications.Interface;
 using BuildNotifications.Interface.ViewModel;
 using BuildNotifications.Ninject;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
 using Ninject;
@@ -16,7 +17,9 @@ namespace BuildNotifications.ViewModel.Locator
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
-            StandardKernel kernel = new StandardKernel(new RunTimeModule());
+            StandardKernel kernel = (bool)ViewModelBase.IsInDesignModeStatic
+                ? new StandardKernel(new DesignTimeModule())
+                : new StandardKernel(new RunTimeModule());
 
             ServiceLocator.SetLocatorProvider(() => new CustomServiceLocator(kernel));
         }

@@ -73,6 +73,15 @@ namespace BuildNotifications.Service
             _messenger.Send(new AccountsUpdate());
         }
 
+        public void RemoveAccount(VsoAccount account)
+        {
+            IList<VsoAccount> accounts = GetAccounts();
+            VsoAccount accountToRemove = accounts.Single(a => a.Name == account.Name);
+            int accountIndex = accounts.IndexOf(accountToRemove);
+            accounts.RemoveAt(accountIndex);
+            SaveAccounts(accounts);
+        }
+
         public void UpdateBuildDefinitions(IList<VsoSubscibedBuildList> subscibedBuilds) // todo more efficient way?
         {
             IList<VsoAccount> accounts = GetAccounts();

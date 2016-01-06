@@ -34,6 +34,8 @@ namespace BuildNotifications.ViewModel
 
             CloseDialogCommand = new RelayCommand(CloseDialog);
             UpdateAccountsCommand = new RelayCommand(UpdateAccounts);
+            EditAccountCommand = new RelayCommand<VsoAccount>(EditAccount);
+            RemoveAccountCommand = new RelayCommand<VsoAccount>(RemoveAccount);
             AddAccountCommand = new RelayCommand(AddAccount);
 
             IsUpdateEnabled = true;
@@ -44,6 +46,8 @@ namespace BuildNotifications.ViewModel
         #region Properties
         public RelayCommand CloseDialogCommand { get; }
         public RelayCommand UpdateAccountsCommand { get; }
+        public RelayCommand<VsoAccount> EditAccountCommand { get; }
+        public RelayCommand<VsoAccount> RemoveAccountCommand { get; }
         public RelayCommand AddAccountCommand { get; }
 
         public IList<VsoAccount> Accounts
@@ -89,6 +93,31 @@ namespace BuildNotifications.ViewModel
             CloseDialog();
 
              IsUpdateEnabled = true;
+        }
+
+        private void EditAccount(VsoAccount account)
+        {
+            ConfigureAccountWindow configureAccountWindow = new ConfigureAccountWindow
+            {
+                Top = Application.Current.MainWindow.Top + 100,
+                Left = Application.Current.MainWindow.Left + 100
+            };
+
+            configureAccountWindow.ShowDialog();
+        }
+
+        private void RemoveAccount(VsoAccount account)
+        {
+            MessageBoxResult confirmation = MessageBox.Show(
+                $"Are you sure you want to remove the account '{account.Name}'?",
+                "Confirm Remove Account",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+
+            if (confirmation == MessageBoxResult.Yes)
+            {
+                _accountService.RemoveAccount(account);
+            }
         }
 
         private void AddAccount()

@@ -9,6 +9,8 @@ namespace BuildNotifications.Interface.ViewModel
         IList<VsoAccount> Accounts { get; set; }
         RelayCommand CloseDialogCommand { get; }
         RelayCommand UpdateAccountsCommand { get; }
+        RelayCommand<VsoAccount> EditAccountCommand { get; }
+        RelayCommand<VsoAccount> RemoveAccountCommand { get; }
         RelayCommand AddAccountCommand { get; }
         bool IsUpdateEnabled { get; }
         bool NotifyOnStart { get; }

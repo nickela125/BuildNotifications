@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using BuildNotifications.Model;
 
-namespace BuildNotifications.Helpers
+namespace BuildNotifications.Model.Helpers
 {
     public static class TreeHelper
     {

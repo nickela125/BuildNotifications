@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BuildNotifications.Client;
 using BuildNotifications.Interface.Client;
 using BuildNotifications.Model;
-using BuildNotifications.Model.DTO;
 using BuildNotifications.Service;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;

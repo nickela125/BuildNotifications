@@ -3,16 +3,22 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+        xmlns:helpers="clr-namespace:BuildNotifications.ViewModel.Helpers"
         mc:Ignorable="d"
         Title="Manage Builds"  Height="525" Width="500" ResizeMode="NoResize"
         DataContext="{Binding ManageBuilds, Source={StaticResource Locator}}">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="VisibilityConverter" />
+        <helpers:BindingProxy x:Key="proxy" Data="{Binding}"/>
 
-        <HierarchicalDataTemplate 
+        <HierarchicalDataTemplate
           x:Key="CheckBoxItemTemplate"
           ItemsSource="{Binding Children}">
-            <StackPanel Orientation="Horizontal">
+            <StackPanel 
+                Orientation="Horizontal" 
+                x:Name="OuterControl">
                 <CheckBox
                   Focusable="False" 
                   IsChecked="{Binding IsSelected, Mode=TwoWay}" 
@@ -20,16 +26,21 @@
                 <ContentPresenter 
                   Content="{Binding DisplayName, Mode=OneTime}"
                   Margin="2,0"
-                >
-                    <!-- todo menu -->
-                    <!--<ContentPresenter.ContextMenu>
+                  Tag="{Binding ElementName=OuterControl, Path=DataContext}">
+                    <ContentPresenter.ContextMenu>
                         <ContextMenu StaysOpen="true"
-                                     Visibility="{Binding Path=Data.DisplayMenu, 
-                                        Source={StaticResource DataContextProxy}, Converter={StaticResource VisibilityConverter}}">
-                            <MenuItem Header="Edit..."/>
-                            <MenuItem Header="Remove"/>
+                                     DataContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}"
+                                     Visibility="{Binding DisplayMenu, Converter={StaticResource VisibilityConverter}}">
+                            <MenuItem Header="Edit..." 
+                                      Command="{Binding Data.EditAccountCommand, Source={StaticResource proxy}}"
+                                      DataContext="{Binding Path=DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType=ContextMenu}}"
+                                      CommandParameter="{Binding}"/>
+                            <MenuItem Header="Remove"
+                                      Command="{Binding Data.RemoveAccountCommand, Source={StaticResource proxy}}"
+                                      DataContext="{Binding Path=DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType=ContextMenu}}"
+                                      CommandParameter="{Binding}" />
                         </ContextMenu>
-                    </ContentPresenter.ContextMenu>-->
+                    </ContentPresenter.ContextMenu>
                 </ContentPresenter>
             </StackPanel>
         </HierarchicalDataTemplate>
@@ -64,9 +75,10 @@
             Margin="10,0,10,0"
             ItemsSource="{Binding Accounts, Mode=TwoWay}"
             ItemTemplate="{StaticResource CheckBoxItemTemplate}"
+            Padding="10"
             />
 
-            <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Vertical">
+        <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Vertical">
             <TextBlock 
                 Text="Notify me when a build:"
                 FontSize="11" 
@@ -76,16 +88,16 @@
                 Content="Starts"
                 IsChecked="{Binding NotifyOnStart}"
                 FontSize="11" 
-                Height="14" 
+                Height="16" 
                 Margin="20,10,0,0"/>
             <CheckBox
                 Content="Finishes"
                 IsChecked="{Binding NotifyOnFinish}"
                 FontSize="11" 
-                Height="14"
+                Height="16"
                 Margin="20,10,0,0"/>
         </StackPanel>
-        
+
         <!--Buttons-->
         <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
             <Button Margin="0,0,10,0" Width="100" Height="30" Content="Update" IsDefault="True" IsEnabled="{Binding IsUpdateEnabled}"  Command="{Binding UpdateAccountsCommand}"/>

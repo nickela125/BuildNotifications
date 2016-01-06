@@ -1,6 +1,4 @@
-﻿using BuildNotifications.Model;
-
-namespace BuildNotifications.Helpers
+﻿namespace BuildNotifications.Common.Helpers
 {
     public static class VsoAddressHelper
     {

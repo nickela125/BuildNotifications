@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BuildNotifications.Helpers;
+using BuildNotifications.Common.Helpers;
 using BuildNotifications.Interface.Client;
 using BuildNotifications.Interface.Service;
 using BuildNotifications.Model;

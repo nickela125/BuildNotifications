@@ -5,7 +5,6 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web;
 using BuildNotifications.Interface.Client;
-using BuildNotifications.Model;
 using Newtonsoft.Json;
 
 namespace BuildNotifications.Client
