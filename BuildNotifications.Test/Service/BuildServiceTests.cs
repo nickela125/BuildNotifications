@@ -566,11 +566,5 @@ namespace BuildNotifications.Test.Service
             Assert.AreEqual(BuildResult.Succeeded, buildDefinition.LastCompletedBuildResult);
             Assert.AreEqual("1234", buildDefinition.CurrentBuildId);
         }
-
-        [TestMethod]
-        public void ThisTestFails()
-        {
-            Assert.IsFalse(true); 
-        }
     }
 }
