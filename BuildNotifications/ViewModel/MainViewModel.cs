@@ -76,6 +76,11 @@ namespace BuildNotifications.ViewModel
                 DoubleClickCommand = BuildsMenuItemCommand,
                 ToolTipText = "Build Notifications"
             };
+
+            _icon.TrayBalloonTipClicked += (sender, args) =>
+            {
+                // todo need to get url here
+            };
             
             InitTimer();
         }

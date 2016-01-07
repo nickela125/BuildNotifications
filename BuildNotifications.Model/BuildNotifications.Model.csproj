@@ -70,6 +70,8 @@
     <Compile Include="DTO\Build.cs" />
     <Compile Include="DTO\BuildDefinition.cs" />
     <Compile Include="DTO\BuildDefinitionList.cs" />
+    <Compile Include="DTO\BuildLink.cs" />
+    <Compile Include="DTO\BuildLinks.cs" />
     <Compile Include="DTO\BuildList.cs" />
     <Compile Include="DTO\Project.cs" />
     <Compile Include="DTO\ProjectList.cs" />

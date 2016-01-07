@@ -34,7 +34,8 @@ namespace BuildNotifications.Service
                 Status = (BuildStatus)Enum.Parse(typeof(BuildStatus), build.Status, true),
                 BuildDefinitionId = build.Definition.Id,
                 QueueTime = DateTime.Parse(build.QueueTime),
-                RequestedFor = build.RequestedFor.DisplayName
+                RequestedFor = build.RequestedFor.DisplayName,
+                BuildUrl = build.Links.Self.Href
             };
         }
     }
