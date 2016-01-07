@@ -570,7 +570,7 @@ namespace BuildNotifications.Test.Service
         [TestMethod]
         public void ThisTestFails()
         {
-            Assert.IsFalse(true);
+            Assert.IsFalse(true); 
         }
     }
 }
