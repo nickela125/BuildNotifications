@@ -100,7 +100,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Converters\BuildResultToImageSourceConverter.cs" />
     <Compile Include="Converters\SwitchConverter.cs" />
     <Compile Include="ManageBuildsWindow.xaml.cs">
       <DependentUpon>ManageBuildsWindow.xaml</DependentUpon>
