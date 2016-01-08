@@ -42,13 +42,16 @@ namespace BuildNotifications.Service
         private IList<VsoBuildUpdate> CheckForUpdateInternal(List<VsoBuild> buildList, VsoBuildDefinition buildDefinition)
         {
             IList<VsoBuildUpdate> updates = new List<VsoBuildUpdate>();
+            
+            List<VsoBuild> orderedBuilds = buildList.OrderByDescending(b => b.QueueTime).ToList();
+            VsoBuild latestBuild = orderedBuilds.First(); // method only called if at least one build
+            VsoBuild secondLatestBuild = orderedBuilds.Count < 2 ? null : orderedBuilds.Last();
 
-            if (buildDefinition.CurrentBuildId == null)
+            if (buildDefinition.CurrentBuildId == null || 
+                    (!buildDefinition.CurrentBuildId.Equals(latestBuild.Id) && 
+                        (secondLatestBuild == null || !buildDefinition.CurrentBuildId.Equals(secondLatestBuild.Id))))
             {
-                // No builds recorded yet
-                VsoBuild latestBuild = buildList.Count == 1 ?
-                    buildList.First() :
-                    buildList.OrderByDescending(b => b.QueueTime).First();
+                // One or two builds that we haven't seen before
 
                 buildDefinition.CurrentBuildId = latestBuild.Id;
                 buildDefinition.CurrentBuildStatus = latestBuild.Status;
@@ -69,11 +72,6 @@ namespace BuildNotifications.Service
             }
             else
             {
-                // Build recorded
-                List<VsoBuild> orderedBuilds = buildList.OrderByDescending(b => b.QueueTime).ToList();
-                VsoBuild latestBuild = orderedBuilds.First();
-                VsoBuild oldestBuild = orderedBuilds.Count == 1 ? null : orderedBuilds.Last();
-
                 // latest build already seen before
                 if (buildDefinition.CurrentBuildId.Equals(latestBuild.Id))
                 {
@@ -105,20 +103,20 @@ namespace BuildNotifications.Service
                         });
                     }
                 }
-                // Older build has been seen before
-                else if (oldestBuild != null && buildDefinition.CurrentBuildId.Equals(oldestBuild.Id))
+                // Second latest build has been seen before
+                else if (secondLatestBuild != null && buildDefinition.CurrentBuildId.Equals(secondLatestBuild.Id))
                 {
-                    if (oldestBuild.Status != buildDefinition.CurrentBuildStatus)
+                    if (secondLatestBuild.Status != buildDefinition.CurrentBuildStatus)
                     {
-                        buildDefinition.LastCompletedBuildResult = oldestBuild.Result;
+                        buildDefinition.LastCompletedBuildResult = secondLatestBuild.Result;
 
                         updates.Add(new VsoBuildUpdate
                         {
                             Name = buildDefinition.DisplayName,
                             Id = buildDefinition.Id,
-                            RequestedFor = oldestBuild.RequestedFor,
-                            Result = oldestBuild.Result,
-                            Status = oldestBuild.Status
+                            RequestedFor = secondLatestBuild.RequestedFor,
+                            Result = secondLatestBuild.Result,
+                            Status = secondLatestBuild.Status
                         });
                     }
                     
