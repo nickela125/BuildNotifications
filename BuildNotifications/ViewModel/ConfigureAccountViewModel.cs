@@ -60,7 +60,7 @@ namespace BuildNotifications.ViewModel
         {
             IsUpdateEnabled = false;
 
-            var account = new VsoAccount
+            var account = new Account
             {
                 Name = VsoAccount,
                 Username = Username,
@@ -69,7 +69,7 @@ namespace BuildNotifications.ViewModel
 
             try
             {
-                await _accountService.UpdateAccount(account);
+                await _accountService.UpdateAccountDetails(account);
                 CloseDialog();
             }
             catch (Exception)

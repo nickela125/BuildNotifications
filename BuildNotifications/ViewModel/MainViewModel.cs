@@ -25,36 +25,25 @@ namespace BuildNotifications.ViewModel
         private readonly IBuildService _buildService;
         private readonly IMessenger _messenger;
         private Timer _timer;
-        private TaskbarIcon _icon;
-        private bool _notifyOnBuildStart;
-        private bool _notifyOnBuildFinish;
+        private TaskbarIcon _icon; 
 
         public MainViewModel(IAccountService accountService, IBuildService buildService, IMessenger messenger)
         {
             _accountService = accountService;
             _buildService = buildService;
             _messenger = messenger;
-            _notifyOnBuildStart = _accountService.GetNotifyOnStart();
-            _notifyOnBuildFinish = _accountService.GetNotifyOnFinish();
-
-            _messenger.Register<NotifyOptionsUpdate>(this, update =>
-            {
-                _notifyOnBuildStart = ((NotifyOptionsUpdate) update).NotifyOnStart;
-                _notifyOnBuildFinish = ((NotifyOptionsUpdate) update).NotifyOnFinish;
-            });
 
             CloseCommand = new RelayCommand<CancelEventArgs>(Close);
             ManageBuildsCommand = new RelayCommand(ManageBuilds);
             BuildsMenuItemCommand = new RelayCommand(BuildsMenuItem);
             ExitMenuItemCommand = new RelayCommand(ExitMenuItem);
 
-            BuildAccounts = GetSubscribedBuilds();
-            _messenger.Register<AccountsUpdate>(this, update =>
+            SubscribedBuilds = _buildService.GetSubscribedBuilds();
+            _messenger.Register<SubscribedBuildsUpdate>(this, update =>
             {
-                BuildAccounts = GetSubscribedBuilds();
+                SubscribedBuilds = ((SubscribedBuildsUpdate)update).SubscribedBuilds;
                 _icon.Icon = GetIconForBuilds();
             });
-            // todo show correct icon
 
             _icon = new TaskbarIcon
             {
@@ -69,7 +58,7 @@ namespace BuildNotifications.ViewModel
                         new MenuItem { Header = "Builds...", Command = BuildsMenuItemCommand },
                         new MenuItem { Header = "Exit", Command = ExitMenuItemCommand }
                     },
-                    Placement = PlacementMode.AbsolutePoint, //todo get this in the right position
+                    Placement = PlacementMode.AbsolutePoint,
                     HorizontalOffset = 0,
                     VerticalOffset = 0
                 },
@@ -91,11 +80,12 @@ namespace BuildNotifications.ViewModel
         private RelayCommand BuildsMenuItemCommand { get; }
         private RelayCommand ExitMenuItemCommand { get; }
         public RelayCommand ManageBuildsCommand { get; }
-        private IList<VsoSubscibedBuildList> _buildAccounts; 
-        public IList<VsoSubscibedBuildList> BuildAccounts
+
+        private IList<SubscribedBuild> _subscribedBuilds; 
+        public IList<SubscribedBuild> SubscribedBuilds
         {
-            get { return _buildAccounts; }
-            set { Set(ref _buildAccounts, value); }
+            get { return _subscribedBuilds; }
+            set { Set(ref _subscribedBuilds, value); }
         }
 
         #endregion
@@ -140,53 +130,21 @@ namespace BuildNotifications.ViewModel
             _timer.Start();
         }
 
-        private IList<VsoSubscibedBuildList> GetSubscribedBuilds()
-        {
-            IList<VsoAccount> accounts = _accountService.GetAccounts();
-
-            return (from account in accounts
-                    where account.IsSelected == null || account.IsSelected.Value
-                    from project in account.Projects
-                    where project.IsSelected == null || project.IsSelected.Value
-                    let definitions = project.Builds.Where(b => b.IsSelected != null && (bool)b.IsSelected).ToList()
-                    where definitions.Any()
-                    select new VsoSubscibedBuildList
-                    {
-                        BuildDefinitions = definitions,
-                        AccountDetails = new AccountDetails
-                        {
-                            AccountName = account.Name,
-                            EncodedCredentials = account.EncodedCredentials,
-                            ProjectId = project.Id
-                        }
-                    }).ToList();
-        }
-
         private async void CheckBuilds(object sender, EventArgs e)
         {
-            foreach (VsoSubscibedBuildList vsoBuildAccount in BuildAccounts)
+            IList<BuildUpdate> updates = await _buildService.CheckForUpdatedBuilds(SubscribedBuilds);
+            if (updates.Any())
             {
-                IList<VsoBuildUpdate> updates = await _buildService.CheckForUpdatedBuilds(
-                    vsoBuildAccount.AccountDetails, vsoBuildAccount.BuildDefinitions);
-                if (updates.Any())
-                {
-                    NotifyOfUpdates(updates);
-                    _icon.Icon = GetIconForBuilds();
-                }
-
-                // TODO - don't need to update every time - only if something has changed
-                _accountService.UpdateBuildStatus(
-                    vsoBuildAccount.AccountDetails.AccountName,
-                    vsoBuildAccount.AccountDetails.ProjectId,
-                    vsoBuildAccount.BuildDefinitions.ToList());
+                NotifyOfUpdates(updates);
+                _icon.Icon = GetIconForBuilds();
             }
         }
 
-        private void NotifyOfUpdates(IList<VsoBuildUpdate> updates)
+        private void NotifyOfUpdates(IList<BuildUpdate> updates)
         {
-            foreach (VsoBuildUpdate vsoBuildUpdate in updates)
+            foreach (BuildUpdate vsoBuildUpdate in updates)
             {
-                if (vsoBuildUpdate.Result == null && _notifyOnBuildStart)
+                if (vsoBuildUpdate.Result == null)
                 {
                     // Only one we care about for now
                     if (vsoBuildUpdate.Status == BuildStatus.InProgress)
@@ -197,7 +155,7 @@ namespace BuildNotifications.ViewModel
                             BalloonIcon.Info);
                     }
                 }
-                else if (_notifyOnBuildFinish)
+                else
                 {
                     switch (vsoBuildUpdate.Result)
                     {
@@ -232,7 +190,7 @@ namespace BuildNotifications.ViewModel
 
         private Icon GetIconForBuilds()
         {
-            List<BuildResult?> results = BuildAccounts.SelectMany(ba => ba.BuildDefinitions.Select(bd => bd.LastCompletedBuildResult)).ToList();
+            List<BuildResult?> results = SubscribedBuilds.Select(sb => sb.LastCompletedBuildResult).ToList();
 
             if (results.Any(r => r.GetValueOrDefault(BuildResult.Succeeded) == BuildResult.Failed))
             {

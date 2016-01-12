@@ -1,6 +1,6 @@
 ﻿namespace BuildNotifications.Model
 {
-    public class VsoBuildUpdate
+    public class BuildUpdate
     {
         public string Id { get; set; }
         public string Name { get; set; }

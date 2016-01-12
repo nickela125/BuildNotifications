@@ -7,27 +7,27 @@ namespace BuildNotifications.Service
 {
     public class Mapper : IMapper
     {
-        public VsoProject MapToVsoProject(Project project)
+        public Project MapToProject(VsoProject project)
         {
-            return new VsoProject
+            return new Project
             {
                 Id = project.Id,
                 Name = project.Name
             };
         }
 
-        public VsoBuildDefinition MapToVsoBuildDefinition(BuildDefinition build)
+        public BuildDefinition MapToBuildDefinition(VsoBuildDefinition build)
         {
-            return new VsoBuildDefinition
+            return new BuildDefinition
             {
                 Id = build.Id,
                 Name = build.Name
             };
         }
 
-        public VsoBuild MapToVsoBuild(Build build)
+        public Build MapToBuild(VsoBuild build)
         {
-            return new VsoBuild
+            return new Build
             {
                 Id = build.Id,
                 Result = build.Result == null ? null : (BuildResult?)Enum.Parse(typeof(BuildResult), build.Result, true),

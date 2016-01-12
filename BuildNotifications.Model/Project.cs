@@ -5,17 +5,17 @@ using Newtonsoft.Json;
 
 namespace BuildNotifications.Model
 {
-    public class VsoProject : TreeItem
+    public class Project : TreeItem
     {
-        public VsoProject()
+        public Project()
         {
             DisplayMenu = false;
         }
 
         public string Id { get; set; }
         public string Name { get; set; }
-        private IList<VsoBuildDefinition> _builds;
-        public IList<VsoBuildDefinition> Builds {
+        private IList<BuildDefinition> _builds;
+        public IList<BuildDefinition> Builds {
             get { return _builds; }
             set
             {
@@ -25,12 +25,12 @@ namespace BuildNotifications.Model
             }
         }
         [JsonIgnore]
-        public new IList<VsoBuildDefinition> Children { get; set; }
+        public new IList<BuildDefinition> Children { get; set; }
 
         [JsonIgnore]
         public new string DisplayName => Name;
         [JsonIgnore]
-        public new VsoAccount Parent { get; set; }
+        public new Account Parent { get; set; }
 
         private bool? _isSelected;
         public override bool? IsSelected
@@ -53,7 +53,7 @@ namespace BuildNotifications.Model
 
             if (updateChildren && value != null)
             {
-                foreach (VsoBuildDefinition vsoBuildDefinition in Children)
+                foreach (BuildDefinition vsoBuildDefinition in Children)
                 {
                     vsoBuildDefinition.SetIsSelected(value, false);
                 }

@@ -7,6 +7,10 @@ namespace BuildNotifications.Interface.Service
 {
     public interface IBuildService
     {
-        Task<IList<VsoBuildUpdate>> CheckForUpdatedBuilds(AccountDetails accountDetails, IList<VsoBuildDefinition> buildDefinitions);
+        bool GetNotifyOnStart();
+        bool GetNotifyOnFinish();
+        void SaveNotifyOptions(bool notifyOnStart, bool notifyOnFinish);
+        IList<SubscribedBuild> GetSubscribedBuilds();
+        Task<IList<BuildUpdate>> CheckForUpdatedBuilds(IList<SubscribedBuild> subscribedBuilds);
     }
 }

@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using BuildNotifications.Interface.Client;
 using BuildNotifications.Interface.Service;
 using BuildNotifications.Model;
-using BuildNotifications.Model.DTO;
 using BuildNotifications.Model.Message;
 using GalaSoft.MvvmLight.Messaging;
 using Newtonsoft.Json;
@@ -23,13 +22,15 @@ namespace BuildNotifications.Service
             _messenger = messenger;
         }
 
-        public async Task UpdateAccount(VsoAccount account)
+        public async Task UpdateAccountDetails(Account account) // Todo this method should be used with a refresh command
         {
             if (account == null)
             {
                 throw new ArgumentNullException(nameof(account));
             }
 
+            IList<Account> existingAccounts = GetAccounts();
+            
             AccountDetails accountDetails = new AccountDetails
             {
                 AccountName = account.Name,
@@ -39,7 +40,7 @@ namespace BuildNotifications.Service
             // Get any updates to projects and builds
             account.Projects = await _vsoClient.GetProjects(accountDetails);
 
-            foreach (VsoProject vsoProject in account.Projects)
+            foreach (Project vsoProject in account.Projects)
             {
                 accountDetails.ProjectId = vsoProject.Id;
                 vsoProject.Builds = await _vsoClient.GetBuildDefinitions(accountDetails);
@@ -47,128 +48,56 @@ namespace BuildNotifications.Service
             }
 
             // Replace existing reference to account if there is one
-            IList<VsoAccount> accounts = GetAccounts();
-            VsoAccount existingAccount = accounts.SingleOrDefault(a => a.Name == account.Name);
+            Account existingAccount = existingAccounts.SingleOrDefault(a => a.Name == account.Name);
 
             if (existingAccount == null)
             {
-                accounts.Add(account);
+                existingAccounts.Add(account);
             }
             else
             {
-                TransferSubscriptions(existingAccount, account);
-                int indexOfExistingAccount = accounts.IndexOf(existingAccount);
-                accounts[indexOfExistingAccount] = account;
+                TransferSubscriptions(existingAccount, account); // todo - be careful that all data is transferred + new builds / projects included
+                int indexOfExistingAccount = existingAccounts.IndexOf(existingAccount);
+                existingAccounts[indexOfExistingAccount] = account;
             }
 
-            SaveAccounts(accounts);
-           _messenger.Send(new AccountsUpdate());
+            SaveAccounts(existingAccounts);
         }
 
-        public void SaveAccounts(IList<VsoAccount> accounts)
+        public void UpdateAccountSubsciptions(IList<Account> updatedAccounts)
+        {
+            SaveAccounts(updatedAccounts);
+            _messenger.Send(new AccountSubscriptionUpdate { Accounts = updatedAccounts });
+        }
+
+        public void RemoveAccount(Account account)
+        {
+            IList<Account> accounts = GetAccounts();
+            Account accountToRemove = accounts.Single(a => a.Name == account.Name);
+            int accountIndex = accounts.IndexOf(accountToRemove);
+            accounts.RemoveAt(accountIndex);
+            SaveAccounts(accounts);
+            _messenger.Send(new AccountSubscriptionUpdate { Accounts = accounts });
+        }
+
+        public void SaveAccounts(IList<Account> accounts)
         {
             string jsonString = JsonConvert.SerializeObject(accounts);
             Properties.Settings.Default[Constants.AccountsConfigurationName] = jsonString;
             Properties.Settings.Default.Save();
-            _messenger.Send(new AccountsUpdate());
+            _messenger.Send(new AccountsUpdate {Accounts = accounts});
         }
 
-        public void RemoveAccount(VsoAccount account)
-        {
-            IList<VsoAccount> accounts = GetAccounts();
-            VsoAccount accountToRemove = accounts.Single(a => a.Name == account.Name);
-            int accountIndex = accounts.IndexOf(accountToRemove);
-            accounts.RemoveAt(accountIndex);
-            SaveAccounts(accounts);
-        }
-
-        public void UpdateBuildDefinitions(IList<VsoSubscibedBuildList> subscibedBuilds) // todo more efficient way?
-        {
-            IList<VsoAccount> accounts = GetAccounts();
-
-            foreach (VsoAccount account in accounts)
-            {
-                foreach (VsoProject vsoProject in account.Projects)
-                {
-                    VsoSubscibedBuildList buildList =
-                    subscibedBuilds.SingleOrDefault(sb => sb.AccountDetails.AccountName == account.Name && sb.AccountDetails.ProjectId == vsoProject.Id);
-
-                    if (buildList != null)
-                    {
-                        foreach (VsoBuildDefinition vsoBuildDefinition in vsoProject.Builds)
-                        {
-                            int existingDefinitionIndex =
-                                vsoProject.Builds.ToList().FindIndex(b => b.Id == vsoBuildDefinition.Id);
-                            vsoProject.Builds[existingDefinitionIndex] = vsoBuildDefinition;
-                        }
-                        
-                    }
-                }
-            }
-        }
-
-        public bool GetNotifyOnStart()
-        {
-            return (bool)Properties.Settings.Default[Constants.NotifyOnStartConfigurationName];
-        }
-
-        public bool GetNotifyOnFinish()
-        {
-            return (bool)Properties.Settings.Default[Constants.NotifyOnFinishConfigurationName];
-        }
-
-        public void SaveNotifyOptions(bool notifyOnStart, bool notifyOnFinish)
-        {
-            Properties.Settings.Default[Constants.NotifyOnStartConfigurationName] = notifyOnStart;
-            Properties.Settings.Default[Constants.NotifyOnFinishConfigurationName] = notifyOnFinish;
-            Properties.Settings.Default.Save();
-
-            _messenger.Send<NotifyOptionsUpdate>(new NotifyOptionsUpdate
-            {
-                NotifyOnStart = notifyOnStart,
-                NotifyOnFinish = notifyOnFinish
-            });
-        }
-
-        public void UpdateBuildStatus(string accountName, string projectId, IList<VsoBuildDefinition> updatedDefinitions)
-        {
-            if (accountName == null)
-            {
-                throw new ArgumentNullException("accountName");
-            }
-            if (projectId == null)
-            {
-                throw new ArgumentNullException("projectId");
-            }
-            if (updatedDefinitions == null || !updatedDefinitions.Any())
-            {
-                return;
-            }
-
-            IList<VsoAccount> accounts = GetAccounts();
-
-            VsoAccount account = accounts.Single(a => a.Name == accountName);
-            VsoProject project = account.Projects.Single(p => p.Id == projectId);
-            foreach (VsoBuildDefinition update in updatedDefinitions)
-            {
-                VsoBuildDefinition oldBuildDefinition = project.Builds.Single(b => b.Id == update.Id);
-                int buildDefinitionIndex = project.Builds.IndexOf(oldBuildDefinition);
-                project.Builds[buildDefinitionIndex] = update;
-            }
-
-            SaveAccounts(accounts);
-        }
-
-        public IList<VsoAccount> GetAccounts()
+        public IList<Account> GetAccounts()
         {
             string jsonString = (string)Properties.Settings.Default[Constants.AccountsConfigurationName];
             
-            return JsonConvert.DeserializeObject<List<VsoAccount>>(jsonString);
+            return JsonConvert.DeserializeObject<List<Account>>(jsonString);
         }
 
-        private void TransferSubscriptions(VsoAccount oldAccount, VsoAccount newAccount)
+        private void TransferSubscriptions(Account oldAccount, Account newAccount)
         {
-            // TODO
+            throw new NotImplementedException();
         }
     }
 }

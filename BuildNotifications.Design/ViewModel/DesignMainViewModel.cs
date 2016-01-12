@@ -10,12 +10,12 @@ namespace BuildNotifications.Design.ViewModel
     {
         public RelayCommand<CancelEventArgs> CloseCommand { get; }
         public RelayCommand ManageBuildsCommand { get; }
-        public IList<VsoSubscibedBuildList> BuildAccounts {
+        public IList<SubscribedBuild> SubscribedBuilds {
             get
             {
-                return new List<VsoSubscibedBuildList>
+                return new List<SubscribedBuild>
                 {
-                    new VsoSubscibedBuildList
+                    new SubscribedBuild
                     {
                         AccountDetails = new AccountDetails
                         {
@@ -23,30 +23,35 @@ namespace BuildNotifications.Design.ViewModel
                             EncodedCredentials = "1234567",
                             ProjectId = "123456"
                         },
-                        BuildDefinitions = new List<VsoBuildDefinition>
+                        DisplayName = "First Build",
+                        LastCompletedBuildResult = BuildResult.Succeeded
+                    },
+                    new SubscribedBuild
+                    {
+                        AccountDetails = new AccountDetails
                         {
-                            new VsoBuildDefinition
-                            {
-                                Name = "First Build",
-                                LastCompletedBuildResult = BuildResult.Succeeded
-                            },
-                            new VsoBuildDefinition
-                            {
-                                Name = "Second Build",
-                                LastCompletedBuildResult = BuildResult.PartiallySucceeded
-                            },
-                            new VsoBuildDefinition
-                            {
-                                Name = "Second Build",
-                                LastCompletedBuildResult = BuildResult.Failed
-                            },
-                        }
+                            AccountName = "Nickys Account",
+                            EncodedCredentials = "1234567",
+                            ProjectId = "123456"
+                        },
+                        DisplayName = "Second Build",
+                        LastCompletedBuildResult = BuildResult.PartiallySucceeded
+                    },
+                    new SubscribedBuild
+                    {
+                        AccountDetails = new AccountDetails
+                        {
+                            AccountName = "Nickys Account",
+                            EncodedCredentials = "1234567",
+                            ProjectId = "123456"
+                        },
+                        DisplayName = "Third Build",
+                        LastCompletedBuildResult = BuildResult.Failed
                     }
                 };
             }
             set
-            {
-            }
+            {}
         }
     }
 }

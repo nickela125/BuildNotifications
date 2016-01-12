@@ -2,8 +2,8 @@
 
 namespace BuildNotifications.Model.DTO
 {
-    public class BuildList
+    public class VsoBuildList
     {
-        public IList<Build> Value { get; set; }
+        public IList<VsoBuild> Value { get; set; }
     }
 }

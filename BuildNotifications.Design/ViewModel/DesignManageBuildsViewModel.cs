@@ -7,25 +7,25 @@ namespace BuildNotifications.Design.ViewModel
 {
     public class DesignManageBuildsViewModel : IManageBuildsViewModel
     {
-        public IList<VsoAccount> Accounts
+        public IList<Account> Accounts
         {
             get
             {
-                return new List<VsoAccount>
+                return new List<Account>
                 {
-                    new VsoAccount
+                    new Account
                     {
-                        Name = "Account Name",
-                        Projects = new List<VsoProject>
+                        Name = "Account DisplayName",
+                        Projects = new List<Project>
                         {
-                            new VsoProject
+                            new Project
                             {
-                                Name = "Project Name",
-                                Builds = new List<VsoBuildDefinition>
+                                Name = "Project DisplayName",
+                                Builds = new List<BuildDefinition>
                                 {
-                                    new VsoBuildDefinition
+                                    new BuildDefinition
                                     {
-                                        Name = "Build Name"
+                                        Name = "Build DisplayName"
                                     }
                                 }
                             }
@@ -37,8 +37,8 @@ namespace BuildNotifications.Design.ViewModel
         }
         public RelayCommand CloseDialogCommand { get; }
         public RelayCommand UpdateAccountsCommand { get; }
-        public RelayCommand<VsoAccount> EditAccountCommand { get; }
-        public RelayCommand<VsoAccount> RemoveAccountCommand { get; }
+        public RelayCommand<Account> EditAccountCommand { get; }
+        public RelayCommand<Account> RemoveAccountCommand { get; }
         public RelayCommand AddAccountCommand { get; }
 
         public bool IsUpdateEnabled

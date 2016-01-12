@@ -5,9 +5,9 @@ using Newtonsoft.Json;
 
 namespace BuildNotifications.Model
 {
-    public class VsoBuildDefinition : TreeItem
+    public class BuildDefinition : TreeItem
     {
-        public VsoBuildDefinition()
+        public BuildDefinition()
         {
             DisplayMenu = false;
         }
@@ -17,10 +17,7 @@ namespace BuildNotifications.Model
         [JsonIgnore]
         public new string DisplayName => Name;
         [JsonIgnore]
-        public new VsoProject Parent { get; set; }
-        public BuildStatus? CurrentBuildStatus { get; set; }
-        public string CurrentBuildId { get; set; }
-        public BuildResult? LastCompletedBuildResult { get; set; }
+        public new Project Parent { get; set; }
         
         private bool? _isSelected;
         public override bool? IsSelected

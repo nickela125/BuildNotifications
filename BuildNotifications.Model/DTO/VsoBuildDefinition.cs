@@ -1,6 +1,6 @@
 ﻿namespace BuildNotifications.Model.DTO
 {
-    public class BuildDefinition
+    public class VsoBuildDefinition
     {
         public string Id { get; set; }
         public string Name { get; set; }

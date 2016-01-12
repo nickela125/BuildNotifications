@@ -9,6 +9,6 @@ namespace BuildNotifications.Interface.ViewModel
     {
         RelayCommand<CancelEventArgs> CloseCommand { get; }
         RelayCommand ManageBuildsCommand { get; }
-        IList<VsoSubscibedBuildList> BuildAccounts { get; set; }
+        IList<SubscribedBuild> SubscribedBuilds { get; set; }
     }
 }

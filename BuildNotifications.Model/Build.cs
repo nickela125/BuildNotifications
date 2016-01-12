@@ -2,7 +2,7 @@
 
 namespace BuildNotifications.Model
 {
-    public class VsoBuild
+    public class Build
     {
         public string Id { get; set; }
         public string BuildDefinitionId { get; set; }

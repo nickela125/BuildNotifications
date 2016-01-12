@@ -74,36 +74,30 @@
                 Padding="10"
                 VerticalScrollBarVisibility="Auto">
             <StackPanel>
-                <ItemsControl ItemsSource="{Binding BuildAccounts, Mode=TwoWay}">
+                <ItemsControl ItemsSource="{Binding SubscribedBuilds, Mode=TwoWay}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <StackPanel>
-                                <Grid>
-                                    <TextBlock
+                                    <Grid>
+                                        <TextBlock
                                             Text="{Binding AccountDetails.AccountName}"
                                             FontWeight="Bold"/>
-                                </Grid>
-                                <ItemsControl ItemsSource="{Binding BuildDefinitions}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <Grid Margin="20,0,0,0">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="20" />
-                                                    <ColumnDefinition />
-                                                </Grid.ColumnDefinitions>
-                                                <Image 
-                                                        Grid.Column="0"
-                                                        Width="20"
-                                                        Source="{Binding LastCompletedBuildResult, 
-                                                            Converter={StaticResource IconConverter}}" />
-                                                <TextBlock
-                                                        Grid.Column="1"
-                                                        Text="{Binding DisplayName}"/>
-                                            </Grid>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                            </StackPanel>
+                                    </Grid>
+                                    <Grid Margin="20,0,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="20" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <Image 
+                                            Grid.Column="0"
+                                            Width="20"
+                                            Source="{Binding LastCompletedBuildResult, 
+                                                Converter={StaticResource IconConverter}}" />
+                                        <TextBlock
+                                            Grid.Column="1"
+                                            Text="{Binding DisplayName}"/>
+                                    </Grid>
+                                </StackPanel>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>

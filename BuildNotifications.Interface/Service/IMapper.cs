@@ -5,8 +5,8 @@ namespace BuildNotifications.Interface.Service
 {
     public interface IMapper
     {
-        VsoProject MapToVsoProject(Project project);
-        VsoBuildDefinition MapToVsoBuildDefinition(BuildDefinition build);
-        VsoBuild MapToVsoBuild(Build build);
+        Project MapToProject(VsoProject project);
+        BuildDefinition MapToBuildDefinition(VsoBuildDefinition build);
+        Build MapToBuild(VsoBuild build);
     }
 }

@@ -1,6 +1,6 @@
 namespace BuildNotifications.Model.DTO
 {
-    public class User
+    public class VsoUser
     {
         public string DisplayName { get; set; }
     }

@@ -2,8 +2,8 @@
 
 namespace BuildNotifications.Model.DTO
 {
-    public class ProjectList
+    public class VsoProjectList
     {
-        public List<Project> Value { get; set; }
+        public List<VsoProject> Value { get; set; }
     }
 }

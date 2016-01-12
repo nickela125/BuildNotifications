@@ -46,8 +46,8 @@
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -67,26 +67,28 @@
     <Compile Include="AccountDetails.cs" />
     <Compile Include="BuildResult.cs" />
     <Compile Include="BuildStatus.cs" />
-    <Compile Include="DTO\Build.cs" />
-    <Compile Include="DTO\BuildDefinition.cs" />
-    <Compile Include="DTO\BuildDefinitionList.cs" />
-    <Compile Include="DTO\BuildLink.cs" />
-    <Compile Include="DTO\BuildLinks.cs" />
-    <Compile Include="DTO\BuildList.cs" />
-    <Compile Include="DTO\Project.cs" />
-    <Compile Include="DTO\ProjectList.cs" />
-    <Compile Include="DTO\User.cs" />
+    <Compile Include="DTO\VsoBuild.cs" />
+    <Compile Include="DTO\VsoBuildDefinition.cs" />
+    <Compile Include="DTO\VsoBuildDefinitionList.cs" />
+    <Compile Include="DTO\VsoBuildLink.cs" />
+    <Compile Include="DTO\VsoBuildLinks.cs" />
+    <Compile Include="DTO\VsoBuildList.cs" />
+    <Compile Include="DTO\VsoProject.cs" />
+    <Compile Include="DTO\VsoProjectList.cs" />
+    <Compile Include="DTO\VsoUser.cs" />
     <Compile Include="Helpers\TreeHelper.cs" />
+    <Compile Include="Message\AccountSubscriptionUpdate.cs" />
     <Compile Include="Message\AccountsUpdate.cs" />
     <Compile Include="Message\NotifyOptionsUpdate.cs" />
+    <Compile Include="Message\SubscribedBuildsUpdate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SubscribedBuild.cs" />
     <Compile Include="TreeItem.cs" />
-    <Compile Include="VsoAccount.cs" />
-    <Compile Include="VsoBuild.cs" />
-    <Compile Include="VsoBuildDefinition.cs" />
-    <Compile Include="VsoBuildUpdate.cs" />
-    <Compile Include="VsoProject.cs" />
-    <Compile Include="VsoSubscibedBuildList.cs" />
+    <Compile Include="Account.cs" />
+    <Compile Include="Build.cs" />
+    <Compile Include="BuildDefinition.cs" />
+    <Compile Include="BuildUpdate.cs" />
+    <Compile Include="Project.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

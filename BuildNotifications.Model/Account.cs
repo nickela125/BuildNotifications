@@ -4,9 +4,9 @@ using Newtonsoft.Json;
 
 namespace BuildNotifications.Model
 {
-    public class VsoAccount : TreeItem
+    public class Account : TreeItem
     {
-        public VsoAccount()
+        public Account()
         {
             DisplayMenu = true;
         }
@@ -14,9 +14,9 @@ namespace BuildNotifications.Model
         public string Name { get; set; }
         public string Username { get; set; }
         public string EncodedCredentials { get; set; }
-        private IList<VsoProject> _projects;
+        private IList<Project> _projects;
 
-        public IList<VsoProject> Projects
+        public IList<Project> Projects
         {
             get { return _projects;}
             set
@@ -28,7 +28,7 @@ namespace BuildNotifications.Model
         }
 
         [JsonIgnore]
-        public new IList<VsoProject> Children { get; set; }
+        public new IList<Project> Children { get; set; }
         
         [JsonIgnore]
         public new string DisplayName => Name;
@@ -46,7 +46,7 @@ namespace BuildNotifications.Model
 
             if (updateChildren)
             {
-                foreach (VsoProject vsoProject in Children)
+                foreach (Project vsoProject in Children)
                 {
                     vsoProject.SetIsSelected(value, false, true);
                 }

@@ -6,11 +6,11 @@ namespace BuildNotifications.Interface.ViewModel
 {
     public interface IManageBuildsViewModel
     {
-        IList<VsoAccount> Accounts { get; set; }
+        IList<Account> Accounts { get; set; }
         RelayCommand CloseDialogCommand { get; }
         RelayCommand UpdateAccountsCommand { get; }
-        RelayCommand<VsoAccount> EditAccountCommand { get; }
-        RelayCommand<VsoAccount> RemoveAccountCommand { get; }
+        RelayCommand<Account> EditAccountCommand { get; }
+        RelayCommand<Account> RemoveAccountCommand { get; }
         RelayCommand AddAccountCommand { get; }
         bool IsUpdateEnabled { get; }
         bool NotifyOnStart { get; }
