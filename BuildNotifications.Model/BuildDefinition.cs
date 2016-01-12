@@ -14,8 +14,7 @@ namespace BuildNotifications.Model
 
         public string Id { get; set; }
         public string Name { get; set; }
-        [JsonIgnore]
-        public new string DisplayName => Name;
+
         [JsonIgnore]
         public new Project Parent { get; set; }
         

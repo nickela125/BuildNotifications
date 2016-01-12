@@ -29,9 +29,6 @@ namespace BuildNotifications.Model
 
         [JsonIgnore]
         public new IList<Project> Children { get; set; }
-        
-        [JsonIgnore]
-        public new string DisplayName => Name;
 
         private bool? _isSelected;
         public override bool? IsSelected

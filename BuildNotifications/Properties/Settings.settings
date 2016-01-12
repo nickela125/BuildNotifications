@@ -1,17 +1,17 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassDisplayNamespace="BuildNotifications.Properties" GeneratedClassDisplayName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="BuildNotifications.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting DisplayName="Accounts" Type="System.String" Scope="User">
+    <Setting Name="Accounts" Type="System.String" Scope="User">
       <Value Profile="(Default)">[]</Value>
     </Setting>
-    <Setting DisplayName="NotifyOnStart" Type="System.Boolean" Scope="User">
+    <Setting Name="NotifyOnStart" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting DisplayName="NotifyOnFinish" Type="System.Boolean" Scope="User">
+    <Setting Name="NotifyOnFinish" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting DisplayName="SubscribedBuilds" Type="System.String" Scope="User">
+    <Setting Name="SubscribedBuilds" Type="System.String" Scope="User">
       <Value Profile="(Default)">[]</Value>
     </Setting>
   </Settings>

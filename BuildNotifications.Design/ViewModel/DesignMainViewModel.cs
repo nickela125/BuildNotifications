@@ -23,7 +23,7 @@ namespace BuildNotifications.Design.ViewModel
                             EncodedCredentials = "1234567",
                             ProjectId = "123456"
                         },
-                        DisplayName = "First Build",
+                        Name = "First Build",
                         LastCompletedBuildResult = BuildResult.Succeeded
                     },
                     new SubscribedBuild
@@ -34,7 +34,7 @@ namespace BuildNotifications.Design.ViewModel
                             EncodedCredentials = "1234567",
                             ProjectId = "123456"
                         },
-                        DisplayName = "Second Build",
+                        Name = "Second Build",
                         LastCompletedBuildResult = BuildResult.PartiallySucceeded
                     },
                     new SubscribedBuild
@@ -45,7 +45,7 @@ namespace BuildNotifications.Design.ViewModel
                             EncodedCredentials = "1234567",
                             ProjectId = "123456"
                         },
-                        DisplayName = "Third Build",
+                        Name = "Third Build",
                         LastCompletedBuildResult = BuildResult.Failed
                     }
                 };

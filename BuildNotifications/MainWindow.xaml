@@ -95,7 +95,7 @@
                                                 Converter={StaticResource IconConverter}}" />
                                         <TextBlock
                                             Grid.Column="1"
-                                            Text="{Binding DisplayName}"/>
+                                            Text="{Binding Name}"/>
                                     </Grid>
                                 </StackPanel>
                         </DataTemplate>

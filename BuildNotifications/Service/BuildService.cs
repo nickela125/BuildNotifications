@@ -59,7 +59,7 @@ namespace BuildNotifications.Service
                                         EncodedCredentials = account.EncodedCredentials
                                     },
                                     BuildDefinitionId = buildDefinition.Id,
-                                    DisplayName = buildDefinition.DisplayName
+                                    Name = buildDefinition.Name
                                 });
                             }
                         }
@@ -169,7 +169,7 @@ namespace BuildNotifications.Service
                 {
                     updates.Add(new BuildUpdate
                     {
-                        Name = subscribedBuild.DisplayName,
+                        Name = subscribedBuild.Name,
                         Id = subscribedBuild.BuildDefinitionId,
                         RequestedFor = latestBuild.RequestedFor,
                         Result = latestBuild.Result,
@@ -189,7 +189,7 @@ namespace BuildNotifications.Service
 
                         updates.Add(new BuildUpdate
                         {
-                            Name = subscribedBuild.DisplayName,
+                            Name = subscribedBuild.Name,
                             Id = subscribedBuild.BuildDefinitionId,
                             RequestedFor = latestBuild.RequestedFor,
                             Result = latestBuild.Result,
@@ -202,7 +202,7 @@ namespace BuildNotifications.Service
                         
                         updates.Add(new BuildUpdate
                         {
-                            Name = subscribedBuild.DisplayName,
+                            Name = subscribedBuild.Name,
                             Id = subscribedBuild.BuildDefinitionId,
                             RequestedFor = latestBuild.RequestedFor,
                             Result = latestBuild.Result,
@@ -219,7 +219,7 @@ namespace BuildNotifications.Service
 
                         updates.Add(new BuildUpdate
                         {
-                            Name = subscribedBuild.DisplayName,
+                            Name = subscribedBuild.Name,
                             Id = subscribedBuild.BuildDefinitionId,
                             RequestedFor = secondLatestBuild.RequestedFor,
                             Result = secondLatestBuild.Result,
@@ -238,7 +238,7 @@ namespace BuildNotifications.Service
 
                     updates.Add(new BuildUpdate
                     {
-                        Name = subscribedBuild.DisplayName,
+                        Name = subscribedBuild.Name,
                         Id = subscribedBuild.BuildDefinitionId,
                         RequestedFor = latestBuild.RequestedFor,
                         Result = latestBuild.Result,

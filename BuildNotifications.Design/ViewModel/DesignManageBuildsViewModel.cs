@@ -15,17 +15,17 @@ namespace BuildNotifications.Design.ViewModel
                 {
                     new Account
                     {
-                        Name = "Account DisplayName",
+                        Name = "Account Name",
                         Projects = new List<Project>
                         {
                             new Project
                             {
-                                Name = "Project DisplayName",
+                                Name = "Project Name",
                                 Builds = new List<BuildDefinition>
                                 {
                                     new BuildDefinition
                                     {
-                                        Name = "Build DisplayName"
+                                        Name = "Build Name"
                                     }
                                 }
                             }

@@ -56,7 +56,7 @@ namespace BuildNotifications.Test.Service
         //        }
         //    };
 
-        //    VsoBuildDefinition buildDefinition = new VsoBuildDefinition { Id = "1", DisplayName = "First Definition"};
+        //    VsoBuildDefinition buildDefinition = new VsoBuildDefinition { Id = "1", Name = "First Definition"};
         //    var buildService = new BuildService(Initialize(builds));
 
         //    IList<VsoBuildUpdate> updates = buildService.CheckForUpdatedBuilds(new AccountDetails(), 
@@ -65,7 +65,7 @@ namespace BuildNotifications.Test.Service
         //    Assert.AreEqual(1, updates.Count);
         //    Assert.AreEqual(BuildStatus.InProgress, updates.First().Status);
         //    Assert.IsNull(updates.First().Result);
-        //    Assert.AreEqual("First Definition", updates.First().DisplayName);
+        //    Assert.AreEqual("First Definition", updates.First().Name);
         //    Assert.AreEqual(BuildStatus.InProgress, buildDefinition.CurrentBuildStatus);
         //    Assert.AreEqual(null, buildDefinition.LastCompletedBuildResult);
         //    Assert.AreEqual("1234", buildDefinition.CurrentBuildId);
@@ -86,7 +86,7 @@ namespace BuildNotifications.Test.Service
         //        }
         //    };
 
-        //    VsoBuildDefinition buildDefinition = new VsoBuildDefinition { Id = "1", DisplayName = "First Definition" };
+        //    VsoBuildDefinition buildDefinition = new VsoBuildDefinition { Id = "1", Name = "First Definition" };
         //    var buildService = new BuildService(Initialize(builds));
 
         //    IList<VsoBuildUpdate> updates = buildService.CheckForUpdatedBuilds(new AccountDetails(), 
@@ -95,7 +95,7 @@ namespace BuildNotifications.Test.Service
         //    Assert.AreEqual(1, updates.Count);
         //    Assert.AreEqual(BuildStatus.Completed, updates.First().Status);
         //    Assert.AreEqual(BuildResult.PartiallySucceeded, updates.First().Result);
-        //    Assert.AreEqual("First Definition", updates.First().DisplayName);
+        //    Assert.AreEqual("First Definition", updates.First().Name);
         //    Assert.AreEqual(BuildStatus.Completed, buildDefinition.CurrentBuildStatus);
         //    Assert.AreEqual(BuildResult.PartiallySucceeded, buildDefinition.LastCompletedBuildResult);
         //    Assert.AreEqual("1234", buildDefinition.CurrentBuildId);
@@ -149,7 +149,7 @@ namespace BuildNotifications.Test.Service
         //        }
         //    };
 
-        //    VsoBuildDefinition buildDefinition = new VsoBuildDefinition { Id = "1", DisplayName = "First Definition" };
+        //    VsoBuildDefinition buildDefinition = new VsoBuildDefinition { Id = "1", Name = "First Definition" };
         //    var buildService = new BuildService(Initialize(builds));
 
         //    IList<VsoBuildUpdate> updates = buildService.CheckForUpdatedBuilds(new AccountDetails(),
@@ -158,7 +158,7 @@ namespace BuildNotifications.Test.Service
         //    Assert.AreEqual(1, updates.Count);
         //    Assert.AreEqual(BuildStatus.InProgress, updates.First().Status);
         //    Assert.IsNull(updates.First().Result);
-        //    Assert.AreEqual("First Definition", updates.First().DisplayName);
+        //    Assert.AreEqual("First Definition", updates.First().Name);
         //    Assert.AreEqual(BuildStatus.InProgress, buildDefinition.CurrentBuildStatus);
         //    Assert.AreEqual(null, buildDefinition.LastCompletedBuildResult);
         //    Assert.AreEqual("1234", buildDefinition.CurrentBuildId);
@@ -210,7 +210,7 @@ namespace BuildNotifications.Test.Service
         //    VsoBuildDefinition buildDefinition = new VsoBuildDefinition
         //    {
         //        Id = "1", CurrentBuildId = "1234", CurrentBuildStatus = BuildStatus.InProgress,
-        //        DisplayName = "First Definition"
+        //        Name = "First Definition"
         //    };
 
         //    var buildService = new BuildService(Initialize(builds));
@@ -221,7 +221,7 @@ namespace BuildNotifications.Test.Service
         //    Assert.AreEqual(1, updates.Count);
         //    Assert.AreEqual(BuildStatus.Completed, updates.First().Status);
         //    Assert.AreEqual(BuildResult.Succeeded, updates.First().Result);
-        //    Assert.AreEqual("First Definition", updates.First().DisplayName);
+        //    Assert.AreEqual("First Definition", updates.First().Name);
         //    Assert.AreEqual(BuildStatus.Completed, buildDefinition.CurrentBuildStatus);
         //    Assert.AreEqual(BuildResult.Succeeded, buildDefinition.LastCompletedBuildResult);
         //    Assert.AreEqual("1234", buildDefinition.CurrentBuildId);
@@ -244,7 +244,7 @@ namespace BuildNotifications.Test.Service
         //    VsoBuildDefinition buildDefinition = new VsoBuildDefinition
         //    {
         //        Id = "1", CurrentBuildId = "1234", CurrentBuildStatus = BuildStatus.InProgress,
-        //        DisplayName = "First Definition"
+        //        Name = "First Definition"
         //    };
 
         //    var buildService = new BuildService(Initialize(builds));
@@ -255,7 +255,7 @@ namespace BuildNotifications.Test.Service
         //    Assert.AreEqual(1, updates.Count);
         //    Assert.AreEqual(BuildStatus.Completed, updates.First().Status);
         //    Assert.AreEqual(BuildResult.Failed, updates.First().Result);
-        //    Assert.AreEqual("First Definition", updates.First().DisplayName);
+        //    Assert.AreEqual("First Definition", updates.First().Name);
         //    Assert.AreEqual(BuildStatus.Completed, buildDefinition.CurrentBuildStatus);
         //    Assert.AreEqual(BuildResult.Failed, buildDefinition.LastCompletedBuildResult);
         //    Assert.AreEqual("1234", buildDefinition.CurrentBuildId);
@@ -327,7 +327,7 @@ namespace BuildNotifications.Test.Service
         //    VsoBuildDefinition buildDefinition = new VsoBuildDefinition
         //    {
         //        Id = "1", CurrentBuildId = "1234", CurrentBuildStatus = BuildStatus.InProgress,
-        //        DisplayName = "First Definition"
+        //        Name = "First Definition"
         //    };
 
         //    var buildService = new BuildService(Initialize(builds));
@@ -338,7 +338,7 @@ namespace BuildNotifications.Test.Service
         //    Assert.AreEqual(1, updates.Count);
         //    Assert.AreEqual(BuildStatus.Completed, updates.First().Status);
         //    Assert.AreEqual(BuildResult.Succeeded, updates.First().Result);
-        //    Assert.AreEqual("First Definition", updates.First().DisplayName);
+        //    Assert.AreEqual("First Definition", updates.First().Name);
         //    Assert.AreEqual(BuildStatus.Completed, buildDefinition.CurrentBuildStatus);
         //    Assert.AreEqual(BuildResult.Succeeded, buildDefinition.LastCompletedBuildResult);
         //    Assert.AreEqual("1234", buildDefinition.CurrentBuildId);
@@ -371,7 +371,7 @@ namespace BuildNotifications.Test.Service
         //    VsoBuildDefinition buildDefinition = new VsoBuildDefinition
         //    {
         //        Id = "1", CurrentBuildId = "1234", CurrentBuildStatus = BuildStatus.InProgress,
-        //        DisplayName = "First Definition"
+        //        Name = "First Definition"
         //    };
 
         //    var buildService = new BuildService(Initialize(builds));
@@ -382,7 +382,7 @@ namespace BuildNotifications.Test.Service
         //    Assert.AreEqual(1, updates.Count);
         //    Assert.AreEqual(BuildStatus.Completed, updates.First().Status);
         //    Assert.AreEqual(BuildResult.Failed, updates.First().Result);
-        //    Assert.AreEqual("First Definition", updates.First().DisplayName);
+        //    Assert.AreEqual("First Definition", updates.First().Name);
         //    Assert.AreEqual(BuildStatus.Completed, buildDefinition.CurrentBuildStatus);
         //    Assert.AreEqual(BuildResult.Failed, buildDefinition.LastCompletedBuildResult);
         //    Assert.AreEqual("1234", buildDefinition.CurrentBuildId);
@@ -417,7 +417,7 @@ namespace BuildNotifications.Test.Service
         //        CurrentBuildId = "4567",
         //        CurrentBuildStatus = BuildStatus.Completed,
         //        LastCompletedBuildResult = BuildResult.Succeeded,
-        //        DisplayName = "First Definition"
+        //        Name = "First Definition"
         //    };
 
         //    var buildService = new BuildService(Initialize(builds));
@@ -428,7 +428,7 @@ namespace BuildNotifications.Test.Service
         //    Assert.AreEqual(1, updates.Count);
         //    Assert.AreEqual(BuildStatus.InProgress, updates.First().Status);
         //    Assert.IsNull(updates.First().Result);
-        //    Assert.AreEqual("First Definition", updates.First().DisplayName);
+        //    Assert.AreEqual("First Definition", updates.First().Name);
         //    Assert.AreEqual(BuildStatus.InProgress, buildDefinition.CurrentBuildStatus);
         //    Assert.AreEqual(BuildResult.Succeeded, buildDefinition.LastCompletedBuildResult);
         //    Assert.AreEqual("1234", buildDefinition.CurrentBuildId);
@@ -463,7 +463,7 @@ namespace BuildNotifications.Test.Service
         //        CurrentBuildId = "4567",
         //        CurrentBuildStatus = BuildStatus.InProgress,
         //        LastCompletedBuildResult = BuildResult.Failed,
-        //        DisplayName = "First Definition"
+        //        Name = "First Definition"
         //    };
 
         //    var buildService = new BuildService(Initialize(builds));
@@ -472,8 +472,8 @@ namespace BuildNotifications.Test.Service
         //        new List<VsoBuildDefinition> { buildDefinition }).Result;
 
         //    Assert.AreEqual(2, updates.Count);
-        //    Assert.IsTrue(updates.Any(u => u.Status == BuildStatus.Completed && u.Result == BuildResult.Succeeded && u.DisplayName == "First Definition"));
-        //    Assert.IsTrue(updates.Any(u => u.Status == BuildStatus.InProgress && u.Result == null && u.DisplayName == "First Definition"));
+        //    Assert.IsTrue(updates.Any(u => u.Status == BuildStatus.Completed && u.Result == BuildResult.Succeeded && u.Name == "First Definition"));
+        //    Assert.IsTrue(updates.Any(u => u.Status == BuildStatus.InProgress && u.Result == null && u.Name == "First Definition"));
         //    Assert.AreEqual(BuildStatus.InProgress, buildDefinition.CurrentBuildStatus);
         //    Assert.AreEqual(BuildResult.Succeeded, buildDefinition.LastCompletedBuildResult);
         //    Assert.AreEqual("1234", buildDefinition.CurrentBuildId);
@@ -507,7 +507,7 @@ namespace BuildNotifications.Test.Service
         //        CurrentBuildId = "1234",
         //        LastCompletedBuildResult = BuildResult.Failed,
         //        CurrentBuildStatus = BuildStatus.NotStarted,
-        //        DisplayName = "First Definition"
+        //        Name = "First Definition"
         //    };
 
         //    var buildService = new BuildService(Initialize(builds));
@@ -518,7 +518,7 @@ namespace BuildNotifications.Test.Service
         //    Assert.AreEqual(1, updates.Count);
         //    Assert.AreEqual(BuildStatus.InProgress, updates.First().Status);
         //    Assert.IsNull(updates.First().Result);
-        //    Assert.AreEqual("First Definition", updates.First().DisplayName);
+        //    Assert.AreEqual("First Definition", updates.First().Name);
         //    Assert.AreEqual(BuildStatus.InProgress, buildDefinition.CurrentBuildStatus);
         //    Assert.AreEqual(BuildResult.Failed, buildDefinition.LastCompletedBuildResult);
         //    Assert.AreEqual("1234", buildDefinition.CurrentBuildId);
@@ -554,7 +554,7 @@ namespace BuildNotifications.Test.Service
         //        CurrentBuildId = "1234",
         //        LastCompletedBuildResult = BuildResult.Succeeded,
         //        CurrentBuildStatus = BuildStatus.Completed,
-        //        DisplayName = "First Definition"
+        //        Name = "First Definition"
         //    };
 
         //    var buildService = new BuildService(Initialize(builds));
@@ -598,7 +598,7 @@ namespace BuildNotifications.Test.Service
         //        CurrentBuildId = "09876",
         //        LastCompletedBuildResult = BuildResult.Succeeded,
         //        CurrentBuildStatus = BuildStatus.Completed,
-        //        DisplayName = "First Definition"
+        //        Name = "First Definition"
         //    };
 
         //    var buildService = new BuildService(Initialize(builds));

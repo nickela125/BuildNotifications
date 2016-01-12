@@ -26,9 +26,7 @@ namespace BuildNotifications.Model
         }
         [JsonIgnore]
         public new IList<BuildDefinition> Children { get; set; }
-
-        [JsonIgnore]
-        public new string DisplayName => Name;
+        
         [JsonIgnore]
         public new Account Parent { get; set; }
 

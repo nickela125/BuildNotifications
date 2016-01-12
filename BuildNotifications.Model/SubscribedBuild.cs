@@ -6,7 +6,7 @@ namespace BuildNotifications.Model
     {
         public AccountDetails AccountDetails { get; set; }
         public string BuildDefinitionId { get; set; }
-        public string DisplayName{ get; set; }
+        public string Name{ get; set; }
         public BuildStatus? CurrentBuildStatus { get; set; }
         public string CurrentBuildId { get; set; }
 
