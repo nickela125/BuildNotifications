@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Controls.Primitives;
+using System.Windows.Data;
 using BuildNotifications.Interface.Service;
 using BuildNotifications.Interface.ViewModel;
 using BuildNotifications.Model;
@@ -38,12 +40,17 @@ namespace BuildNotifications.ViewModel
             BuildsMenuItemCommand = new RelayCommand(BuildsMenuItem);
             ExitMenuItemCommand = new RelayCommand(ExitMenuItem);
 
-            SubscribedBuilds = _buildService.GetSubscribedBuilds();
+            SubscribedBuilds = new ObservableCollection<SubscribedBuild>(_buildService.GetSubscribedBuilds());
             _messenger.Register<SubscribedBuildsUpdate>(this, update =>
             {
-                SubscribedBuilds = ((SubscribedBuildsUpdate)update).SubscribedBuilds;
+                SubscribedBuilds = new ObservableCollection<SubscribedBuild>(((SubscribedBuildsUpdate)update).SubscribedBuilds);
+                GroupedSubscribedBuilds = new ListCollectionView(SubscribedBuilds);
+                GroupedSubscribedBuilds.GroupDescriptions.Add(new PropertyGroupDescription("LastCompletedBuildResult"));
                 _icon.Icon = GetIconForBuilds();
             });
+
+            GroupedSubscribedBuilds = new ListCollectionView(SubscribedBuilds);
+            GroupedSubscribedBuilds.GroupDescriptions.Add(new PropertyGroupDescription("LastCompletedBuildResult"));
 
             _icon = new TaskbarIcon
             {
@@ -81,11 +88,22 @@ namespace BuildNotifications.ViewModel
         private RelayCommand ExitMenuItemCommand { get; }
         public RelayCommand ManageBuildsCommand { get; }
 
-        private IList<SubscribedBuild> _subscribedBuilds; 
-        public IList<SubscribedBuild> SubscribedBuilds
+        private ObservableCollection<SubscribedBuild> _subscribedBuilds; 
+        public ObservableCollection<SubscribedBuild> SubscribedBuilds
         {
             get { return _subscribedBuilds; }
-            set { Set(ref _subscribedBuilds, value); }
+            set
+            {
+                Set(ref _subscribedBuilds, value);
+                RaisePropertyChanged(() => SubscribedBuilds);
+            }
+        }
+
+        private ListCollectionView _groupedSubscribedBuilds; 
+        public ListCollectionView GroupedSubscribedBuilds
+        {
+            get { return _groupedSubscribedBuilds; }
+            set { Set(ref _groupedSubscribedBuilds, value); }
         }
 
         #endregion
@@ -229,6 +247,6 @@ namespace BuildNotifications.ViewModel
         }
 
         #endregion
-
+        
     }
 }

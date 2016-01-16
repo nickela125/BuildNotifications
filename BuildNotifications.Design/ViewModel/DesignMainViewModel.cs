@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows.Data;
 using BuildNotifications.Interface.ViewModel;
 using BuildNotifications.Model;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -10,10 +12,10 @@ namespace BuildNotifications.Design.ViewModel
     {
         public RelayCommand<CancelEventArgs> CloseCommand { get; }
         public RelayCommand ManageBuildsCommand { get; }
-        public IList<SubscribedBuild> SubscribedBuilds {
+        public ObservableCollection<SubscribedBuild> SubscribedBuilds {
             get
             {
-                return new List<SubscribedBuild>
+                return new ObservableCollection<SubscribedBuild>
                 {
                     new SubscribedBuild
                     {
@@ -52,6 +54,17 @@ namespace BuildNotifications.Design.ViewModel
             }
             set
             {}
+        }
+
+        public ListCollectionView GroupedSubscribedBuilds
+        {
+            get
+            {
+                var GroupedSubscribedBuildsInternal = new ListCollectionView(SubscribedBuilds);
+                GroupedSubscribedBuildsInternal.GroupDescriptions.Add(new PropertyGroupDescription("LastCompletedBuildResult"));
+                return GroupedSubscribedBuildsInternal;
+            }
+            set { }
         }
     }
 }

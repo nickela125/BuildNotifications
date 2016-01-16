@@ -6,8 +6,9 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:command="http://www.galasoft.ch/mvvmlight"
         xmlns:converters="clr-namespace:BuildNotifications.Converters"
+        xmlns:model="clr-namespace:BuildNotifications.Model;assembly=BuildNotifications.Model"
         mc:Ignorable="d"
-        Title="Build Notifications" Height="350" Width="525"
+        Title="Build Notifications" Height="450" Width="750"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
     <!-- Close Command -->
     <i:Interaction.Triggers>
@@ -23,6 +24,43 @@
             <converters:SwitchConverterCase When="Canceled" Then="Icons/questionResource.ico" />
             <converters:SwitchConverterCase When="null" Then="Icons/questionResource.ico" />
         </converters:SwitchConverter>
+
+        <Style x:Key="GroupedHeaderStyle" TargetType="{x:Type GroupItem}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type GroupItem}">
+                        <StackPanel >
+                            <StackPanel Width="{Binding RelativeSource={RelativeSource
+                                                      Mode=FindAncestor,
+                                                      AncestorType={x:Type Expander}},
+                                                    Path=ActualWidth}">
+                                <DockPanel Margin="10,5,10,5">
+                                    <TextBlock Text="{Binding Path=Name}" Foreground="#2F6DC2" Margin="5,0,5,0" />
+                                    <TextBlock Text="(" Foreground="#2F6DC2" />
+                                    <TextBlock Text="{Binding Path=ItemCount}" Foreground="#0442FB" />
+                                    <TextBlock Text=")" Foreground="#2F6DC2" />
+                                    <StackPanel Orientation="Vertical" Margin="5,7,0,0">
+                                        <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+                                    </StackPanel>
+                                </DockPanel>
+                            </StackPanel>
+                            <ItemsPresenter />
+                        </StackPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="{x:Type DataGridCell}">
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="White" />
+                    <Setter Property="BorderBrush" Value="{x:Null}" />
+                    <Setter Property="Foreground" Value="Black" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
     </Window.Resources>
 
     <!-- Main Content -->
@@ -34,15 +72,77 @@
         </Grid.RowDefinitions>
 
         <!-- http://blogs.msdn.com/b/jaimer/archive/2009/01/20/styling-microsoft-s-wpf-datagrid.aspx
-        http://www.wpftutorial.net/datagrid.html
+        http://www.wpftutorial.net/datagrid.html-->
         <DataGrid
             Grid.Row="0"
             Background="White"
             Margin="10"
-            ItemsSource="{Binding BuildAccounts}">
-            <DataGrid.Columns></DataGrid.Columns>
-        </DataGrid>-->
-        
+            GridLinesVisibility="None"
+            CanUserResizeRows="False"
+            ItemsSource="{Binding GroupedSubscribedBuilds}"
+            CanUserAddRows="False"
+            CanUserDeleteRows="False"
+            IsReadOnly="True"
+            RowHeaderWidth="0"
+            AutoGenerateColumns="False">
+            <DataGrid.GroupStyle>
+                <GroupStyle ContainerStyle="{StaticResource GroupedHeaderStyle}">
+                    <GroupStyle.Panel>
+                        <ItemsPanelTemplate>
+                            <DataGridRowsPresenter/>
+                        </ItemsPanelTemplate>
+                    </GroupStyle.Panel>
+                </GroupStyle>
+            </DataGrid.GroupStyle>
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Build Name" Width="200" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Grid Margin="10,0,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="35" />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <Image 
+                                    Grid.Column="0"
+                                    Width="20"
+                                    Margin="10,0,5,0"
+                                    Source="{Binding LastCompletedBuildResult, 
+                                        Converter={StaticResource IconConverter}}" />
+                                <TextBlock
+                                    Grid.Column="1"
+                                    Text="{Binding Name}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Time" Width="150" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                    Text=""/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Project Name" Width="150" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                    Text=""/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Requested For" Width="150" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                    Text=""/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
         <!--<Grid 
             Grid.Row="0"
             Background="White"
@@ -62,7 +162,7 @@
             <TextBlock Grid.Row="1" Grid.Column="0" Text="asdf asdf lksadf safljk sfaklj sljk sfdfas asf" /> 
             <TextBlock Grid.Row="1" Grid.Column="2" Text="asdf asdf lksadf safljk sfaklj sljk sfdfas asf" /> 
         </Grid>-->
-        <Border
+        <!--<Border
                 Grid.Row="0"
                 Margin="10"
                 BorderBrush="#828790"
@@ -103,8 +203,8 @@
                 </ItemsControl>
             </StackPanel>
         </ScrollViewer>
-        </Border>
-        
+        </Border>-->
+
         <Button 
                 Grid.Row="1"
                 Content="Manage Builds..."
