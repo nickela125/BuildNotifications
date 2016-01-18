@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Data;
 using BuildNotifications.Interface.ViewModel;
 using BuildNotifications.Model;
@@ -23,10 +24,12 @@ namespace BuildNotifications.Design.ViewModel
                         {
                             AccountName = "Nickys Account",
                             EncodedCredentials = "1234567",
-                            ProjectId = "123456"
+                            ProjectId = "123456",
+                            ProjectName = "My project"
                         },
                         Name = "First Build",
-                        LastCompletedBuildResult = BuildResult.Succeeded
+                        LastCompletedBuildResult = BuildResult.Succeeded,
+                        LastCompletedBuildRequestedFor = "Me"
                     },
                     new SubscribedBuild
                     {
@@ -34,10 +37,12 @@ namespace BuildNotifications.Design.ViewModel
                         {
                             AccountName = "Nickys Account",
                             EncodedCredentials = "1234567",
-                            ProjectId = "123456"
+                            ProjectId = "123456",
+                            ProjectName = "Oh hey another project"
                         },
                         Name = "Second Build",
-                        LastCompletedBuildResult = BuildResult.PartiallySucceeded
+                        LastCompletedBuildResult = BuildResult.PartiallySucceeded,
+                        LastCompletedBuildRequestedFor = "A Fox"
                     },
                     new SubscribedBuild
                     {
@@ -45,10 +50,12 @@ namespace BuildNotifications.Design.ViewModel
                         {
                             AccountName = "Nickys Account",
                             EncodedCredentials = "1234567",
-                            ProjectId = "123456"
+                            ProjectId = "123456",
+                            ProjectName = "A name for a project"
                         },
                         Name = "Third Build",
-                        LastCompletedBuildResult = BuildResult.Failed
+                        LastCompletedBuildResult = BuildResult.Failed,
+                        LastCompletedBuildRequestedFor = "Nicky Crawford"
                     }
                 };
             }
@@ -61,10 +68,17 @@ namespace BuildNotifications.Design.ViewModel
             get
             {
                 var GroupedSubscribedBuildsInternal = new ListCollectionView(SubscribedBuilds);
-                GroupedSubscribedBuildsInternal.GroupDescriptions.Add(new PropertyGroupDescription("LastCompletedBuildResult"));
+                GroupedSubscribedBuildsInternal.GroupDescriptions.Add(new PropertyGroupDescription("CurrentBuildStatus"));
                 return GroupedSubscribedBuildsInternal;
             }
             set { }
+        }
+
+        public IList<string> StatusFilterOptions => new List<string> { "Current Build Status" };
+        public string SelectedFilterOption
+        {
+            get { return StatusFilterOptions.First(); }
+            set {  }
         }
     }
 }

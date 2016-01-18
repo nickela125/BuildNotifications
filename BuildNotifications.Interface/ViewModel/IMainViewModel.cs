@@ -13,5 +13,7 @@ namespace BuildNotifications.Interface.ViewModel
         RelayCommand ManageBuildsCommand { get; }
         ObservableCollection<SubscribedBuild> SubscribedBuilds { get; set; }
         ListCollectionView GroupedSubscribedBuilds { get; set; }
+        IList<string> StatusFilterOptions { get; }
+        string SelectedFilterOption { get; set; }
     }
 }

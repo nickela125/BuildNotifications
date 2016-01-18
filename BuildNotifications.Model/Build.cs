@@ -9,7 +9,7 @@ namespace BuildNotifications.Model
         public string RequestedFor { get; set; }
         public BuildResult? Result { get; set; }
         public BuildStatus Status { get; set; }
-        public DateTime QueueTime { get; set; }
+        public DateTime LastChangedDate { get; set; }
         public string BuildUrl { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight;
+﻿using System;
+using GalaSoft.MvvmLight;
 
 namespace BuildNotifications.Model
 {
@@ -7,6 +8,9 @@ namespace BuildNotifications.Model
         public AccountDetails AccountDetails { get; set; }
         public string BuildDefinitionId { get; set; }
         public string Name{ get; set; }
+        public string LastCompletedBuildRequestedFor{ get; set; }
+        public DateTime LastBuildResultChangeTime{ get; set; }
+        public DateTime LastBuildStatusChangeTime{ get; set; }
         public BuildStatus? CurrentBuildStatus { get; set; }
         public string CurrentBuildId { get; set; }
 

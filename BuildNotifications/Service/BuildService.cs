@@ -28,7 +28,7 @@ namespace BuildNotifications.Service
         {
             IList<Account> accounts = update.Accounts;
             IList<SubscribedBuild> existingSubscribedBuilds = GetSubscribedBuilds();
-            IList<SubscribedBuild> newSubscribedBuilds = new List<SubscribedBuild>();
+            IList<SubscribedBuild> newSubscribedBuilds = new List<SubscribedBuild>(); 
 
             foreach (Account account in accounts)
             {
@@ -56,7 +56,8 @@ namespace BuildNotifications.Service
                                     {
                                         AccountName = account.Name,
                                         ProjectId = project.Id,
-                                        EncodedCredentials = account.EncodedCredentials
+                                        EncodedCredentials = account.EncodedCredentials,
+                                        ProjectName = project.Name
                                     },
                                     BuildDefinitionId = buildDefinition.Id,
                                     Name = buildDefinition.Name
@@ -150,7 +151,7 @@ namespace BuildNotifications.Service
         {
             IList<BuildUpdate> updates = new List<BuildUpdate>();
             
-            List<Build> orderedBuilds = buildList.OrderByDescending(b => b.QueueTime).ToList();
+            List<Build> orderedBuilds = buildList.OrderByDescending(b => b.LastChangedDate).ToList();
             Build latestBuild = orderedBuilds.First(); // method only called if at least one build
             Build secondLatestBuild = orderedBuilds.Count < 2 ? null : orderedBuilds.Last();
 
@@ -163,9 +164,10 @@ namespace BuildNotifications.Service
                 subscribedBuild.CurrentBuildId = latestBuild.Id;
                 subscribedBuild.CurrentBuildStatus = latestBuild.Status;
                 subscribedBuild.LastCompletedBuildResult = latestBuild.Result;
+                subscribedBuild.LastCompletedBuildRequestedFor = latestBuild.RequestedFor;
 
                 // send update if queued in last 10 seconds
-                if (latestBuild.QueueTime > DateTime.Now.AddSeconds(-10))
+                if (latestBuild.LastChangedDate > DateTime.Now.AddSeconds(-10))
                 {
                     updates.Add(new BuildUpdate
                     {
@@ -186,6 +188,7 @@ namespace BuildNotifications.Service
                     {
                         subscribedBuild.CurrentBuildStatus = latestBuild.Status;
                         subscribedBuild.LastCompletedBuildResult = latestBuild.Result;
+                        subscribedBuild.LastCompletedBuildRequestedFor = latestBuild.RequestedFor;
 
                         updates.Add(new BuildUpdate
                         {
@@ -234,6 +237,7 @@ namespace BuildNotifications.Service
                     if (latestBuild.Result != null)
                     {
                         subscribedBuild.LastCompletedBuildResult = latestBuild.Result;
+                        subscribedBuild.LastCompletedBuildRequestedFor = latestBuild.RequestedFor;
                     }
 
                     updates.Add(new BuildUpdate
@@ -247,6 +251,11 @@ namespace BuildNotifications.Service
                 }
             }
             return updates;
+        }
+
+        private void UpdateSubscribedBuild(SubscribedBuild subscribedBuild, Build lastestBuild)
+        {
+            
         }
     }
 }

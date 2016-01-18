@@ -27,7 +27,8 @@ namespace BuildNotifications.ViewModel
         private readonly IBuildService _buildService;
         private readonly IMessenger _messenger;
         private Timer _timer;
-        private TaskbarIcon _icon; 
+        private TaskbarIcon _icon;
+        private string _filterPropertyName;
 
         public MainViewModel(IAccountService accountService, IBuildService buildService, IMessenger messenger)
         {
@@ -39,18 +40,28 @@ namespace BuildNotifications.ViewModel
             ManageBuildsCommand = new RelayCommand(ManageBuilds);
             BuildsMenuItemCommand = new RelayCommand(BuildsMenuItem);
             ExitMenuItemCommand = new RelayCommand(ExitMenuItem);
+            
+            StatusFilterOptions = new List<string>
+            {
+                Constants.FilterByResult,
+                Constants.FilterByStatus
+            };
+
+            SelectedFilterOption = StatusFilterOptions.First();
+            _filterPropertyName = Constants.BuildResultPropertyName;
 
             SubscribedBuilds = new ObservableCollection<SubscribedBuild>(_buildService.GetSubscribedBuilds());
             _messenger.Register<SubscribedBuildsUpdate>(this, update =>
             {
                 SubscribedBuilds = new ObservableCollection<SubscribedBuild>(((SubscribedBuildsUpdate)update).SubscribedBuilds);
                 GroupedSubscribedBuilds = new ListCollectionView(SubscribedBuilds);
-                GroupedSubscribedBuilds.GroupDescriptions.Add(new PropertyGroupDescription("LastCompletedBuildResult"));
+                GroupedSubscribedBuilds.GroupDescriptions.Add(new PropertyGroupDescription(_filterPropertyName));
                 _icon.Icon = GetIconForBuilds();
             });
 
             GroupedSubscribedBuilds = new ListCollectionView(SubscribedBuilds);
-            GroupedSubscribedBuilds.GroupDescriptions.Add(new PropertyGroupDescription("LastCompletedBuildResult"));
+            GroupedSubscribedBuilds.GroupDescriptions.Add(new PropertyGroupDescription(_filterPropertyName));
+
 
             _icon = new TaskbarIcon
             {
@@ -106,6 +117,33 @@ namespace BuildNotifications.ViewModel
             set { Set(ref _groupedSubscribedBuilds, value); }
         }
 
+        private IList<string> _statusFilterOptions; 
+        public IList<string> StatusFilterOptions
+        {
+            get { return _statusFilterOptions; }
+            set { Set(ref _statusFilterOptions, value); }
+        }
+
+        private string _selectedFilterOption; 
+        public string SelectedFilterOption
+        {
+            get { return _selectedFilterOption; }
+            set
+            {
+                Set(ref _selectedFilterOption, value);
+
+                _filterPropertyName = SelectedFilterOption == 
+                    Constants.FilterByStatus ? 
+                    Constants.BuildStatusPropertyName : 
+                    Constants.BuildResultPropertyName;
+                if (GroupedSubscribedBuilds != null && GroupedSubscribedBuilds.GroupDescriptions != null)
+                {
+                    GroupedSubscribedBuilds.GroupDescriptions.Clear();
+                    GroupedSubscribedBuilds.GroupDescriptions.Add(new PropertyGroupDescription(_filterPropertyName));
+                }
+            }
+        }
+
         #endregion
 
         #region Commands
@@ -125,6 +163,7 @@ namespace BuildNotifications.ViewModel
             eventArgs.Cancel = true;
             Application.Current.MainWindow.Hide();
         }
+
         private void ManageBuilds()
         {
             ManageBuildsWindow manageBuildsWindow = new ManageBuildsWindow
