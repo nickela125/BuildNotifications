@@ -23,18 +23,14 @@ namespace BuildNotifications.ViewModel
 {
     public class MainViewModel : ViewModelBase, IMainViewModel
     {
-        private readonly IAccountService _accountService;
         private readonly IBuildService _buildService;
-        private readonly IMessenger _messenger;
         private Timer _timer;
         private TaskbarIcon _icon;
         private string _filterPropertyName;
 
-        public MainViewModel(IAccountService accountService, IBuildService buildService, IMessenger messenger)
+        public MainViewModel(IBuildService buildService, IMessenger messenger)
         {
-            _accountService = accountService;
             _buildService = buildService;
-            _messenger = messenger;
 
             CloseCommand = new RelayCommand<CancelEventArgs>(Close);
             ManageBuildsCommand = new RelayCommand(ManageBuilds);
@@ -51,7 +47,7 @@ namespace BuildNotifications.ViewModel
             _filterPropertyName = Constants.BuildResultPropertyName;
 
             SubscribedBuilds = new ObservableCollection<SubscribedBuild>(_buildService.GetSubscribedBuilds());
-            _messenger.Register<SubscribedBuildsUpdate>(this, update =>
+            messenger.Register<SubscribedBuildsUpdate>(this, update =>
             {
                 SubscribedBuilds = new ObservableCollection<SubscribedBuild>(((SubscribedBuildsUpdate)update).SubscribedBuilds);
                 GroupedSubscribedBuilds = new ListCollectionView(SubscribedBuilds);
@@ -136,12 +132,20 @@ namespace BuildNotifications.ViewModel
                     Constants.FilterByStatus ? 
                     Constants.BuildStatusPropertyName : 
                     Constants.BuildResultPropertyName;
-                if (GroupedSubscribedBuilds != null && GroupedSubscribedBuilds.GroupDescriptions != null)
+                if (GroupedSubscribedBuilds?.GroupDescriptions != null)
                 {
                     GroupedSubscribedBuilds.GroupDescriptions.Clear();
                     GroupedSubscribedBuilds.GroupDescriptions.Add(new PropertyGroupDescription(_filterPropertyName));
                 }
+                _showingResults = _selectedFilterOption != Constants.FilterByStatus;
             }
+        }
+
+        private bool _showingResults;
+        public bool ShowingResults
+        {
+            get { return _showingResults; }
+            set { Set(ref _showingResults, value); }
         }
 
         #endregion

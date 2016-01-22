@@ -64,6 +64,9 @@
             </Style.Triggers>
         </Style>
 
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <converters:InverseBooleanToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"  />
+        
     </Window.Resources>
 
     <!-- Main Content -->
@@ -86,6 +89,7 @@
         <!-- http://blogs.msdn.com/b/jaimer/archive/2009/01/20/styling-microsoft-s-wpf-datagrid.aspx
         http://www.wpftutorial.net/datagrid.html-->
         <DataGrid
+            x:Name="Table"
             Grid.Row="1"
             Background="White"
             Margin="10"
@@ -147,8 +151,16 @@
                 <DataGridTemplateColumn Header="Requested For" Width="150" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock
-                                    Text="{Binding LastCompletedBuildRequestedFor}"/>
+                            <Grid>
+                                <TextBlock
+                                        Visibility="{Binding DataContext.ShowingResults, ElementName=Table, 
+                                            Converter={StaticResource BoolToVisibilityConverter}, Mode=TwoWay}"
+                                        Text="{Binding LastCompletedBuildRequestedFor}"/>
+                                <TextBlock
+                                        Visibility="{Binding DataContext.ShowingResults, ElementName=Table, 
+                                            Converter={StaticResource InverseBoolToVisibilityConverter}}"
+                                        Text="{Binding CurrentBuildRequestedFor}"/>
+                            </Grid>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

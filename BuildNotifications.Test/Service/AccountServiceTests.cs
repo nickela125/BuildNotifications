@@ -13,7 +13,7 @@ namespace BuildNotifications.Test.Service
 
         public void Initialize()
         {
-            _accountService = new AccountService(new VsoClient(new RestClient(), new Mapper()), new Messenger());
+            _accountService = new AccountService(new VsoClient(new RestClient(), new Mapper()), new Messenger(), new SettingsProvider());
         }
 
         [TestMethod]

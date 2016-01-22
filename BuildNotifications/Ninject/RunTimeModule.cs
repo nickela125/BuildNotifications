@@ -26,6 +26,7 @@ namespace BuildNotifications.Ninject
             Bind<IAccountService>().To<AccountService>().InSingletonScope();
             Bind<IMapper>().To<Mapper>().InSingletonScope();
             Bind<IBuildService>().To<BuildService>().InSingletonScope();
+            Bind<ISettingsProvider>().To<SettingsProvider>().InSingletonScope();
 
             // Client
             Bind<IRestClient>().To<RestClient>();

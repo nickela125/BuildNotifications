@@ -15,11 +15,13 @@ namespace BuildNotifications.Service
     {
         private readonly IVsoClient _vsoClient;
         private readonly IMessenger _messenger;
+        private readonly ISettingsProvider _settingsProvider;
 
-        public AccountService(IVsoClient vsoClient, IMessenger messenger)
+        public AccountService(IVsoClient vsoClient, IMessenger messenger, ISettingsProvider settingsProvider)
         {
             _vsoClient = vsoClient;
             _messenger = messenger;
+            _settingsProvider = settingsProvider;
         }
 
         public async Task UpdateAccountDetails(Account account) // Todo this method should be used with a refresh command
@@ -83,21 +85,19 @@ namespace BuildNotifications.Service
         public void SaveAccounts(IList<Account> accounts)
         {
             string jsonString = JsonConvert.SerializeObject(accounts);
-            Properties.Settings.Default[Constants.AccountsConfigurationName] = jsonString;
-            Properties.Settings.Default.Save();
+            _settingsProvider.SaveSetting(Constants.AccountsConfigurationName, jsonString);
             _messenger.Send(new AccountsUpdate {Accounts = accounts});
         }
 
         public IList<Account> GetAccounts()
         {
-            string jsonString = (string)Properties.Settings.Default[Constants.AccountsConfigurationName];
-            
+            string jsonString = (string)_settingsProvider.GetSetting(Constants.AccountsConfigurationName);
             return JsonConvert.DeserializeObject<List<Account>>(jsonString);
         }
 
         private void TransferSubscriptions(Account oldAccount, Account newAccount)
         {
-            throw new NotImplementedException();
+            // todo
         }
     }
 }

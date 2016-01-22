@@ -100,6 +100,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\InverseBooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\PascalCaseToWordsConverter.cs" />
     <Compile Include="Converters\SwitchConverter.cs" />
     <Compile Include="ManageBuildsWindow.xaml.cs">
@@ -115,6 +116,7 @@
     <Compile Include="Service\AccountService.cs" />
     <Compile Include="Service\BuildService.cs" />
     <Compile Include="Service\Mapper.cs" />
+    <Compile Include="Service\SettingsProvider.cs" />
     <Compile Include="ViewModel\ConfigureAccountViewModel.cs" />
     <Compile Include="ViewModel\Helpers\ApplicationHelper.cs" />
     <Compile Include="ViewModel\Helpers\BindingProxy.cs" />

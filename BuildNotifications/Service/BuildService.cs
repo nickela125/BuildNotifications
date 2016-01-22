@@ -15,11 +15,13 @@ namespace BuildNotifications.Service
     {
         private readonly IVsoClient _vsoClient;
         private readonly IMessenger _messenger;
+        private readonly ISettingsProvider _settingsProvider;
 
-        public BuildService(IVsoClient vsoClient, IMessenger messenger)
+        public BuildService(IVsoClient vsoClient, IMessenger messenger, ISettingsProvider settingsProvider)
         {
             _vsoClient = vsoClient;
             _messenger = messenger;
+            _settingsProvider = settingsProvider;
 
             _messenger.Register<AccountSubscriptionUpdate>(this, UpdateSubscribedBuilds);
         }
@@ -28,7 +30,7 @@ namespace BuildNotifications.Service
         {
             IList<Account> accounts = update.Accounts;
             IList<SubscribedBuild> existingSubscribedBuilds = GetSubscribedBuilds();
-            IList<SubscribedBuild> newSubscribedBuilds = new List<SubscribedBuild>(); 
+            IList<SubscribedBuild> newSubscribedBuilds = new List<SubscribedBuild>();
 
             foreach (Account account in accounts)
             {
@@ -73,19 +75,18 @@ namespace BuildNotifications.Service
 
         public bool GetNotifyOnStart()
         {
-            return (bool)Properties.Settings.Default[Constants.NotifyOnStartConfigurationName];
+            return (bool)_settingsProvider.GetSetting(Constants.NotifyOnStartConfigurationName);
         }
 
         public bool GetNotifyOnFinish()
         {
-            return (bool)Properties.Settings.Default[Constants.NotifyOnFinishConfigurationName];
+            return (bool)_settingsProvider.GetSetting(Constants.NotifyOnFinishConfigurationName);
         }
 
         public void SaveNotifyOptions(bool notifyOnStart, bool notifyOnFinish)
         {
-            Properties.Settings.Default[Constants.NotifyOnStartConfigurationName] = notifyOnStart;
-            Properties.Settings.Default[Constants.NotifyOnFinishConfigurationName] = notifyOnFinish;
-            Properties.Settings.Default.Save();
+            _settingsProvider.SaveSetting(Constants.NotifyOnStartConfigurationName, notifyOnStart);
+            _settingsProvider.SaveSetting(Constants.NotifyOnFinishConfigurationName, notifyOnFinish);
 
             _messenger.Send<NotifyOptionsUpdate>(new NotifyOptionsUpdate
             {
@@ -96,29 +97,37 @@ namespace BuildNotifications.Service
 
         public IList<SubscribedBuild> GetSubscribedBuilds()
         {
-            string jsonString = (string)Properties.Settings.Default[Constants.SubscribedBuilds];
-
+            string jsonString = (string)_settingsProvider.GetSetting(Constants.SubscribedBuilds);
             return JsonConvert.DeserializeObject<List<SubscribedBuild>>(jsonString);
         }
 
         private void SaveSubscribedBuilds(IList<SubscribedBuild> subscribedBuilds)
         {
             string jsonString = JsonConvert.SerializeObject(subscribedBuilds);
-            Properties.Settings.Default[Constants.SubscribedBuilds] = jsonString;
-            Properties.Settings.Default.Save();
-            _messenger.Send(new SubscribedBuildsUpdate {SubscribedBuilds = subscribedBuilds});
+            _settingsProvider.SaveSetting(Constants.SubscribedBuilds, jsonString);
+            _messenger.Send(new SubscribedBuildsUpdate { SubscribedBuilds = subscribedBuilds });
         }
 
         public async Task<IList<BuildUpdate>> CheckForUpdatedBuilds(IList<SubscribedBuild> subscribedBuilds)
         {
-            // todo group by account details to reduce calls
+            List<List<SubscribedBuild>> groupedBuilds = subscribedBuilds.GroupBy(b => new
+            {
+                b.AccountDetails.AccountName,
+                b.AccountDetails.ProjectId
+            })
+            .Select(grp => grp.ToList())
+            .ToList();
 
             var updates = new List<BuildUpdate>();
 
-            foreach (SubscribedBuild subscribedBuild in subscribedBuilds)
+            foreach (List<SubscribedBuild> groupedBuild in groupedBuilds)
             {
-                IList<Build> builds = await _vsoClient.GetBuilds(subscribedBuild.AccountDetails, new []{ subscribedBuild.BuildDefinitionId });
-                List<List<Build>> buildsByDefinition = builds
+                IList<Build> buildsForAccount =
+                    await
+                        _vsoClient.GetBuilds(groupedBuild.First().AccountDetails,
+                            groupedBuild.Select(g => g.BuildDefinitionId).ToList());
+            
+                List<List<Build>> buildsByDefinition = buildsForAccount
                     .GroupBy(b => b.BuildDefinitionId)
                     .Select(grp => grp.ToList())
                     .ToList();
@@ -150,112 +159,78 @@ namespace BuildNotifications.Service
         private IList<BuildUpdate> CheckForUpdateInternal(List<Build> buildList, SubscribedBuild subscribedBuild)
         {
             IList<BuildUpdate> updates = new List<BuildUpdate>();
-            
-            List<Build> orderedBuilds = buildList.OrderByDescending(b => b.LastChangedDate).ToList();
-            Build latestBuild = orderedBuilds.First(); // method only called if at least one build
+
+            List<Build> orderedBuilds = buildList.OrderByDescending(b => b.QueueTime).ToList();
+            Build latestBuild = orderedBuilds.First(); // this method is only called if at least one build
             Build secondLatestBuild = orderedBuilds.Count < 2 ? null : orderedBuilds.Last();
 
-            if (subscribedBuild.CurrentBuildId == null || 
-                    (!subscribedBuild.CurrentBuildId.Equals(latestBuild.Id) && 
-                        (secondLatestBuild == null || !subscribedBuild.CurrentBuildId.Equals(secondLatestBuild.Id))))
+            bool haveNotSeenEitherBuild = subscribedBuild.CurrentBuildId == null ||
+                                          (!subscribedBuild.CurrentBuildId.Equals(latestBuild?.Id) &&
+                                          !subscribedBuild.CurrentBuildId.Equals(secondLatestBuild?.Id));
+
+            bool oneBuildIsCurrent = subscribedBuild.CurrentBuildId != null &&
+                                     (subscribedBuild.CurrentBuildId.Equals(latestBuild.Id) ||
+                                     (secondLatestBuild != null &&
+                                      subscribedBuild.CurrentBuildId.Equals(secondLatestBuild.Id)));
+
+            Build currentBuild = oneBuildIsCurrent
+                ? (subscribedBuild.CurrentBuildId.Equals(latestBuild.Id)
+                    ? latestBuild
+                    : secondLatestBuild)
+                : null;
+            
+            if (haveNotSeenEitherBuild)
             {
-                // One or two builds that we haven't seen before
-
-                subscribedBuild.CurrentBuildId = latestBuild.Id;
-                subscribedBuild.CurrentBuildStatus = latestBuild.Status;
-                subscribedBuild.LastCompletedBuildResult = latestBuild.Result;
-                subscribedBuild.LastCompletedBuildRequestedFor = latestBuild.RequestedFor;
-
-                // send update if queued in last 10 seconds
-                if (latestBuild.LastChangedDate > DateTime.Now.AddSeconds(-10))
+                UpdateSubscribedBuild(subscribedBuild, latestBuild);
+                
+                if (latestBuild != null && latestBuild.QueueTime > DateTime.Now.AddSeconds(-10))
                 {
-                    updates.Add(new BuildUpdate
-                    {
-                        Name = subscribedBuild.Name,
-                        Id = subscribedBuild.BuildDefinitionId,
-                        RequestedFor = latestBuild.RequestedFor,
-                        Result = latestBuild.Result,
-                        Status = latestBuild.Status
-                    });
+                    updates.Add(CreateUpdate(subscribedBuild, latestBuild));
                 }
             }
-            else
+            else if (oneBuildIsCurrent)
             {
-                // latest build already seen before
-                if (subscribedBuild.CurrentBuildId.Equals(latestBuild.Id))
+                // Send update if older build changed
+                if (currentBuild == secondLatestBuild && secondLatestBuild.Status != subscribedBuild.CurrentBuildStatus)
                 {
-                    if (latestBuild.Result != null && latestBuild.Status != subscribedBuild.CurrentBuildStatus)
-                    {
-                        subscribedBuild.CurrentBuildStatus = latestBuild.Status;
-                        subscribedBuild.LastCompletedBuildResult = latestBuild.Result;
-                        subscribedBuild.LastCompletedBuildRequestedFor = latestBuild.RequestedFor;
-
-                        updates.Add(new BuildUpdate
-                        {
-                            Name = subscribedBuild.Name,
-                            Id = subscribedBuild.BuildDefinitionId,
-                            RequestedFor = latestBuild.RequestedFor,
-                            Result = latestBuild.Result,
-                            Status = latestBuild.Status
-                        });
-                    }
-                    else if (latestBuild.Status != subscribedBuild.CurrentBuildStatus)
-                    {
-                        subscribedBuild.CurrentBuildStatus = latestBuild.Status;
-                        
-                        updates.Add(new BuildUpdate
-                        {
-                            Name = subscribedBuild.Name,
-                            Id = subscribedBuild.BuildDefinitionId,
-                            RequestedFor = latestBuild.RequestedFor,
-                            Result = latestBuild.Result,
-                            Status = latestBuild.Status
-                        });
-                    }
+                    subscribedBuild.LastCompletedBuildResult = secondLatestBuild.Result;
+                    UpdateSubscribedBuild(subscribedBuild, secondLatestBuild);
+                    updates.Add(CreateUpdate(subscribedBuild, secondLatestBuild));
                 }
-                // Second latest build has been seen before
-                else if (secondLatestBuild != null && subscribedBuild.CurrentBuildId.Equals(secondLatestBuild.Id))
+
+                if (currentBuild == secondLatestBuild || latestBuild.Status != subscribedBuild.CurrentBuildStatus)
                 {
-                    if (secondLatestBuild.Status != subscribedBuild.CurrentBuildStatus)
-                    {
-                        subscribedBuild.LastCompletedBuildResult = secondLatestBuild.Result;
-
-                        updates.Add(new BuildUpdate
-                        {
-                            Name = subscribedBuild.Name,
-                            Id = subscribedBuild.BuildDefinitionId,
-                            RequestedFor = secondLatestBuild.RequestedFor,
-                            Result = secondLatestBuild.Result,
-                            Status = secondLatestBuild.Status
-                        });
-                    }
-                    
-                    // look at new build
-                    subscribedBuild.CurrentBuildStatus = latestBuild.Status;
-                    subscribedBuild.CurrentBuildId = latestBuild.Id;
-
-                    if (latestBuild.Result != null)
-                    {
-                        subscribedBuild.LastCompletedBuildResult = latestBuild.Result;
-                        subscribedBuild.LastCompletedBuildRequestedFor = latestBuild.RequestedFor;
-                    }
-
-                    updates.Add(new BuildUpdate
-                    {
-                        Name = subscribedBuild.Name,
-                        Id = subscribedBuild.BuildDefinitionId,
-                        RequestedFor = latestBuild.RequestedFor,
-                        Result = latestBuild.Result,
-                        Status = latestBuild.Status
-                    });
+                    UpdateSubscribedBuild(subscribedBuild, latestBuild);
+                    updates.Add(CreateUpdate(subscribedBuild, latestBuild));
                 }
             }
             return updates;
         }
 
-        private void UpdateSubscribedBuild(SubscribedBuild subscribedBuild, Build lastestBuild)
+        private void UpdateSubscribedBuild(SubscribedBuild subscribedBuild, Build build)
         {
-            
+            subscribedBuild.CurrentBuildId = build.Id;
+            subscribedBuild.CurrentBuildStatus = build.Status;
+
+            subscribedBuild.CurrentBuildRequestedFor = build.RequestedFor;
+
+            if (build.Result != null)
+            {
+                subscribedBuild.LastCompletedBuildResult = build.Result;
+                subscribedBuild.LastCompletedBuildRequestedFor = build.RequestedFor;
+            }
+        }
+
+        private BuildUpdate CreateUpdate(SubscribedBuild subscribedBuild, Build build)
+        {
+            return new BuildUpdate
+            {
+                Name = subscribedBuild.Name,
+                Id = subscribedBuild.BuildDefinitionId,
+                RequestedFor = build.RequestedFor,
+                Result = build.Result,
+                Status = build.Status
+            };
         }
     }
 }

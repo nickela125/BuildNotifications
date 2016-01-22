@@ -51,6 +51,7 @@
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Moq, Version=4.2.1510.2205, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <HintPath>..\packages\Moq.4.2.1510.2205\lib\net40\Moq.dll</HintPath>
       <Private>True</Private>
@@ -83,6 +84,10 @@
     <Compile Include="Service\BuildServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BuildNotifications.Common\BuildNotifications.Common.csproj">
+      <Project>{15c1ac09-9535-4149-b194-df5afac5c6b4}</Project>
+      <Name>BuildNotifications.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BuildNotifications.Interface\BuildNotifications.Interface.csproj">
       <Project>{C41701FE-96E8-4368-9C2B-7728689C0980}</Project>
       <Name>BuildNotifications.Interface</Name>

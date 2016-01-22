@@ -15,5 +15,6 @@ namespace BuildNotifications.Interface.ViewModel
         ListCollectionView GroupedSubscribedBuilds { get; set; }
         IList<string> StatusFilterOptions { get; }
         string SelectedFilterOption { get; set; }
+        bool ShowingResults { get; set; }
     }
 }

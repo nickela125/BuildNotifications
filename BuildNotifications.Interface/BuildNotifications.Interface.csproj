@@ -70,6 +70,7 @@
     <Compile Include="Service\IAccountService.cs" />
     <Compile Include="Service\IBuildService.cs" />
     <Compile Include="Service\IMapper.cs" />
+    <Compile Include="Service\ISettingsProvider.cs" />
     <Compile Include="ViewModel\IConfigureAccountViewModel.cs" />
     <Compile Include="ViewModel\IMainViewModel.cs" />
     <Compile Include="ViewModel\IManageBuildsViewModel.cs" />

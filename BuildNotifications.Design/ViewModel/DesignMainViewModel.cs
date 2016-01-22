@@ -29,7 +29,8 @@ namespace BuildNotifications.Design.ViewModel
                         },
                         Name = "First Build",
                         LastCompletedBuildResult = BuildResult.Succeeded,
-                        LastCompletedBuildRequestedFor = "Me"
+                        LastCompletedBuildRequestedFor = "Me",
+                        CurrentBuildRequestedFor = "You"
                     },
                     new SubscribedBuild
                     {
@@ -42,7 +43,8 @@ namespace BuildNotifications.Design.ViewModel
                         },
                         Name = "Second Build",
                         LastCompletedBuildResult = BuildResult.PartiallySucceeded,
-                        LastCompletedBuildRequestedFor = "A Fox"
+                        LastCompletedBuildRequestedFor = "A Fox",
+                        CurrentBuildRequestedFor = "A Cat"
                     },
                     new SubscribedBuild
                     {
@@ -55,7 +57,8 @@ namespace BuildNotifications.Design.ViewModel
                         },
                         Name = "Third Build",
                         LastCompletedBuildResult = BuildResult.Failed,
-                        LastCompletedBuildRequestedFor = "Nicky Crawford"
+                        LastCompletedBuildRequestedFor = "Nicky Crawford",
+                        CurrentBuildRequestedFor = "Harry Potter"
                     }
                 };
             }
@@ -80,5 +83,7 @@ namespace BuildNotifications.Design.ViewModel
             get { return StatusFilterOptions.First(); }
             set {  }
         }
+
+        public bool ShowingResults { get; set; }
     }
 }
