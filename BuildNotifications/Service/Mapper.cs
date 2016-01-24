@@ -36,6 +36,7 @@ namespace BuildNotifications.Service
                 QueueTime = build.QueueTime,
                 StartTime = build.StartTime,
                 FinishTime = build.FinishTime,
+                LastChangedDate = build.LastChangedDate,
                 RequestedFor = build.RequestedFor.DisplayName,
                 BuildUrl = build.Links.Self.Href
             };

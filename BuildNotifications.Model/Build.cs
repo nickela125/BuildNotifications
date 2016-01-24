@@ -11,6 +11,7 @@ namespace BuildNotifications.Model
         public BuildStatus Status { get; set; }
         public DateTime QueueTime { get; set; }
         public DateTime StartTime { get; set; }
+        public DateTime LastChangedDate { get; set; }
         public DateTime FinishTime { get; set; }
         public string BuildUrl { get; set; }
     }

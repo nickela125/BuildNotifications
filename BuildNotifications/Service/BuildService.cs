@@ -38,33 +38,33 @@ namespace BuildNotifications.Service
                 {
                     foreach (BuildDefinition buildDefinition in project.Builds)
                     {
-                        if (buildDefinition.IsSelected != null && buildDefinition.IsSelected.Value)
+                        if (buildDefinition.IsSelected == null || !buildDefinition.IsSelected.Value) continue;
+
+                        SubscribedBuild existingSubscribedBuild =
+                            existingSubscribedBuilds.SingleOrDefault(
+                                x =>
+                                    x.BuildDefinitionId == buildDefinition.Id &&
+                                    x.AccountDetails.ProjectId == project.Id &&
+                                    x.AccountDetails.AccountName == account.Name);
+
+                        if (existingSubscribedBuild != null)
                         {
-                            SubscribedBuild existingSubscribedBuild =
-                                existingSubscribedBuilds.SingleOrDefault(
-                                    x =>
-                                        x.BuildDefinitionId == buildDefinition.Id &&
-                                        x.AccountDetails.ProjectId == project.Id &&
-                                        x.AccountDetails.AccountName == account.Name);
-                            if (existingSubscribedBuild != null)
+                            newSubscribedBuilds.Add(existingSubscribedBuild);
+                        }
+                        else
+                        {
+                            newSubscribedBuilds.Add(new SubscribedBuild
                             {
-                                newSubscribedBuilds.Add(existingSubscribedBuild);
-                            }
-                            else
-                            {
-                                newSubscribedBuilds.Add(new SubscribedBuild
+                                AccountDetails = new AccountDetails
                                 {
-                                    AccountDetails = new AccountDetails
-                                    {
-                                        AccountName = account.Name,
-                                        ProjectId = project.Id,
-                                        EncodedCredentials = account.EncodedCredentials,
-                                        ProjectName = project.Name
-                                    },
-                                    BuildDefinitionId = buildDefinition.Id,
-                                    Name = buildDefinition.Name
-                                });
-                            }
+                                    AccountName = account.Name,
+                                    ProjectId = project.Id,
+                                    EncodedCredentials = account.EncodedCredentials,
+                                    ProjectName = project.Name
+                                },
+                                BuildDefinitionId = buildDefinition.Id,
+                                Name = buildDefinition.Name
+                            });
                         }
                     }
                 }
@@ -88,7 +88,7 @@ namespace BuildNotifications.Service
             _settingsProvider.SaveSetting(Constants.NotifyOnStartConfigurationName, notifyOnStart);
             _settingsProvider.SaveSetting(Constants.NotifyOnFinishConfigurationName, notifyOnFinish);
 
-            _messenger.Send<NotifyOptionsUpdate>(new NotifyOptionsUpdate
+            _messenger.Send(new NotifyOptionsUpdate
             {
                 NotifyOnStart = notifyOnStart,
                 NotifyOnFinish = notifyOnFinish
@@ -135,6 +135,19 @@ namespace BuildNotifications.Service
                 foreach (List<Build> buildList in buildsByDefinition)
                 {
                     if (!buildList.Any()) continue;
+
+                    if (buildList[0].BuildDefinitionId == "1")
+                    {
+                        foreach (Build build in buildList)
+                        {
+                            Console.WriteLine($"Status:\t{build.Status}{Environment.NewLine}" +
+                                              $"Queue Time:\t\t{build.QueueTime}{Environment.NewLine}" +
+                                              $"Start Time:\t\t{build.StartTime}{Environment.NewLine}" +
+                                              $"Finish Time:\t{build.FinishTime}{Environment.NewLine}" +
+                                              $"Last Changed:\t{build.LastChangedDate}{Environment.NewLine}");
+                        }
+                        Console.WriteLine("---------------------------------------");
+                    }
 
                     SubscribedBuild subscribedBuildToUpdate = subscribedBuilds.Single(sb => sb.BuildDefinitionId == buildList.First().BuildDefinitionId);
                     updates.AddRange(CheckForUpdateInternal(buildList, subscribedBuildToUpdate));

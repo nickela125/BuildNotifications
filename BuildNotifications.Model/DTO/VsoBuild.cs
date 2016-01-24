@@ -11,6 +11,7 @@ namespace BuildNotifications.Model.DTO
         public DateTime QueueTime { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime FinishTime { get; set; }
+        public DateTime LastChangedDate { get; set; }
         public VsoBuildDefinition Definition { get; set; }
         public VsoUser RequestedFor { get; set; }
         [JsonProperty(PropertyName = "_links")]

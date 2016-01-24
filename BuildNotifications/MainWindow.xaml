@@ -31,10 +31,10 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type GroupItem}">
-                        <StackPanel >
+                        <StackPanel>
                             <StackPanel Width="{Binding RelativeSource={RelativeSource
                                                       Mode=FindAncestor,
-                                                      AncestorType={x:Type Expander}},
+                                                      AncestorType={x:Type StackPanel}},
                                                     Path=ActualWidth}">
                                 <DockPanel Margin="10,5,10,5">
                                     <TextBlock Text="{Binding Path=Name, Converter={StaticResource PascalCaseToWordsConverter}}" 
