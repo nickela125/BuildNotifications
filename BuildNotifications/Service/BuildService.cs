@@ -135,20 +135,7 @@ namespace BuildNotifications.Service
                 foreach (List<Build> buildList in buildsByDefinition)
                 {
                     if (!buildList.Any()) continue;
-
-                    if (buildList[0].BuildDefinitionId == "1")
-                    {
-                        foreach (Build build in buildList)
-                        {
-                            Console.WriteLine($"Status:\t{build.Status}{Environment.NewLine}" +
-                                              $"Queue Time:\t\t{build.QueueTime}{Environment.NewLine}" +
-                                              $"Start Time:\t\t{build.StartTime}{Environment.NewLine}" +
-                                              $"Finish Time:\t{build.FinishTime}{Environment.NewLine}" +
-                                              $"Last Changed:\t{build.LastChangedDate}{Environment.NewLine}");
-                        }
-                        Console.WriteLine("---------------------------------------");
-                    }
-
+                    
                     SubscribedBuild subscribedBuildToUpdate = subscribedBuilds.Single(sb => sb.BuildDefinitionId == buildList.First().BuildDefinitionId);
                     updates.AddRange(CheckForUpdateInternal(buildList, subscribedBuildToUpdate));
                 }
@@ -173,7 +160,7 @@ namespace BuildNotifications.Service
         {
             IList<BuildUpdate> updates = new List<BuildUpdate>();
 
-            List<Build> orderedBuilds = buildList.OrderByDescending(b => b.QueueTime).ToList();
+            List<Build> orderedBuilds = buildList.OrderByDescending(b => b.LastChangedDate).ToList();
             Build latestBuild = orderedBuilds.First(); // this method is only called if at least one build
             Build secondLatestBuild = orderedBuilds.Count < 2 ? null : orderedBuilds.Last();
 
@@ -196,7 +183,7 @@ namespace BuildNotifications.Service
             {
                 UpdateSubscribedBuild(subscribedBuild, latestBuild);
                 
-                if (latestBuild != null && latestBuild.QueueTime > DateTime.Now.AddSeconds(-10))
+                if (latestBuild != null && latestBuild.LastChangedDate > DateTime.Now.AddSeconds(-10))
                 {
                     updates.Add(CreateUpdate(subscribedBuild, latestBuild));
                 }
@@ -222,16 +209,21 @@ namespace BuildNotifications.Service
 
         private void UpdateSubscribedBuild(SubscribedBuild subscribedBuild, Build build)
         {
+            if (subscribedBuild.CurrentBuildStatus != build.Status)
+            {
+                subscribedBuild.LastBuildStatusChangeTime = build.LastChangedDate;
+
+                if (build.Result != null)
+                {
+                    subscribedBuild.LastCompletedBuildResult = build.Result;
+                    subscribedBuild.LastCompletedBuildRequestedFor = build.RequestedFor;
+                    subscribedBuild.LastBuildResultChangeTime = build.LastChangedDate;
+                }
+            }
+
             subscribedBuild.CurrentBuildId = build.Id;
             subscribedBuild.CurrentBuildStatus = build.Status;
-
             subscribedBuild.CurrentBuildRequestedFor = build.RequestedFor;
-
-            if (build.Result != null)
-            {
-                subscribedBuild.LastCompletedBuildResult = build.Result;
-                subscribedBuild.LastCompletedBuildRequestedFor = build.RequestedFor;
-            }
         }
 
         private BuildUpdate CreateUpdate(SubscribedBuild subscribedBuild, Build build)

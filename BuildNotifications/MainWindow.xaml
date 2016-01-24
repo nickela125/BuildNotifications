@@ -26,6 +26,8 @@
         </converters:SwitchConverter>
         
         <converters:PascalCaseToWordsConverter x:Key="PascalCaseToWordsConverter" />
+        
+        <converters:DateTimeFormatterConverter x:Key="DateTimeFormatterConverter" />
 
         <Style x:Key="GroupedHeaderStyle" TargetType="{x:Type GroupItem}">
             <Setter Property="Template">
@@ -135,8 +137,16 @@
                 <DataGridTemplateColumn Header="Time" Width="150" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock
-                                    Text=""/>
+                            <Grid>
+                                <TextBlock
+                                        Visibility="{Binding DataContext.ShowingResults, ElementName=Table, 
+                                            Converter={StaticResource BoolToVisibilityConverter}, Mode=TwoWay}"
+                                        Text="{Binding LastBuildResultChangeTime, Converter={StaticResource DateTimeFormatterConverter}}"/>
+                                <TextBlock
+                                        Visibility="{Binding DataContext.ShowingResults, ElementName=Table, 
+                                            Converter={StaticResource InverseBoolToVisibilityConverter}}"
+                                        Text="{Binding LastBuildStatusChangeTime, Converter={StaticResource DateTimeFormatterConverter}}"/>
+                            </Grid>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

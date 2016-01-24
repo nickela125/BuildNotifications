@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -30,7 +31,9 @@ namespace BuildNotifications.Design.ViewModel
                         Name = "First Build",
                         LastCompletedBuildResult = BuildResult.Succeeded,
                         LastCompletedBuildRequestedFor = "Me",
-                        CurrentBuildRequestedFor = "You"
+                        CurrentBuildRequestedFor = "You",
+                        LastBuildResultChangeTime = DateTime.Now,
+                        LastBuildStatusChangeTime = DateTime.Now
                     },
                     new SubscribedBuild
                     {
@@ -44,7 +47,9 @@ namespace BuildNotifications.Design.ViewModel
                         Name = "Second Build",
                         LastCompletedBuildResult = BuildResult.PartiallySucceeded,
                         LastCompletedBuildRequestedFor = "A Fox",
-                        CurrentBuildRequestedFor = "A Cat"
+                        CurrentBuildRequestedFor = "A Cat",
+                        LastBuildResultChangeTime = DateTime.Now.AddMinutes(-200),
+                        LastBuildStatusChangeTime = DateTime.Now.AddMinutes(-200)
                     },
                     new SubscribedBuild
                     {
@@ -58,7 +63,9 @@ namespace BuildNotifications.Design.ViewModel
                         Name = "Third Build",
                         LastCompletedBuildResult = BuildResult.Failed,
                         LastCompletedBuildRequestedFor = "Nicky Crawford",
-                        CurrentBuildRequestedFor = "Harry Potter"
+                        CurrentBuildRequestedFor = "Harry Potter",
+                        LastBuildResultChangeTime = DateTime.Now.AddMinutes(200),
+                        LastBuildStatusChangeTime = DateTime.Now.AddMinutes(200)
                     }
                 };
             }

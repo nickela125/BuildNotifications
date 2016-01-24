@@ -74,7 +74,7 @@ namespace BuildNotifications.Test.Service
                     BuildDefinitionId = "1",
                     Status = BuildStatus.InProgress,
                     Id = "1234",
-                    QueueTime = DateTime.Now
+                    LastChangedDate = DateTime.Now
                 }
             };
 
@@ -109,7 +109,7 @@ namespace BuildNotifications.Test.Service
                     Id = "1234",
                     Status = BuildStatus.Completed,
                     Result = BuildResult.PartiallySucceeded,
-                    QueueTime = DateTime.Now
+                    LastChangedDate = DateTime.Now
                 }
             };
 
@@ -144,7 +144,7 @@ namespace BuildNotifications.Test.Service
                     Id = "1234",
                     Status = BuildStatus.Completed,
                     Result = BuildResult.Canceled,
-                    QueueTime = DateTime.Now.AddDays(-1)
+                    LastChangedDate = DateTime.Now.AddDays(-1)
                 }
             };
 
@@ -174,14 +174,14 @@ namespace BuildNotifications.Test.Service
                     BuildDefinitionId = "1",
                     Id = "1234",
                     Status = BuildStatus.InProgress,
-                    QueueTime = DateTime.Now
+                    LastChangedDate = DateTime.Now
                 },
                 new Build
                 {
                     BuildDefinitionId = "1",
                     Id = "1234",
                     Status = BuildStatus.Completed,
-                    QueueTime = DateTime.Now.AddMinutes(-1)
+                    LastChangedDate = DateTime.Now.AddMinutes(-1)
                 }
             };
 
@@ -305,6 +305,7 @@ namespace BuildNotifications.Test.Service
                     BuildDefinitionId = "1",
                     Status = BuildStatus.InProgress,
                     RequestedFor = secondRequestedPerson,
+                    LastChangedDate = DateTime.Now,
                     Id = "5678"
                 },
                 new Build
@@ -313,6 +314,7 @@ namespace BuildNotifications.Test.Service
                     Status = BuildStatus.Completed,
                     Result = BuildResult.PartiallySucceeded,
                     RequestedFor = firstRequestedPerson,
+                    LastChangedDate = DateTime.Now.AddMinutes(-1),
                     Id = "1234"
                 }
             };
@@ -491,14 +493,14 @@ namespace BuildNotifications.Test.Service
                     BuildDefinitionId = "1",
                     Status = BuildStatus.InProgress,
                     Id = "1234",
-                    QueueTime = DateTime.Now
+                    LastChangedDate = DateTime.Now
                 },
                 new Build
                 {
                     BuildDefinitionId = "1",
                     Status = BuildStatus.Completed,
                     Id = "4567",
-                    QueueTime = DateTime.Now.AddMinutes(-1)
+                    LastChangedDate = DateTime.Now.AddMinutes(-1)
                 }
             };
 
@@ -533,7 +535,7 @@ namespace BuildNotifications.Test.Service
                     Result = BuildResult.Succeeded,
                     Status = BuildStatus.Completed,
                     Id = "1234",
-                    QueueTime = DateTime.Now
+                    LastChangedDate = DateTime.Now
                 },
                 new Build
                 {
@@ -541,7 +543,7 @@ namespace BuildNotifications.Test.Service
                     Result = BuildResult.Failed,
                     Status = BuildStatus.Completed,
                     Id = "4567",
-                    QueueTime = DateTime.Now.AddMinutes(-1)
+                    LastChangedDate = DateTime.Now.AddMinutes(-1)
                 }
             };
 
@@ -579,7 +581,7 @@ namespace BuildNotifications.Test.Service
                     Result = BuildResult.Failed,
                     Status = BuildStatus.Completed,
                     Id = "1234",
-                    QueueTime = DateTime.Now
+                    LastChangedDate = DateTime.Now
                 },
                 new Build
                 {
@@ -587,7 +589,7 @@ namespace BuildNotifications.Test.Service
                     Result = BuildResult.Succeeded,
                     Status = BuildStatus.Completed,
                     Id = "4567",
-                    QueueTime = DateTime.Now.AddMinutes(-1)
+                    LastChangedDate = DateTime.Now.AddMinutes(-1)
                 }
 
             };
@@ -625,7 +627,7 @@ namespace BuildNotifications.Test.Service
                     BuildDefinitionId = "1",
                     Status = BuildStatus.InProgress,
                     Id = "1234",
-                    QueueTime = DateTime.Now
+                    LastChangedDate = DateTime.Now
                 },
                 new Build
                 {
@@ -633,7 +635,7 @@ namespace BuildNotifications.Test.Service
                     Result = BuildResult.Succeeded,
                     Status = BuildStatus.Completed,
                     Id = "4567",
-                    QueueTime = DateTime.Now.AddMinutes(-1)
+                    LastChangedDate = DateTime.Now.AddMinutes(-1)
                 }
 
             };
@@ -672,7 +674,7 @@ namespace BuildNotifications.Test.Service
                     BuildDefinitionId = "1",
                     Status = BuildStatus.InProgress,
                     Id = "1234",
-                    QueueTime = DateTime.Now
+                    LastChangedDate = DateTime.Now
                 },
                 new Build
                 {
@@ -680,7 +682,7 @@ namespace BuildNotifications.Test.Service
                     Result = BuildResult.Succeeded,
                     Status = BuildStatus.Completed,
                     Id = "4567",
-                    QueueTime = DateTime.Now.AddMinutes(-1)
+                    LastChangedDate = DateTime.Now.AddMinutes(-1)
                 }
 
             };
@@ -718,14 +720,14 @@ namespace BuildNotifications.Test.Service
                     BuildDefinitionId = "1",
                     Status = BuildStatus.InProgress,
                     Id = "1234",
-                    QueueTime = DateTime.Now
+                    LastChangedDate = DateTime.Now
                 },
                 new Build
                 {
                     BuildDefinitionId = "1",
                     Status = BuildStatus.InProgress,
                     Id = "1234",
-                    QueueTime = DateTime.Now.AddMinutes(-1)
+                    LastChangedDate = DateTime.Now.AddMinutes(-1)
                 }
 
             };
@@ -765,7 +767,7 @@ namespace BuildNotifications.Test.Service
                     Status = BuildStatus.Completed,
                     Result = BuildResult.Succeeded,
                     Id = "1234",
-                    QueueTime = DateTime.Now
+                    LastChangedDate = DateTime.Now
                 },
                 new Build
                 {
@@ -773,7 +775,7 @@ namespace BuildNotifications.Test.Service
                     Status = BuildStatus.Completed,
                     Result = BuildResult.Succeeded,
                     Id = "5678",
-                    QueueTime = DateTime.Now.AddMinutes(-1)
+                    LastChangedDate = DateTime.Now.AddMinutes(-1)
                 }
 
             };
@@ -810,7 +812,7 @@ namespace BuildNotifications.Test.Service
                     Status = BuildStatus.Completed,
                     Result = BuildResult.Succeeded,
                     Id = "1234",
-                    QueueTime = DateTime.Now
+                    LastChangedDate = DateTime.Now
                 },
                 new Build
                 {
@@ -818,7 +820,7 @@ namespace BuildNotifications.Test.Service
                     Status = BuildStatus.Completed,
                     Result = BuildResult.Succeeded,
                     Id = "5678",
-                    QueueTime = DateTime.Now.AddMinutes(-1)
+                    LastChangedDate = DateTime.Now.AddMinutes(-1)
                 }
 
             };

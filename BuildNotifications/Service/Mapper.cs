@@ -33,10 +33,7 @@ namespace BuildNotifications.Service
                 Result = build.Result == null ? null : (BuildResult?)Enum.Parse(typeof(BuildResult), build.Result, true),
                 Status = (BuildStatus)Enum.Parse(typeof(BuildStatus), build.Status, true),
                 BuildDefinitionId = build.Definition.Id,
-                QueueTime = build.QueueTime,
-                StartTime = build.StartTime,
-                FinishTime = build.FinishTime,
-                LastChangedDate = build.LastChangedDate,
+                LastChangedDate = DateTime.SpecifyKind(build.LastChangedDate, DateTimeKind.Utc),
                 RequestedFor = build.RequestedFor.DisplayName,
                 BuildUrl = build.Links.Self.Href
             };
