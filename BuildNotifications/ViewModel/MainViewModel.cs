@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
+using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using BuildNotifications.Interface.Service;
@@ -13,6 +14,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Application = System.Windows.Application;
 using System.Windows.Forms;
+using System.Xml;
 using BuildNotifications.Model.Message;
 using GalaSoft.MvvmLight.Messaging;
 using Hardcodet.Wpf.TaskbarNotification;
@@ -36,7 +38,7 @@ namespace BuildNotifications.ViewModel
             ManageBuildsCommand = new RelayCommand(ManageBuilds);
             BuildsMenuItemCommand = new RelayCommand(BuildsMenuItem);
             ExitMenuItemCommand = new RelayCommand(ExitMenuItem);
-            
+
             StatusFilterOptions = new List<string>
             {
                 Constants.FilterByResult,
@@ -84,7 +86,7 @@ namespace BuildNotifications.ViewModel
             {
                 // todo need to get url here
             };
-            
+
             InitTimer();
         }
 
@@ -95,7 +97,7 @@ namespace BuildNotifications.ViewModel
         private RelayCommand ExitMenuItemCommand { get; }
         public RelayCommand ManageBuildsCommand { get; }
 
-        private ObservableCollection<SubscribedBuild> _subscribedBuilds; 
+        private ObservableCollection<SubscribedBuild> _subscribedBuilds;
         public ObservableCollection<SubscribedBuild> SubscribedBuilds
         {
             get { return _subscribedBuilds; }
@@ -106,21 +108,21 @@ namespace BuildNotifications.ViewModel
             }
         }
 
-        private ListCollectionView _groupedSubscribedBuilds; 
+        private ListCollectionView _groupedSubscribedBuilds;
         public ListCollectionView GroupedSubscribedBuilds
         {
             get { return _groupedSubscribedBuilds; }
             set { Set(ref _groupedSubscribedBuilds, value); }
         }
 
-        private IList<string> _statusFilterOptions; 
+        private IList<string> _statusFilterOptions;
         public IList<string> StatusFilterOptions
         {
             get { return _statusFilterOptions; }
             set { Set(ref _statusFilterOptions, value); }
         }
 
-        private string _selectedFilterOption; 
+        private string _selectedFilterOption;
         public string SelectedFilterOption
         {
             get { return _selectedFilterOption; }
@@ -128,9 +130,9 @@ namespace BuildNotifications.ViewModel
             {
                 Set(ref _selectedFilterOption, value);
 
-                _filterPropertyName = SelectedFilterOption == 
-                    Constants.FilterByStatus ? 
-                    Constants.BuildStatusPropertyName : 
+                _filterPropertyName = SelectedFilterOption ==
+                    Constants.FilterByStatus ?
+                    Constants.BuildStatusPropertyName :
                     Constants.BuildResultPropertyName;
                 if (GroupedSubscribedBuilds?.GroupDescriptions != null)
                 {
@@ -211,8 +213,8 @@ namespace BuildNotifications.ViewModel
                     if (vsoBuildUpdate.Status == BuildStatus.InProgress)
                     {
                         _icon.ShowBalloonTip(
-                            $"{vsoBuildUpdate.Name} Started", 
-                            $"Requested For: {vsoBuildUpdate.RequestedFor}", 
+                            $"{vsoBuildUpdate.Name} Started",
+                            $"Requested For: {vsoBuildUpdate.RequestedFor}",
                             BalloonIcon.Info);
                     }
                 }
@@ -223,7 +225,7 @@ namespace BuildNotifications.ViewModel
                         case BuildResult.Succeeded:
                             _icon.ShowBalloonTip(
                                 $"{vsoBuildUpdate.Name} Succeeded",
-                                $"Requested For: {vsoBuildUpdate.RequestedFor}", 
+                                $"Requested For: {vsoBuildUpdate.RequestedFor}",
                                 BalloonIcon.Info);
                             break;
                         case BuildResult.PartiallySucceeded:
@@ -290,6 +292,101 @@ namespace BuildNotifications.ViewModel
         }
 
         #endregion
-        
+
+
+        //public void MakeNotification()
+        //{
+        //    ToastContent content = new ToastContent()
+        //    {
+        //        Launch = "lei",
+
+        //        Visual = new ToastVisual()
+        //        {
+        //            TitleText = new ToastText()
+        //            {
+        //                Text = "New message from Lei"
+        //            },
+
+        //            BodyTextLine1 = new ToastText()
+        //            {
+        //                Text = "NotificationsExtensions is great!"
+        //            },
+
+        //            AppLogoOverride = new ToastAppLogo()
+        //            {
+        //                Crop = ToastImageCrop.Circle,
+        //                Source = new ToastImageSource("http://messageme.com/lei/profile.jpg")
+        //            }
+        //        },
+
+        //        Actions = new ToastActionsCustom()
+        //        {
+        //            //Inputs =
+        //            //{
+        //            //    new ToastTextBox("tbQuickReply")
+        //            //    {
+        //            //        PlaceholderContent = "type a reply"
+        //            //    }
+        //            //},
+
+        //            //Buttons =
+        //            //{
+        //            //    new ToastButton("reply", "reply")
+        //            //    {
+        //            //        ActivationType = ToastActivationType.Background,
+        //            //        ImageUri = "Assets/QuickReply.png",
+        //            //        TextBoxId = "tbReply"
+        //            //    }
+        //            //}
+        //        },
+
+        //        Audio = new ToastAudio()
+        //        {
+        //            Src = new Uri("ms-winsoundevent:Notification.IM")
+        //        }
+        //    };
+
+        //    string stringContent = content.GetContent();
+
+        //    // Generate WinRT notification
+        //    //new ToastNotification(stringContent);
+
+
+        //    //ToastNotificationManager.CreateToastNotifier().Show(new ToastNotification(content.GetXml()));
+
+        //    //TileBindingContentAdaptive bindingContent = new TileBindingContentAdaptive()
+        //    //{
+        //    //    PeekImage = new TilePeekImage()
+        //    //    {
+        //    //        Source = new TileImageSource("Assets/PeekImage.jpg")
+        //    //    },
+
+        //    //    Children =
+        //    //    {
+        //    //        new TileText()
+        //    //        {
+        //    //            Text = "Notifications Extensions",
+        //    //            Style = TileTextStyle.Body
+        //    //        },
+
+        //    //        new TileText()
+        //    //        {
+        //    //            Text = "Generate notifications easily!",
+        //    //            Wrap = true,
+        //    //            Style = TileTextStyle.CaptionSubtle
+        //    //        }
+        //    //    }
+        //    //};
+
+        //    //ToastNotificationManager 
+        //}
+
+        //public XmlDocument GetXml(ToastContent content)
+        //{
+        //    XmlDocument doc = new XmlDocument();
+        //    doc.LoadXml(content.GetContent());
+
+        //    return doc;
+        //}
     }
 }
