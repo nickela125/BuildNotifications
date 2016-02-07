@@ -8,7 +8,8 @@
         xmlns:helpers="clr-namespace:BuildNotifications.ViewModel.Helpers"
         mc:Ignorable="d"
         Title="Manage Builds"  Height="525" Width="500" ResizeMode="NoResize"
-        DataContext="{Binding ManageBuilds, Source={StaticResource Locator}}">
+        DataContext="{Binding ManageBuilds, Source={StaticResource Locator}}"
+        Icon="Icons/hammer.ico">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="VisibilityConverter" />
         <helpers:BindingProxy x:Key="proxy" Data="{Binding}"/>

@@ -1,7 +1,9 @@
-﻿namespace BuildNotifications
+﻿namespace BuildNotifications.Common
 {
     public static class Constants
     {
+        public const string AppId = "Crawford.BuildNotifications";
+
         // Settings Names
         public const string AccountsConfigurationName = "Accounts";
         public const string NotifyOnStartConfigurationName = "NotifyOnStart";

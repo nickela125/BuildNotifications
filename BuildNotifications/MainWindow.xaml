@@ -9,7 +9,8 @@
         xmlns:model="clr-namespace:BuildNotifications.Model;assembly=BuildNotifications.Model"
         mc:Ignorable="d"
         Title="Build Notifications" Height="450" Width="750"
-        DataContext="{Binding Main, Source={StaticResource Locator}}">
+        DataContext="{Binding Main, Source={StaticResource Locator}}"
+        Icon="Icons/hammer.ico">
     <!-- Close Command -->
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">

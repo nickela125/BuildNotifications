@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing;
+using System.IO;
 using System.Linq;
-using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using BuildNotifications.Interface.Service;
@@ -14,12 +14,14 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Application = System.Windows.Application;
 using System.Windows.Forms;
-using System.Xml;
+using Windows.Data.Xml.Dom;
 using BuildNotifications.Model.Message;
 using GalaSoft.MvvmLight.Messaging;
 using Hardcodet.Wpf.TaskbarNotification;
 using ContextMenu = System.Windows.Controls.ContextMenu;
 using MenuItem = System.Windows.Controls.MenuItem;
+using Windows.UI.Notifications;
+using BuildNotifications.Common;
 
 namespace BuildNotifications.ViewModel
 {
@@ -80,11 +82,6 @@ namespace BuildNotifications.ViewModel
                 },
                 DoubleClickCommand = BuildsMenuItemCommand,
                 ToolTipText = "Build Notifications"
-            };
-
-            _icon.TrayBalloonTipClicked += (sender, args) =>
-            {
-                // todo need to get url here
             };
 
             InitTimer();
@@ -212,10 +209,10 @@ namespace BuildNotifications.ViewModel
                     // Only one we care about for now
                     if (vsoBuildUpdate.Status == BuildStatus.InProgress)
                     {
-                        _icon.ShowBalloonTip(
+                        ShowToast(
                             $"{vsoBuildUpdate.Name} Started",
                             $"Requested For: {vsoBuildUpdate.RequestedFor}",
-                            BalloonIcon.Info);
+                            "Icons/info.png");
                     }
                 }
                 else
@@ -223,28 +220,28 @@ namespace BuildNotifications.ViewModel
                     switch (vsoBuildUpdate.Result)
                     {
                         case BuildResult.Succeeded:
-                            _icon.ShowBalloonTip(
+                            ShowToast(
                                 $"{vsoBuildUpdate.Name} Succeeded",
                                 $"Requested For: {vsoBuildUpdate.RequestedFor}",
-                                BalloonIcon.Info);
+                                "Icons/tick.png");
                             break;
                         case BuildResult.PartiallySucceeded:
-                            _icon.ShowBalloonTip(
+                            ShowToast(
                                 $"{vsoBuildUpdate.Name} Partially Succeeded",
                                 $"Requested For: {vsoBuildUpdate.RequestedFor}",
-                                BalloonIcon.Warning);
+                                "Icons/warning.png");
                             break;
                         case BuildResult.Failed:
-                            _icon.ShowBalloonTip(
+                            ShowToast(
                                 $"{vsoBuildUpdate.Name} Failed",
                                 $"Requested For: {vsoBuildUpdate.RequestedFor}",
-                                BalloonIcon.Error);
+                                "Icons/cross.png");
                             break;
                         case BuildResult.Canceled:
-                            _icon.ShowBalloonTip(
+                            ShowToast(
                                 $"{vsoBuildUpdate.Name} Cancelled",
                                 $"Requested For: {vsoBuildUpdate.RequestedFor}",
-                                BalloonIcon.Info);
+                                "Icons/question.png");
                             break;
                     }
                 }
@@ -274,119 +271,27 @@ namespace BuildNotifications.ViewModel
             return new Icon("Icons/question.ico");
         }
 
-        private Icon GetIcon(BuildResult? result)
+        private void ShowToast(string lineOne, string lineTwo, string iconPath)
         {
-            switch (result)
-            {
-                case BuildResult.Succeeded:
-                    return new Icon("Icons/tick.ico");
-                case BuildResult.PartiallySucceeded:
-                    return new Icon("Icons/warning.ico");
-                case BuildResult.Failed:
-                    return new Icon("Icons/cross.ico");
-                case BuildResult.Canceled:
-                    return new Icon("Icons/info.ico");
-                default:
-                    return new Icon("Icons/question.ico");
-            }
+            // Get a toast XML template
+            XmlDocument toastXml = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastImageAndText04);
+
+            // Fill in the text elements
+            XmlNodeList stringElements = toastXml.GetElementsByTagName("text");
+            stringElements[0].AppendChild(toastXml.CreateTextNode(lineOne));
+            stringElements[1].AppendChild(toastXml.CreateTextNode(lineTwo));
+
+            // Specify the absolute path to an image
+            string imagePath = "file:///" + Path.GetFullPath(iconPath);
+            XmlNodeList imageElements = toastXml.GetElementsByTagName("image");
+            imageElements[0].Attributes.GetNamedItem("src").NodeValue = imagePath;
+           
+            ToastNotification toast = new ToastNotification(toastXml);
+
+            // Show the toast. Be sure to specify the AppUserModelId on your application's shortcut!
+            ToastNotificationManager.CreateToastNotifier(Constants.AppId).Show(toast);
         }
 
         #endregion
-
-
-        //public void MakeNotification()
-        //{
-        //    ToastContent content = new ToastContent()
-        //    {
-        //        Launch = "lei",
-
-        //        Visual = new ToastVisual()
-        //        {
-        //            TitleText = new ToastText()
-        //            {
-        //                Text = "New message from Lei"
-        //            },
-
-        //            BodyTextLine1 = new ToastText()
-        //            {
-        //                Text = "NotificationsExtensions is great!"
-        //            },
-
-        //            AppLogoOverride = new ToastAppLogo()
-        //            {
-        //                Crop = ToastImageCrop.Circle,
-        //                Source = new ToastImageSource("http://messageme.com/lei/profile.jpg")
-        //            }
-        //        },
-
-        //        Actions = new ToastActionsCustom()
-        //        {
-        //            //Inputs =
-        //            //{
-        //            //    new ToastTextBox("tbQuickReply")
-        //            //    {
-        //            //        PlaceholderContent = "type a reply"
-        //            //    }
-        //            //},
-
-        //            //Buttons =
-        //            //{
-        //            //    new ToastButton("reply", "reply")
-        //            //    {
-        //            //        ActivationType = ToastActivationType.Background,
-        //            //        ImageUri = "Assets/QuickReply.png",
-        //            //        TextBoxId = "tbReply"
-        //            //    }
-        //            //}
-        //        },
-
-        //        Audio = new ToastAudio()
-        //        {
-        //            Src = new Uri("ms-winsoundevent:Notification.IM")
-        //        }
-        //    };
-
-        //    string stringContent = content.GetContent();
-
-        //    // Generate WinRT notification
-        //    //new ToastNotification(stringContent);
-
-
-        //    //ToastNotificationManager.CreateToastNotifier().Show(new ToastNotification(content.GetXml()));
-
-        //    //TileBindingContentAdaptive bindingContent = new TileBindingContentAdaptive()
-        //    //{
-        //    //    PeekImage = new TilePeekImage()
-        //    //    {
-        //    //        Source = new TileImageSource("Assets/PeekImage.jpg")
-        //    //    },
-
-        //    //    Children =
-        //    //    {
-        //    //        new TileText()
-        //    //        {
-        //    //            Text = "Notifications Extensions",
-        //    //            Style = TileTextStyle.Body
-        //    //        },
-
-        //    //        new TileText()
-        //    //        {
-        //    //            Text = "Generate notifications easily!",
-        //    //            Wrap = true,
-        //    //            Style = TileTextStyle.CaptionSubtle
-        //    //        }
-        //    //    }
-        //    //};
-
-        //    //ToastNotificationManager 
-        //}
-
-        //public XmlDocument GetXml(ToastContent content)
-        //{
-        //    XmlDocument doc = new XmlDocument();
-        //    doc.LoadXml(content.GetContent());
-
-        //    return doc;
-        //}
     }
 }

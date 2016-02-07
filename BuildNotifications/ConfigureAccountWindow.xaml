@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         Title="Configure Account"  Height="247" Width="400" ResizeMode="NoResize"
         DataContext="{Binding ConfigureAccount, Source={StaticResource Locator}}"
+        Icon="Icons/hammer.ico"
         Background="#F0F0F0">
     <StackPanel Margin="10,10,10,10">
         <TextBlock FontWeight="Bold" Text="Account:" Height="20" />
