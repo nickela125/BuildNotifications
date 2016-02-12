@@ -242,7 +242,7 @@ namespace BuildNotifications.ViewModel
                             ShowToast(
                                 $"{vsoBuildUpdate.Name} Cancelled",
                                 $"Requested For: {vsoBuildUpdate.RequestedFor}",
-                                "Icons/question.png");
+                                "Icons/stop.png");
                             break;
                     }
                 }
@@ -263,7 +263,7 @@ namespace BuildNotifications.ViewModel
             }
             if (results.Any(r => r.GetValueOrDefault(BuildResult.Succeeded) == BuildResult.Canceled))
             {
-                return new Icon("Icons/question.ico");
+                return new Icon("Icons/stop.ico");
             }
             if (results.All(r => r.GetValueOrDefault(BuildResult.Failed) == BuildResult.Succeeded))
             {

@@ -22,7 +22,7 @@
             <converters:SwitchConverterCase When="Succeeded" Then="Icons/tickResource.ico" />
             <converters:SwitchConverterCase When="PartiallySucceeded" Then="Icons/warningResource.ico" />
             <converters:SwitchConverterCase When="Failed" Then="Icons/crossResource.ico" />
-            <converters:SwitchConverterCase When="Canceled" Then="Icons/questionResource.ico" />
+            <converters:SwitchConverterCase When="Canceled" Then="Icons/stopResource.ico" />
             <converters:SwitchConverterCase When="null" Then="Icons/questionResource.ico" />
         </converters:SwitchConverter>
 
