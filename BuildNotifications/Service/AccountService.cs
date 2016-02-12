@@ -25,7 +25,7 @@ namespace BuildNotifications.Service
             _settingsProvider = settingsProvider;
         }
 
-        public async Task UpdateAccount(Account account) // Todo this method should be used with a refresh command
+        public async Task UpdateAccount(Account account)
         {
             if (account == null)
             {

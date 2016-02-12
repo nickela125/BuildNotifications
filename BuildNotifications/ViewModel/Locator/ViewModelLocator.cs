@@ -30,7 +30,7 @@ namespace BuildNotifications.ViewModel.Locator
 
         public static void Cleanup()
         {
-            // TODO Clear the ViewModels
+            // Clear the ViewModels
         }
 
         private static T GetInstance<T>()

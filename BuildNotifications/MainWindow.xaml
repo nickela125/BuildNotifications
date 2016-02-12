@@ -18,14 +18,24 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Window.Resources>
-        <converters:SwitchConverter x:Key="IconConverter">
+        <converters:SwitchConverter x:Key="ResultIconConverter">
             <converters:SwitchConverterCase When="Succeeded" Then="Icons/tickResource.ico" />
             <converters:SwitchConverterCase When="PartiallySucceeded" Then="Icons/warningResource.ico" />
             <converters:SwitchConverterCase When="Failed" Then="Icons/crossResource.ico" />
             <converters:SwitchConverterCase When="Canceled" Then="Icons/questionResource.ico" />
             <converters:SwitchConverterCase When="null" Then="Icons/questionResource.ico" />
         </converters:SwitchConverter>
-        
+
+        <converters:SwitchConverter x:Key="StatusIconConverter">
+            <converters:SwitchConverterCase When="InProgress" Then="Icons/hammerResource.ico" />
+            <converters:SwitchConverterCase When="Completed" Then="Icons/completeResource.ico" />
+            <converters:SwitchConverterCase When="Cancelling" Then="Icons/waitingResource.ico" />
+            <converters:SwitchConverterCase When="Postponed" Then="Icons/questionResource.ico" />
+            <converters:SwitchConverterCase When="NotStarted" Then="Icons/waitingResource.ico" />
+            <converters:SwitchConverterCase When="All" Then="Icons/questionResource.ico" />
+            <converters:SwitchConverterCase When="null" Then="Icons/questionResource.ico" />
+        </converters:SwitchConverter>
+
         <converters:PascalCaseToWordsConverter x:Key="PascalCaseToWordsConverter" />
         
         <converters:DateTimeFormatterConverter x:Key="DateTimeFormatterConverter" />
@@ -122,12 +132,25 @@
                                     <ColumnDefinition Width="35" />
                                     <ColumnDefinition />
                                 </Grid.ColumnDefinitions>
-                                <Image 
-                                    Grid.Column="0"
-                                    Width="20"
-                                    Margin="10,0,5,0"
-                                    Source="{Binding LastCompletedBuildResult, 
-                                        Converter={StaticResource IconConverter}}" />
+                                <Grid>
+                                    <Image 
+                                        Grid.Column="0"
+                                        Width="20"
+                                        Margin="10,0,5,0"
+                                        Source="{Binding LastCompletedBuildResult, 
+                                            Converter={StaticResource ResultIconConverter}}"
+                                        Visibility="{Binding DataContext.ShowingResults, ElementName=Table, 
+                                            Converter={StaticResource BoolToVisibilityConverter}, Mode=TwoWay}" />
+                                    <Image 
+                                        Grid.Column="0"
+                                        Width="20"
+                                        Margin="10,0,5,0"
+                                        Source="{Binding CurrentBuildStatus, 
+                                            Converter={StaticResource StatusIconConverter}}"
+                                        Visibility="{Binding DataContext.ShowingResults, ElementName=Table, 
+                                            Converter={StaticResource InverseBoolToVisibilityConverter}}" />
+                                </Grid>
+                                
                                 <TextBlock
                                     Grid.Column="1"
                                     Text="{Binding Name}"/>

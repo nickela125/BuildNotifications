@@ -17,13 +17,13 @@ namespace BuildNotifications.Service
         private readonly IVsoClient _vsoClient;
         private readonly IMessenger _messenger;
         private readonly ISettingsProvider _settingsProvider;
-
+        
         public BuildService(IVsoClient vsoClient, IMessenger messenger, ISettingsProvider settingsProvider)
         {
             _vsoClient = vsoClient;
             _messenger = messenger;
             _settingsProvider = settingsProvider;
-
+            
             _messenger.Register<AccountSubscriptionUpdate>(this, UpdateSubscribedBuilds);
         }
 
@@ -154,7 +154,7 @@ namespace BuildNotifications.Service
                 updates.RemoveAll(u => u.Result != null);
             }
 
-            return updates; // todo order by date
+            return updates;
         }
 
         private IList<BuildUpdate> CheckForUpdateInternal(List<Build> buildList, SubscribedBuild subscribedBuild)

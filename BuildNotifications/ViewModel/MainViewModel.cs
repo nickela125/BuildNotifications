@@ -263,7 +263,7 @@ namespace BuildNotifications.ViewModel
             }
             if (results.Any(r => r.GetValueOrDefault(BuildResult.Succeeded) == BuildResult.Canceled))
             {
-                return new Icon("Icons/info.ico");
+                return new Icon("Icons/question.ico");
             }
             if (results.All(r => r.GetValueOrDefault(BuildResult.Failed) == BuildResult.Succeeded))
             {
