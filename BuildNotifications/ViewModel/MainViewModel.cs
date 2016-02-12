@@ -159,6 +159,7 @@ namespace BuildNotifications.ViewModel
         private void BuildsMenuItem()
         {
             Application.Current.MainWindow.Show();
+            Application.Current.MainWindow.Activate();
         }
 
         private void Close(CancelEventArgs eventArgs)
