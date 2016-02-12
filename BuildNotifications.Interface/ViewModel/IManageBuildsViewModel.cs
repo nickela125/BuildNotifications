@@ -11,6 +11,7 @@ namespace BuildNotifications.Interface.ViewModel
         RelayCommand UpdateAccountsCommand { get; }
         RelayCommand<Account> EditAccountCommand { get; }
         RelayCommand<Account> RemoveAccountCommand { get; }
+        RelayCommand<Account> RefreshAccountCommand { get; }
         RelayCommand AddAccountCommand { get; }
         bool IsUpdateEnabled { get; }
         bool NotifyOnStart { get; }

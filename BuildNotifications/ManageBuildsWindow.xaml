@@ -36,6 +36,10 @@
                                       Command="{Binding Data.EditAccountCommand, Source={StaticResource proxy}}"
                                       DataContext="{Binding Path=DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType=ContextMenu}}"
                                       CommandParameter="{Binding}"/>
+                            <MenuItem Header="Refresh"
+                                      Command="{Binding Data.RefreshAccountCommand, Source={StaticResource proxy}}"
+                                      DataContext="{Binding Path=DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType=ContextMenu}}"
+                                      CommandParameter="{Binding}" />
                             <MenuItem Header="Remove"
                                       Command="{Binding Data.RemoveAccountCommand, Source={StaticResource proxy}}"
                                       DataContext="{Binding Path=DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType=ContextMenu}}"

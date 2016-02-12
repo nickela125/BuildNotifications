@@ -39,6 +39,7 @@ namespace BuildNotifications.Design.ViewModel
         public RelayCommand UpdateAccountsCommand { get; }
         public RelayCommand<Account> EditAccountCommand { get; }
         public RelayCommand<Account> RemoveAccountCommand { get; }
+        public RelayCommand<Account> RefreshAccountCommand { get; }
         public RelayCommand AddAccountCommand { get; }
 
         public bool IsUpdateEnabled

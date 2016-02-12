@@ -6,7 +6,7 @@ namespace BuildNotifications.Interface.Service
 {
     public interface IAccountService
     {
-        Task UpdateAccountDetails(Account account);
+        Task UpdateAccount(Account account);
         void UpdateAccountSubsciptions(IList<Account> updatedAccounts);
         IList<Account> GetAccounts();
         void RemoveAccount(Account account);

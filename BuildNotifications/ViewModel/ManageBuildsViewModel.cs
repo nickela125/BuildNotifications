@@ -38,6 +38,7 @@ namespace BuildNotifications.ViewModel
             UpdateAccountsCommand = new RelayCommand(UpdateAccounts);
             EditAccountCommand = new RelayCommand<Account>(EditAccount);
             RemoveAccountCommand = new RelayCommand<Account>(RemoveAccount);
+            RefreshAccountCommand = new RelayCommand<Account>(RefreshAccount);
             AddAccountCommand = new RelayCommand(AddAccount);
 
             IsUpdateEnabled = true;
@@ -50,6 +51,7 @@ namespace BuildNotifications.ViewModel
         public RelayCommand UpdateAccountsCommand { get; }
         public RelayCommand<Account> EditAccountCommand { get; }
         public RelayCommand<Account> RemoveAccountCommand { get; }
+        public RelayCommand<Account> RefreshAccountCommand { get; }
         public RelayCommand AddAccountCommand { get; }
 
         public IList<Account> Accounts
@@ -120,6 +122,11 @@ namespace BuildNotifications.ViewModel
             {
                 _accountService.RemoveAccount(account);
             }
+        }
+
+        private void RefreshAccount(Account account)
+        {
+            _accountService.UpdateAccount(account);
         }
 
         private void AddAccount()

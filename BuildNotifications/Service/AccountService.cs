@@ -25,7 +25,7 @@ namespace BuildNotifications.Service
             _settingsProvider = settingsProvider;
         }
 
-        public async Task UpdateAccountDetails(Account account) // Todo this method should be used with a refresh command
+        public async Task UpdateAccount(Account account) // Todo this method should be used with a refresh command
         {
             if (account == null)
             {
@@ -98,7 +98,28 @@ namespace BuildNotifications.Service
 
         private void TransferSubscriptions(Account oldAccount, Account newAccount)
         {
-            // todo
+            newAccount.IsSelected = oldAccount.IsSelected;
+
+            foreach (Project newProject in newAccount.Projects)
+            {
+                Project oldProject = oldAccount.Projects.SingleOrDefault(p => p.Id == newProject.Id);
+
+                if (oldProject != null)
+                {
+                    newProject.IsSelected = oldProject.IsSelected;
+
+                    foreach (BuildDefinition newBuildDefinition in newProject.Builds)
+                    {
+                        BuildDefinition oldBuildDefinition =
+                            oldProject.Builds.SingleOrDefault(b => b.Id == newBuildDefinition.Id);
+
+                        if (oldBuildDefinition != null)
+                        {
+                            newBuildDefinition.IsSelected = oldBuildDefinition.IsSelected;
+                        }
+                    }
+                }
+            }
         }
     }
 }

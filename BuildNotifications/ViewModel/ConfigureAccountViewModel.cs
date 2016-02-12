@@ -69,7 +69,7 @@ namespace BuildNotifications.ViewModel
 
             try
             {
-                await _accountService.UpdateAccountDetails(account);
+                await _accountService.UpdateAccount(account);
                 CloseDialog();
             }
             catch (Exception)
