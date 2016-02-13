@@ -235,7 +235,8 @@ namespace BuildNotifications.Service
                 Id = subscribedBuild.BuildDefinitionId,
                 RequestedFor = build.RequestedFor,
                 Result = build.Result,
-                Status = build.Status
+                Status = build.Status,
+                BuildUrl = build.BuildUrl
             };
         }
     }

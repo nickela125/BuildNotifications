@@ -213,7 +213,8 @@ namespace BuildNotifications.ViewModel
                         ShowToast(
                             $"{vsoBuildUpdate.Name} Started",
                             $"Requested For: {vsoBuildUpdate.RequestedFor}",
-                            "Icons/info.png");
+                            "Icons/info.png",
+                                vsoBuildUpdate.BuildUrl);
                     }
                 }
                 else
@@ -224,25 +225,29 @@ namespace BuildNotifications.ViewModel
                             ShowToast(
                                 $"{vsoBuildUpdate.Name} Succeeded",
                                 $"Requested For: {vsoBuildUpdate.RequestedFor}",
-                                "Icons/tick.png");
+                                "Icons/tick.png",
+                                vsoBuildUpdate.BuildUrl);
                             break;
                         case BuildResult.PartiallySucceeded:
                             ShowToast(
                                 $"{vsoBuildUpdate.Name} Partially Succeeded",
                                 $"Requested For: {vsoBuildUpdate.RequestedFor}",
-                                "Icons/warning.png");
+                                "Icons/warning.png",
+                                vsoBuildUpdate.BuildUrl);
                             break;
                         case BuildResult.Failed:
                             ShowToast(
                                 $"{vsoBuildUpdate.Name} Failed",
                                 $"Requested For: {vsoBuildUpdate.RequestedFor}",
-                                "Icons/cross.png");
+                                "Icons/cross.png",
+                                vsoBuildUpdate.BuildUrl);
                             break;
                         case BuildResult.Canceled:
                             ShowToast(
                                 $"{vsoBuildUpdate.Name} Cancelled",
                                 $"Requested For: {vsoBuildUpdate.RequestedFor}",
-                                "Icons/stop.png");
+                                "Icons/stop.png",
+                                vsoBuildUpdate.BuildUrl);
                             break;
                     }
                 }
@@ -272,7 +277,7 @@ namespace BuildNotifications.ViewModel
             return new Icon("Icons/question.ico");
         }
 
-        private void ShowToast(string lineOne, string lineTwo, string iconPath)
+        private void ShowToast(string lineOne, string lineTwo, string iconPath, string launchUrl)
         {
             // Get a toast XML template
             XmlDocument toastXml = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastImageAndText04);
@@ -288,6 +293,10 @@ namespace BuildNotifications.ViewModel
             imageElements[0].Attributes.GetNamedItem("src").NodeValue = imagePath;
            
             ToastNotification toast = new ToastNotification(toastXml);
+            toast.Activated += (notification, eventArgs) =>
+            {
+                System.Diagnostics.Process.Start(launchUrl);
+            };
 
             // Show the toast. Be sure to specify the AppUserModelId on your application's shortcut!
             ToastNotificationManager.CreateToastNotifier(Constants.AppId).Show(toast);

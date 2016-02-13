@@ -35,7 +35,7 @@ namespace BuildNotifications.Service
                 BuildDefinitionId = build.Definition.Id,
                 LastChangedDate = DateTime.SpecifyKind(build.LastChangedDate, DateTimeKind.Utc),
                 RequestedFor = build.RequestedFor.DisplayName,
-                BuildUrl = build.Links.Self.Href
+                BuildUrl = build.Links.Web.Href
             };
         }
     }

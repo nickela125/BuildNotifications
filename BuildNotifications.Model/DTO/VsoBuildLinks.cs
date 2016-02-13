@@ -2,6 +2,6 @@
 {
     public class VsoBuildLinks
     {
-        public VsoBuildLink Self { get; set; }
+        public VsoBuildLink Web { get; set; }
     }
 }

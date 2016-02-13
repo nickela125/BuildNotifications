@@ -7,5 +7,6 @@
         public string RequestedFor { get; set; }
         public BuildStatus Status { get; set; }
         public BuildResult? Result { get; set; }
+        public string BuildUrl { get; set; }
     }
 }
